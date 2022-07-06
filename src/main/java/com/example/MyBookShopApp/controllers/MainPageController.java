@@ -21,13 +21,8 @@ public class MainPageController {
     @GetMapping("/main")
     public String mainPage(Model model){
         model.addAttribute("bookData", bookService.getBooksData());
-        return "templates/index.html";
+        return "index.html";
     }
 
-    @GetMapping("/genres")
-    public String genresPage(){//Model model){
-        System.out.println("------getMapping genres");
-//        model.addAttribute("bookData",bookService.getBooksData());
-        return "genres/index";
-    }
+
 }
