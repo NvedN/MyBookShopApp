@@ -21,7 +21,8 @@ public class MainPageController {
     @GetMapping("/main")
     public String mainPage(Model model){
         model.addAttribute("bookData", bookService.getBooksData());
-        return "index.html";
+        model.addAttribute("searchPlaceHolder", "new search placeholder");
+        return "index";
     }
 
 
