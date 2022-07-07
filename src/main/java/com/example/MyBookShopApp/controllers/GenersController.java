@@ -10,10 +10,13 @@ public class GenersController
 {
 
 		@GetMapping("/main")
-		public String genresPage(){//Model model){
-				System.out.println("------getMapping genres");
-				//        model.addAttribute("bookData",bookService.getBooksData());
+		public String genresMainPage(){//Model model){
 				return "/genres/index";
+		}
+
+		@GetMapping("/slug")
+		public String genresSlugPage(){//Model model){
+				return "/genres/slug";
 		}
 
 }
