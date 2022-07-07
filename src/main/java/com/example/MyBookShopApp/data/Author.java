@@ -1,11 +1,27 @@
 package com.example.MyBookShopApp.data;
 
+import java.util.List;
+
 public class Author
 {
+
 		private Integer id;
+
 		private String firstLetter;
+
 		private String first_name;
+
 		private String last_name;
+
+		@Override public String toString()
+		{
+				return "Author{" +
+						"id=" + id +
+						", firstLetter='" + firstLetter + '\'' +
+						", first_name='" + first_name + '\'' +
+						", last_name='" + last_name + '\'' +
+						'}';
+		}
 
 		public Integer getId()
 		{
@@ -36,4 +52,5 @@ public class Author
 		{
 				this.last_name = last_name;
 		}
+
 }
