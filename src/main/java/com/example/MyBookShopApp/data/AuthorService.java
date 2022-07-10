@@ -1,6 +1,7 @@
 package com.example.MyBookShopApp.data;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
@@ -20,14 +21,8 @@ public class AuthorService {
     }
 
     public Map<String, List<Author>> getAuthorsMap(){
-        List<Author> authots = jdbcTemplate.query("SELECT * FROM authors", (ResultSet rs, int rownum)->{
-            Author author = new Author();
-            author.setId(rs.getInt("id"));
-            author.setFirstName(rs.getString("first_name"));
-            author.setLastName(rs.getString("last_name"));
-            return author;
-        });
+        List<Author> authors = jdbcTemplate.query("SELECT * FROM authors",new BeanPropertyRowMapper<>(Author.class));
 
-        return authots.stream().collect(Collectors.groupingBy((Author a)->{return a.getLastName().substring(0,1);}));
+        return authors.stream().collect(Collectors.groupingBy((Author a)->{return a.getLastName().substring(0,1);}));
     }
 }
