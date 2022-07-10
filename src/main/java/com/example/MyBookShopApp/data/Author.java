@@ -1,61 +1,41 @@
 package com.example.MyBookShopApp.data;
 
-import java.util.List;
+public class Author {
 
-public class Author
-{
+    private Integer id;
+    private String firstName;
+    private String lastName;
 
-		private Integer id;
+    @Override
+    public String toString() {
+        return "Author{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                '}';
+    }
 
-		private String firstLetter;
+    public Integer getId() {
+        return id;
+    }
 
-		private String first_name;
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-		private String last_name;
+    public String getFirstName() {
+        return firstName;
+    }
 
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
-		@Override public String toString()
-		{
-				return "Author{" +
-						"id=" + id +
-						", firstLetter='" + firstLetter + '\'' +
-						", first_name='" + first_name + '\'' +
-						", last_name='" + last_name + '\'' +
-						'}';
-		}
+    public String getLastName() {
+        return lastName;
+    }
 
-		public Integer getId()
-		{
-				return id;
-		}
-
-		public void setId(Integer id)
-		{
-				this.id = id;
-		}
-
-		public String getFirst_name()
-		{
-				return first_name;
-		}
-
-		public void setFirst_name(String first_name)
-		{
-				this.first_name = first_name;
-		}
-
-		public String getLast_name()
-		{
-				return last_name;
-		}
-
-		public void setLast_name(String last_name)
-		{
-				this.last_name = last_name;
-		}
-
-		public String getFirstLetter(String last_name){
-				return String.valueOf(last_name.charAt(0));
-		}
-
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 }
