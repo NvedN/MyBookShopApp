@@ -27,6 +27,6 @@ public class AuthorsController {
 
     @GetMapping("/authors")
     public String authorsPage(){
-        return "/authors/index";
+        return "/index";
     }
 }
