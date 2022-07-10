@@ -1,23 +1,21 @@
 package com.example.MyBookShopApp.data;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "books")
 public class Book {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Transient
     private String author;
+
     private String title;
     private Integer priceOld;
     private Integer price;
-
-    @Override
-    public String toString() {
-        return "Book{" +
-                "id=" + id +
-                ", author='" + author + '\'' +
-                ", title='" + title + '\'' +
-                ", priceOld=" + priceOld +
-                ", price=" + price +
-                '}';
-    }
 
     public Integer getId() {
         return id;
