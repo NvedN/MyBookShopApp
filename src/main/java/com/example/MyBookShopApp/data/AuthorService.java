@@ -24,6 +24,38 @@ public class AuthorService
 
 		}
 
+		public static List<Author> getSortedAuthorsByFirstLetter(String letter,List<Author>authorsList ){
+				HashMap<String,List<Author>> outputSortedMap = new HashMap<>();
+//				List<Author> authorsList = jdbcTemplate.query("SELECT * FROM authors",new BeanPropertyRowMapper<>(Author.class));
+				for(Author author: authorsList){
+						String firstLetter = String.valueOf(author.getLast_name().charAt(0));
+						if (outputSortedMap.containsKey(firstLetter)){
+								List<Author> tmp = outputSortedMap.get(firstLetter);
+								tmp.add(author);
+								outputSortedMap.replace(firstLetter,tmp);
+
+						}else{
+								List<Author> tmp = null;
+								tmp.add(author);
+								outputSortedMap.put(firstLetter,tmp);
+						}
+				}
+
+				return outputSortedMap.get(letter);
+		}
+
+
+
+		public static HashSet firstLetterData(){
+				List<Author> authorsList = jdbcTemplate.query("SELECT * FROM authors",new BeanPropertyRowMapper<>(Author.class));
+				HashSet<String> output = new HashSet();
+				for(Author author: authorsList){
+						String firstLetter = String.valueOf(author.getLast_name().charAt(0));
+						output.add(firstLetter);
+				}
+				return output;
+		}
+
 
 		public static List<Author> sortAuthorsByFirstLetter(List<Author> authorsList) throws Exception{
 				List<String> list = new ArrayList<String>();

@@ -13,6 +13,7 @@ public class Author
 
 		private String last_name;
 
+
 		@Override public String toString()
 		{
 				return "Author{" +
@@ -51,6 +52,10 @@ public class Author
 		public void setLast_name(String last_name)
 		{
 				this.last_name = last_name;
+		}
+
+		public String getFirstLetter(String last_name){
+				return String.valueOf(last_name.charAt(0));
 		}
 
 }
