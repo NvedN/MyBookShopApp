@@ -1,5 +1,6 @@
 package com.example.MyBookShopApp.data;
 
+import com.example.MyBookShopApp.data.models.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -13,16 +14,16 @@ import java.util.stream.Collectors;
 @Service
 public class AuthorService {
 
-    private JdbcTemplate jdbcTemplate;
+    private AuthorRepository authorRepository;
 
     @Autowired
-    public AuthorService(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public AuthorService(AuthorRepository authorRepository)
+    {
+        this.authorRepository = authorRepository;
     }
 
     public Map<String, List<Author>> getAuthorsMap(){
-        List<Author> authors = jdbcTemplate.query("SELECT * FROM authors",new BeanPropertyRowMapper<>(Author.class));
-
-        return authors.stream().collect(Collectors.groupingBy((Author a)->{return a.getLastName().substring(0,1);}));
+        List<Author> authors = authorRepository.findAll();
+        return authors.stream().collect(Collectors.groupingBy((Author a)-> a.getLastName().substring(0,1)));
     }
 }

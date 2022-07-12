@@ -14,40 +14,20 @@ import java.util.stream.Collectors;
 @Service
 public class BookService {
 
-    private JdbcTemplate jdbcTemplate;
+    private BookRepository bookRepository;
 
     @Autowired
-    public BookService(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public BookService(BookRepository bookRepository)
+    {
+        this.bookRepository = bookRepository;
     }
-
-//    public List<Book> getBooksData(){
+    //    public List<Book> getBooksData(){
 //        return jdbcTemplate.query("SELECT * FROM books",new BeanPropertyRowMapper<>(Book.class));
 //    }
 
 
     public List<Book> getBooksData() {
-        List<Book> books = jdbcTemplate.query("SELECT * FROM books", (ResultSet rs, int rownum) -> {
-            Book book = new Book();
-            book.setId(rs.getInt("id"));
-            book.setAuthor(getAuthorByAuthorId(rs.getInt("author_id")));
-            book.setTitle(rs.getString("title"));
-            book.setPriceOld(rs.getInt("price_old"));
-            book.setPrice(rs.getInt("price"));
-            return book;
-        });
-        return new ArrayList<>(books);
+       return bookRepository.findAll();
     }
 
-    private String getAuthorByAuthorId(int author_id) {
-        List<Author> authors = jdbcTemplate.query("SELECT * FROM authors WHERE authors.id=" + author_id,
-            (ResultSet rs, int rowNum) -> {
-                Author author = new Author();
-                author.setId(rs.getInt("id"));
-                author.setFirstName(rs.getString("first_name"));
-                author.setFirstName(rs.getString("last_name"));
-                return author;
-            });
-        return authors.get(0).toString();
-    }
 }

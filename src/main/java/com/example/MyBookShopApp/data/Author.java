@@ -6,55 +6,64 @@ import java.util.List;
 
 @Entity
 @Table(name = "authors")
-public class Author {
+public class Author
+{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    private String firstName;
-    private String lastName;
+		@Id
+		@GeneratedValue(strategy = GenerationType.IDENTITY)
+		private Integer id;
 
-    @OneToMany
-    @JoinColumn(name = "author_id", referencedColumnName = "id")
-    private List<Book> bookList = new ArrayList<>();
+		private String firstName;
 
-    public List<Book> getBookList()
-    {
-        return bookList;
-    }
+		private String lastName;
 
-    public void setBookList(List<Book> bookList)
-    {
-        this.bookList = bookList;
-    }
+		@OneToMany(mappedBy = "author")
+		private List<Book> bookList = new ArrayList<>();
 
-    @Override
-    public String toString() {
-        return firstName
-               + " " + lastName;
-    }
+		public List<Book> getBookList()
+		{
+				return bookList;
+		}
 
-    public Integer getId() {
-        return id;
-    }
+		public void setBookList(List<Book> bookList)
+		{
+				this.bookList = bookList;
+		}
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+		@Override
+		public String toString()
+		{
+				return firstName
+						+ " " + lastName;
+		}
 
-    public String getFirstName() {
-        return firstName;
-    }
+		public Integer getId()
+		{
+				return id;
+		}
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
+		public void setId(Integer id)
+		{
+				this.id = id;
+		}
 
-    public String getLastName() {
-        return lastName;
-    }
+		public String getFirstName()
+		{
+				return firstName;
+		}
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
+		public void setFirstName(String firstName)
+		{
+				this.firstName = firstName;
+		}
+
+		public String getLastName()
+		{
+				return lastName;
+		}
+
+		public void setLastName(String lastName)
+		{
+				this.lastName = lastName;
+		}
 }
