@@ -91,7 +91,7 @@
             <column name="description" type="TEXT">
                 <constraints nullable="false"/>
             </column>
-            <column name="time" type="TIMESTAMP(29) WITHOUT TIME ZONE">
+            <column name="time" type="TIMESTAMP(6) WITHOUT TIME ZONE">
                 <constraints nullable="false"/>
             </column>
             <column name="user_id" type="INT">
@@ -154,7 +154,7 @@
             <column name="book_id" type="INT">
                 <constraints nullable="false"/>
             </column>
-            <column name="time" type="TIMESTAMP(29) WITHOUT TIME ZONE">
+            <column name="time" type="TIMESTAMP(6) WITHOUT TIME ZONE">
                 <constraints nullable="false"/>
             </column>
             <column name="type_id" type="INT">
@@ -210,7 +210,7 @@
             <column name="text" type="TEXT">
                 <constraints nullable="false"/>
             </column>
-            <column name="time" type="TIMESTAMP(29) WITHOUT TIME ZONE">
+            <column name="time" type="TIMESTAMP(6) WITHOUT TIME ZONE">
                 <constraints nullable="false"/>
             </column>
             <column name="user_id" type="INT">
@@ -226,7 +226,7 @@
             <column name="review_id" type="INT">
                 <constraints nullable="false"/>
             </column>
-            <column name="time" type="TIMESTAMP(29) WITHOUT TIME ZONE">
+            <column name="time" type="TIMESTAMP(6) WITHOUT TIME ZONE">
                 <constraints nullable="false"/>
             </column>
             <column name="user_id" type="INT">
@@ -326,7 +326,7 @@
             <column name="text" type="TEXT">
                 <constraints nullable="false"/>
             </column>
-            <column name="time" type="TIMESTAMP(29) WITHOUT TIME ZONE">
+            <column name="time" type="TIMESTAMP(6) WITHOUT TIME ZONE">
                 <constraints nullable="false"/>
             </column>
             <column name="user_id" type="INT"/>
@@ -343,7 +343,7 @@
             <column name="code" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="code_time" type="TIMESTAMP(29) WITHOUT TIME ZONE"/>
+            <column name="code_time" type="TIMESTAMP(6) WITHOUT TIME ZONE"/>
             <column name="code_trails" type="INT"/>
             <column name="contact" type="VARCHAR(255)">
                 <constraints nullable="false"/>
@@ -368,7 +368,7 @@
             <column name="name" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="reg_time" type="TIMESTAMP(29) WITHOUT TIME ZONE">
+            <column name="reg_time" type="TIMESTAMP(6) WITHOUT TIME ZONE">
                 <constraints nullable="false"/>
             </column>
         </createTable>
