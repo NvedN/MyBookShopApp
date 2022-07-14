@@ -60,9 +60,17 @@ public class BooksController
 
 		@GetMapping("/books/recommended")
 		@ResponseBody
-		public RecommendedBooksPageDto getBooksPage(@RequestParam("offset") Integer offset, @RequestParam("limit") Integer limit)
-		{
-//				bookService.getPageOfRecommendedBooks(offset,limit).getContent()
-				return new RecommendedBooksPageDto(bookService.getPageOfRecommendedBooks(offset,limit).getContent());
+		public RecommendedBooksPageDto getBooksPage(@RequestParam("offset") Integer offset,
+				@RequestParam("limit") Integer limit) {
+				System.out.println("---------START LIMIT AND OFFSET");
+				return new RecommendedBooksPageDto(bookService.getPageOfRecommendedBooks(offset, limit).getContent());
+		}
+
+
+		@GetMapping("/books/news")
+		@ResponseBody
+		public RecommendedBooksPageDto getNewsBooks(@RequestParam("offset") Integer offset,
+				@RequestParam("limit") Integer limit) {
+				return new RecommendedBooksPageDto(bookService.getPageOfRecommendedBooks(offset, limit).getContent());
 		}
 }

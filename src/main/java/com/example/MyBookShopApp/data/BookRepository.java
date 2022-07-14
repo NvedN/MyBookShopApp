@@ -3,6 +3,8 @@ package com.example.MyBookShopApp.data;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 public interface BookRepository extends JpaRepository<Book,Integer> {
@@ -28,4 +30,6 @@ public interface BookRepository extends JpaRepository<Book,Integer> {
     @Query(value = "SELECT * FROM books WHERE discount = (SELECT MAX(discount) FROM books",nativeQuery = true)
     List<Book> getBooksWithMaxDiscount();
 
+
+    List<Book> findBooksByPubDateBetween(LocalDateTime startDate,LocalDateTime endDate);
 }
