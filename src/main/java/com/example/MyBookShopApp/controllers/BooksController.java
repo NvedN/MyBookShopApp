@@ -2,11 +2,10 @@ package com.example.MyBookShopApp.controllers;
 
 import com.example.MyBookShopApp.data.Book;
 import com.example.MyBookShopApp.data.BookService;
+import com.example.MyBookShopApp.data.RecommendedBooksPageDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -14,10 +13,12 @@ import java.util.List;
 @RequestMapping("/books")
 public class BooksController
 {
-		private BookService bookService ;
+
+		private BookService bookService;
 
 		@Autowired
-		public BooksController(BookService bookService) {
+		public BooksController(BookService bookService)
+		{
 				this.bookService = bookService;
 		}
 
@@ -46,12 +47,22 @@ public class BooksController
 		}
 
 		@ModelAttribute("booksList")
-		public List<Book> bookList(){
+		public List<Book> bookList()
+		{
 				return bookService.getBooksData();
 		}
+
 		@GetMapping("/books/popular")
-		public String recentBookPage(){
+		public String recentBookPage()
+		{
 				return "books/popular";
 		}
 
+		@GetMapping("/books/recommended")
+		@ResponseBody
+		public RecommendedBooksPageDto getBooksPage(@RequestParam("offset") Integer offset, @RequestParam("limit") Integer limit)
+		{
+//				bookService.getPageOfRecommendedBooks(offset,limit).getContent()
+				return new RecommendedBooksPageDto(bookService.getPageOfRecommendedBooks(offset,limit).getContent());
+		}
 }

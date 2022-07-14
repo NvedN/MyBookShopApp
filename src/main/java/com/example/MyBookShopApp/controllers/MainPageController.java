@@ -7,29 +7,33 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 @Controller
-public class MainPageController {
+public class MainPageController
+{
 
-    private final BookService bookService;
+		private final BookService bookService;
 
-    @Autowired
-    public MainPageController(BookService bookService) {
-        this.bookService = bookService;
-    }
+		@Autowired
+		public MainPageController(BookService bookService)
+		{
+				this.bookService = bookService;
+		}
 
-    @ModelAttribute("recommendedBooks")
-    public List<Book> recommendedBooks(){
-        return bookService.getBooksData();
-    }
+		@ModelAttribute("recommendedBooks")
+		public List<Book> recommendedBooks()
+		{
+				return bookService.getPageOfRecommendedBooks(0, 6).getContent();
+		}
 
-    @GetMapping("/")
-    public String mainPage(Model model){
-        return "index";
-    }
+		@GetMapping("/")
+		public String mainPage(Model model)
+		{
+				return "index";
+		}
+
+//		@GetMapping
+
 }
