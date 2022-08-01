@@ -2,6 +2,7 @@ package com.example.MyBookShopApp.controllers;
 
 import com.example.MyBookShopApp.data.Book;
 import com.example.MyBookShopApp.data.BookService;
+import com.example.MyBookShopApp.data.BooksPageDto;
 import com.example.MyBookShopApp.data.RecommendedBooksPageDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,6 +33,21 @@ public class MainPageController
 				return bookService.getPageOfRecommendedBooks(0, 6).getContent();
 		}
 
+		@ModelAttribute("newsBooks")
+		public List<Book> newsBooks()
+		{
+				System.out.println("----------START news BOOKS !!!");
+				return bookService.getPageOfNewsBooks(0, 6).getContent();
+		}
+
+
+		@ModelAttribute("popularBooks")
+		public List<Book> popularsBooks()
+		{
+				System.out.println("----------START populars BOOKS !!!");
+				return bookService.getPageOfRecommendedBooks(0, 6).getContent();
+		}
+
 		@GetMapping("/")
 		public String mainPage(Model model)
 		{
@@ -46,6 +62,22 @@ public class MainPageController
 				@RequestParam("limit") Integer limit) {
 				System.out.println("---------START LIMIT AND OFFSET");
 				return new RecommendedBooksPageDto(bookService.getPageOfRecommendedBooks(offset, limit).getContent());
+		}
+
+		@GetMapping("/books/newsBooks")
+		@ResponseBody
+		public BooksPageDto getNewsBooksPage(@RequestParam("offset") Integer offset,
+				@RequestParam("limit") Integer limit) {
+				System.out.println("---------START LIMIT AND OFFSET");
+				return new BooksPageDto(bookService.getPageOfNewsBooks(offset, limit).getContent());
+		}
+
+		@GetMapping("/books/popularBooks")
+		@ResponseBody
+		public BooksPageDto getPopularBooksPage(@RequestParam("offset") Integer offset,
+				@RequestParam("limit") Integer limit) {
+				System.out.println("---------START LIMIT AND OFFSET");
+				return new BooksPageDto(bookService.getPageOfNewsBooks(offset, limit).getContent());
 		}
 
 }

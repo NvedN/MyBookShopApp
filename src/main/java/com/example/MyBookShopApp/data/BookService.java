@@ -66,13 +66,13 @@ public class BookService {
         Pageable nextPage = PageRequest.of(offset,limit);
         return bookRepository.findAll(nextPage);
     }
-    public List<Book> findBooksByPubDateBetween(LocalDateTime min, LocalDateTime max){
+    public List<Book> findBooksByPubDateBetween(Integer offset,Integer limit){
 //        2020-12-11 00:00:00.000000
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M/d/yy, h:mm a");
-        min = LocalDateTime.parse("2020-01-01 00:00:00.000000", formatter);
+        LocalDateTime min = LocalDateTime.parse("2020-01-01 00:00:00.000000", formatter);
         System.out.println("------min = " + min);
-        max = LocalDateTime.parse("2022-01-01 00:00:00.000000", formatter);
+        LocalDateTime max = LocalDateTime.parse("2022-01-01 00:00:00.000000", formatter);
         return bookRepository.findBooksByPubDateBetween(min, max);
     }
 
