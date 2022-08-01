@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <body>
 <header class="Header" th:fragment="headFragment">
   <div class="Header-rowMain">
@@ -16,8 +16,11 @@
           <div class="Header-search">
             <div class="search">
               <form class="form form_search" action="#" method="post" data-searchlimit="20">
-                <input class="search-input" id="query" name="query" type="text" placeholder="Search over 30 million book titles" value=""/>
-                <button class="search-button" type="submit" name="search" id="search">Поиск
+<!--                    th:object="${searchWordDto}">-->
+                <input class="search-input" id="querypage" name="querypage" type="text"
+                       placeholder="Search over 30 million book titles"
+                       value="Техника"/>
+                <button class="search-button" type="submit" name="searchpage" id="searchpage">Поиск
                 </button>
               </form>
             </div>

@@ -1,5 +1,10 @@
 package com.example.MyBookShopApp.data;
 
+import org.h2.pagestore.db.PageBtreeLeaf;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -32,4 +37,6 @@ public interface BookRepository extends JpaRepository<Book,Integer> {
 
 
     List<Book> findBooksByPubDateBetween(LocalDateTime startDate,LocalDateTime endDate);
+
+    Page<Book> findBookByTitleContaining(String bookTitle, Pageable nextPage );
 }

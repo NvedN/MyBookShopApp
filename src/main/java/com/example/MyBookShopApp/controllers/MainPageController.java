@@ -47,4 +47,5 @@ public class MainPageController
 				System.out.println("---------START LIMIT AND OFFSET");
 				return new RecommendedBooksPageDto(bookService.getPageOfRecommendedBooks(offset, limit).getContent());
 		}
+
 }
