@@ -1,10 +1,13 @@
 package com.example.MyBookShopApp.controllers;
 
 import com.example.MyBookShopApp.data.Book;
-import com.example.MyBookShopApp.data.BookService;
+import com.example.MyBookShopApp.data.BooksPageDto;
 import com.example.MyBookShopApp.data.RecommendedBooksPageDto;
+import com.example.MyBookShopApp.data.SearchWordDto;
+import com.example.MyBookShopApp.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,8 +38,11 @@ public class BooksController
 		}
 
 		@GetMapping("/recent")
-		public String booksPageRecent()
+		public String booksPageRecent(Model model)
 		{//Model model){
+				System.out.println("------start to filling model in recent page");
+				model.addAttribute("recentResults",
+						bookService.findTopByPubDate(0, 20));
 				return "/books/recent";
 		}
 
@@ -58,13 +64,20 @@ public class BooksController
 				return "books/popular";
 		}
 
-
-
-
 		@GetMapping("/books/news")
 		@ResponseBody
 		public RecommendedBooksPageDto getNewsBooks(@RequestParam("offset") Integer offset,
-				@RequestParam("limit") Integer limit) {
+				@RequestParam("limit") Integer limit, Model model)
+		{
 				return new RecommendedBooksPageDto(bookService.getPageOfRecommendedBooks(offset, limit).getContent());
 		}
+
+		@ModelAttribute("bookPageDto")
+		public BooksPageDto getNextNewsPage()
+		{
+				return new BooksPageDto();
+		}
+
+
+
 }

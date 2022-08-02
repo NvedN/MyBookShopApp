@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
@@ -36,7 +37,22 @@ public interface BookRepository extends JpaRepository<Book,Integer> {
     List<Book> getBooksWithMaxDiscount();
 
 
-    List<Book> findBooksByPubDateBetween(LocalDateTime startDate,LocalDateTime endDate);
+    Page<Book> findBooksByPubDateBetween(LocalDateTime startDate,LocalDateTime endDate, Pageable nextPage);
+    List<Book> findByPubDateBetween(LocalDateTime fromDate, LocalDateTime toDate);
 
     Page<Book> findBookByTitleContaining(String bookTitle, Pageable nextPage );
+
+    List<Book> findBooksByPubDate(LocalDateTime date);
+
+    Page<Book> findBooksByPubDate(LocalDateTime date, Pageable nextPage);
+
+    Page<Book> findTopByOrderByPubDateDesc(Pageable nextPage);
+
+    Page<Book> findAllByOrderByPubDateDesc(Pageable nextPage);
+
+
+
+//    Page<Book> findAllByPubdateDesc
+
+
 }

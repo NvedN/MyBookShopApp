@@ -1,7 +1,7 @@
 package com.example.MyBookShopApp.controllers;
 
 import com.example.MyBookShopApp.data.Book;
-import com.example.MyBookShopApp.data.BookService;
+import com.example.MyBookShopApp.service.BookService;
 import com.example.MyBookShopApp.data.BooksPageDto;
 import com.example.MyBookShopApp.data.RecommendedBooksPageDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,14 +29,12 @@ public class MainPageController
 		@ModelAttribute("recommendedBooks")
 		public List<Book> recommendedBooks()
 		{
-				System.out.println("----------START RECOMMENDED BOOKS !!!");
 				return bookService.getPageOfRecommendedBooks(0, 6).getContent();
 		}
 
 		@ModelAttribute("newsBooks")
 		public List<Book> newsBooks()
 		{
-				System.out.println("----------START news BOOKS !!!");
 				return bookService.getPageOfNewsBooks(0, 6).getContent();
 		}
 
@@ -44,7 +42,6 @@ public class MainPageController
 		@ModelAttribute("popularBooks")
 		public List<Book> popularsBooks()
 		{
-				System.out.println("----------START populars BOOKS !!!");
 				return bookService.getPageOfRecommendedBooks(0, 6).getContent();
 		}
 
@@ -60,7 +57,6 @@ public class MainPageController
 		@ResponseBody
 		public RecommendedBooksPageDto getBooksPage(@RequestParam("offset") Integer offset,
 				@RequestParam("limit") Integer limit) {
-				System.out.println("---------START LIMIT AND OFFSET");
 				return new RecommendedBooksPageDto(bookService.getPageOfRecommendedBooks(offset, limit).getContent());
 		}
 
@@ -68,7 +64,6 @@ public class MainPageController
 		@ResponseBody
 		public BooksPageDto getNewsBooksPage(@RequestParam("offset") Integer offset,
 				@RequestParam("limit") Integer limit) {
-				System.out.println("---------START LIMIT AND OFFSET");
 				return new BooksPageDto(bookService.getPageOfNewsBooks(offset, limit).getContent());
 		}
 
@@ -76,7 +71,6 @@ public class MainPageController
 		@ResponseBody
 		public BooksPageDto getPopularBooksPage(@RequestParam("offset") Integer offset,
 				@RequestParam("limit") Integer limit) {
-				System.out.println("---------START LIMIT AND OFFSET");
 				return new BooksPageDto(bookService.getPageOfNewsBooks(offset, limit).getContent());
 		}
 

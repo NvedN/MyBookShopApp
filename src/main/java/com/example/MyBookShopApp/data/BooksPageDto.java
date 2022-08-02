@@ -13,6 +13,10 @@ public class BooksPageDto
 				this.books = books;
 		}
 
+		public BooksPageDto(){
+
+		}
+
 		public Integer getCount() {
 				return count;
 		}
