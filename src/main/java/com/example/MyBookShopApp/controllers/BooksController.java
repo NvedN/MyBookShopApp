@@ -3,7 +3,6 @@ package com.example.MyBookShopApp.controllers;
 import com.example.MyBookShopApp.data.Book;
 import com.example.MyBookShopApp.data.BooksPageDto;
 import com.example.MyBookShopApp.data.RecommendedBooksPageDto;
-import com.example.MyBookShopApp.data.SearchWordDto;
 import com.example.MyBookShopApp.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -38,13 +37,39 @@ public class BooksController
 		}
 
 		@GetMapping("/recent")
-		public String booksPageRecent(Model model)
+		public String booksPageRecent(@RequestParam(value = "from", required = false) String fromDate,
+				@RequestParam(value = "to", required = false) String toDate,
+				@RequestParam(value = "offset", required = false) Integer offset,
+				@RequestParam(value = "limit", required = false) Integer limit,
+				Model model)
 		{//Model model){
 				System.out.println("------start to filling model in recent page");
-				model.addAttribute("recentResults",
-						bookService.findTopByPubDate(0, 20));
+				System.out.println("----fromDate = " + fromDate);
+				System.out.println("----toDate = " + toDate);
+				System.out.println("----offset = " + offset);
+				System.out.println("----limit = " + limit);
+				if (fromDate != null || toDate != null)
+				{
+						System.out.println("--------Start 1 ");
+						model.addAttribute("recentResults",
+								bookService.findBooksByPubDateBetween(fromDate, toDate, offset, limit));
+				}
+				else
+				{
+						model.addAttribute("recentResults",
+								bookService.findTopByPubDate(0, 20));
+				}
 				return "/books/recent";
 		}
+		//		@GetMapping("/books/recent")
+		//		//		http://localhost:8085/books/recent?from=01.07.2022&to=02.08.2022&offset=0&limit=20
+		//		@ApiOperation("get books between start and end period")
+		//		public ResponseEntity<List<Book>> booksBetweenDates(@RequestParam("from") String fromDate,
+		//				@RequestParam("to") String toDate, @RequestParam("offset") Integer offset,
+		//				@RequestParam("limit") Integer limit)
+		//		{
+		//				return ResponseEntity.ok(bookService.findBooksByPubDateBetween(fromDate, toDate, offset, limit));
+		//		}
 
 		@GetMapping("/slug")
 		public String booksPageSlug()
@@ -77,7 +102,4 @@ public class BooksController
 		{
 				return new BooksPageDto();
 		}
-
-
-
 }

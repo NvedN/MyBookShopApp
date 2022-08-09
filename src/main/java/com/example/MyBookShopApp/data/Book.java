@@ -54,6 +54,10 @@ public class Book {
     @ApiModelProperty("discount value for book")
     private Double price;
 
+    private Integer numberOfBought ;
+    private Integer numberInCart;
+    private Integer numberDelayed ;
+
 
     public Integer getIsBestseller() {
         return isBestseller;
