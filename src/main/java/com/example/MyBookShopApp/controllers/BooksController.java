@@ -4,6 +4,7 @@ import com.example.MyBookShopApp.data.Book;
 import com.example.MyBookShopApp.data.BooksPageDto;
 import com.example.MyBookShopApp.data.RecommendedBooksPageDto;
 import com.example.MyBookShopApp.service.BookService;
+import com.example.MyBookShopApp.service.BooksRatingAndPopularityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,9 +19,19 @@ public class BooksController
 
 		private BookService bookService;
 
+		private BooksRatingAndPopularityService booksRatingAndPopularityService;
+
+//		@Autowired
+//		public BooksController(
+//				BooksRatingAndPopularityService booksRatingAndPopularityService)
+//		{
+//				this.booksRatingAndPopularityService = booksRatingAndPopularityService;
+//		}
+
 		@Autowired
-		public BooksController(BookService bookService)
+		public BooksController(BookService bookService, BooksRatingAndPopularityService booksRatingAndPopularityService)
 		{
+				this.booksRatingAndPopularityService = booksRatingAndPopularityService;
 				this.bookService = bookService;
 		}
 
@@ -31,8 +42,10 @@ public class BooksController
 		}
 
 		@GetMapping("/popular")
-		public String booksPagePopular()
-		{//Model model){
+		public String booksPagePopular(Model model)
+		{
+				model.addAttribute("popularBooks",
+						booksRatingAndPopularityService.findPopularsBooks(0,5));
 				return "/books/popular";
 		}
 
@@ -42,15 +55,9 @@ public class BooksController
 				@RequestParam(value = "offset", required = false) Integer offset,
 				@RequestParam(value = "limit", required = false) Integer limit,
 				Model model)
-		{//Model model){
-				System.out.println("------start to filling model in recent page");
-				System.out.println("----fromDate = " + fromDate);
-				System.out.println("----toDate = " + toDate);
-				System.out.println("----offset = " + offset);
-				System.out.println("----limit = " + limit);
+		{
 				if (fromDate != null || toDate != null)
 				{
-						System.out.println("--------Start 1 ");
 						model.addAttribute("recentResults",
 								bookService.findBooksByPubDateBetween(fromDate, toDate, offset, limit));
 				}

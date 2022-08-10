@@ -73,5 +73,4 @@ public class MainPageController
 				@RequestParam("limit") Integer limit) {
 				return new BooksPageDto(bookService.getPageOfNewsBooks(offset, limit).getContent());
 		}
-
 }

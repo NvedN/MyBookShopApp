@@ -58,6 +58,35 @@ public class Book {
     private Integer numberInCart;
     private Integer numberDelayed ;
 
+    public Integer getNumberOfBought()
+    {
+        return numberOfBought;
+    }
+
+    public void setNumberOfBought(Integer numberOfBought)
+    {
+        this.numberOfBought = numberOfBought;
+    }
+
+    public Integer getNumberInCart()
+    {
+        return numberInCart;
+    }
+
+    public void setNumberInCart(Integer numberInCart)
+    {
+        this.numberInCart = numberInCart;
+    }
+
+    public Integer getNumberDelayed()
+    {
+        return numberDelayed;
+    }
+
+    public void setNumberDelayed(Integer numberDelayed)
+    {
+        this.numberDelayed = numberDelayed;
+    }
 
     public Integer getIsBestseller() {
         return isBestseller;
