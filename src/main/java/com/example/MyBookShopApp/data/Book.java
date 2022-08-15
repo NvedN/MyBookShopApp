@@ -58,6 +58,18 @@ public class Book {
     private Integer numberInCart;
     private Integer numberDelayed ;
 
+    private String tag;
+
+    public String getTag()
+    {
+        return tag;
+    }
+
+    public void setTag(String tag)
+    {
+        this.tag = tag;
+    }
+
     public Integer getNumberOfBought()
     {
         return numberOfBought;

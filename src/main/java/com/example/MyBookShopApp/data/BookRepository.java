@@ -50,10 +50,6 @@ public interface BookRepository extends JpaRepository<Book,Integer> {
 
     Page<Book> findAllByOrderByPubDateDesc(Pageable nextPage);
 
-
-
-
-//    Page<Book> findAllByPubdateDesc
-
+    Page<Book> findBookByTagContaining(String tag, Pageable nextPage );
 
 }

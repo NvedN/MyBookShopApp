@@ -55,8 +55,8 @@
               <h2 class="Authors-title" id="a" th:id="${#strings.toLowerCase(authorsList.key)}" th:text="${authorsList.key}">А
               </h2>
               <div class="Authors-letter">
-                <div th:each="author : ${authorsList.value}" class="Authors-item"><a
-                        href="/authors/slug.html" th:text="${author.lastName + ' ' + author.firstName}">Абгарян Наринэ</a>
+                <div th:each="author : ${authorsList.value}" class="Authors-item">
+                  <a href="/authors/slug.html" th:text="${author.lastName + ' ' + author.firstName}">Абгарян Наринэ</a>
                 </div>
               </div>
             </div>

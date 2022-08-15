@@ -11,10 +11,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class BookService
@@ -91,12 +88,6 @@ public class BookService
 						toDateTime = LocalDate.parse(toDate, DateTimeFormatter.ofPattern("dd.MM.yyyy"))
 								.atTime(0, 0, 0, 0);
 				}
-				System.out.println(
-						"---------bookRepository.findBooksByPubDateBetween(fromDateTime, toDateTime,nextPage).getContent() = "
-								+ bookRepository.findBooksByPubDateBetween(fromDateTime, toDateTime, nextPage).getContent());
-				System.out.println(
-						"---------bookRepository.size = " + bookRepository.findBooksByPubDateBetween(fromDateTime, toDateTime,
-								nextPage).getContent().size());
 				return bookRepository.findBooksByPubDateBetween(fromDateTime, toDateTime, nextPage).getContent();
 		}
 
@@ -105,6 +96,8 @@ public class BookService
 				Pageable nextPage = PageRequest.of(offset, limit);
 				return bookRepository.findBookByTitleContaining(searchWork, nextPage);
 		}
+
+
 
 		public List<Book> findTopByPubDate(Integer offset, Integer limit)
 		{
@@ -128,4 +121,23 @@ public class BookService
 				System.out.println("----------booksList = " + booksList);
 				return bookRepository.findAllByOrderByPubDateDesc(nextPage).getContent();
 		}
+
+		public HashSet<String> getBooksByTag()
+		{
+				HashSet<String> output = new HashSet<>();
+				List<Book> allBooks = bookRepository.findAll();
+				for(Book book : allBooks){
+						output.add(book.getTag());
+				}
+				System.out.println("-------------NVN-----------output = " + output);
+
+				return output;
+		}
+
+		public Page<Book> getPageOfTags(String tag, Integer offset, Integer limit)
+		{
+				Pageable nextPage = PageRequest.of(offset, limit);
+				return bookRepository.findBookByTagContaining(tag, nextPage);
+		}
+
 }
