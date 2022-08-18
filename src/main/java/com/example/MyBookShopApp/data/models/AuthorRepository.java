@@ -9,4 +9,5 @@ import java.util.List;
 public interface AuthorRepository extends JpaRepository<Author,Integer>
 {
 
+		Author getAuthorByLastNameContaining(String authorLastName);
 }

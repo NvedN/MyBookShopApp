@@ -1,9 +1,6 @@
 package com.example.MyBookShopApp.controllers;
 
-import com.example.MyBookShopApp.data.Book;
-import com.example.MyBookShopApp.data.BooksPageDto;
-import com.example.MyBookShopApp.data.RecommendedBooksPageDto;
-import com.example.MyBookShopApp.data.TagWordDto;
+import com.example.MyBookShopApp.data.*;
 import com.example.MyBookShopApp.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -47,8 +44,9 @@ public class MainPageController
 		}
 
 		@GetMapping("/")
-		public String mainPage(Model model)
+		public String mainPage(Model model, SearchWordDto searchWordDto)
 		{
+				model.addAttribute("searchWordDto", searchWordDto);
 				return "index";
 		}
 
@@ -73,6 +71,7 @@ public class MainPageController
 		public BooksPageDto getPopularBooksPage(@RequestParam("offset") Integer offset,
 				@RequestParam("limit") Integer limit)
 		{
+				System.out.println("---------here?");
 				return new BooksPageDto(bookService.getPageOfNewsBooks(offset, limit).getContent());
 		}
 
@@ -84,13 +83,12 @@ public class MainPageController
 
 		@GetMapping("/tags")
 		public String mainPageTags(@RequestParam(value = "tag", required = false) String tag,
-				Model model,TagWordDto tagWordDto)
+				Model model)
 		{
-				System.out.println("--------start Tags?");
-				System.out.println("------tag = " + tag);
-				System.out.println("------tagWord = " + tagWordDto.getExample());
-				model.addAttribute("tagWord",tag);
+				model.addAttribute("tagName",tag);
 				model.addAttribute("tagResults", bookService.getPageOfTags(tag, 0, 20).getContent());
 				return "/tags/index";
 		}
+
+
 }

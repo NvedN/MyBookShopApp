@@ -47,13 +47,13 @@ p.error-browser
             <ul class="breadcrumbs">
                 <li class="breadcrumbs-item"><a href="/index.html">Главная</a>
                 </li>
-                <li class="breadcrumbs-item breadcrumbs-item_current"><span>Психологическая проза</span>
+                <li class="breadcrumbs-item breadcrumbs-item_current" th:text="${tagName}"><span>Психологическая проза</span>
                 </li>
             </ul>
             <div class="Section">
-                <div class="Section-header" th:text="${tagWord}">
+                <div class="Section-header">
 <!--                    th:field="*{}"-->
-                    <h1 class="Section-title" th:text="${tagWord}">Психологическая проза
+                    <h1 class="Section-title"  th:text="${tagName}">Психологическая проза
                     </h1>
                     <div class="Section-header-links"><a class="Section-header-link" href="/index.html#tags">Все
                         тэги</a>
@@ -78,6 +78,7 @@ p.error-browser
                     <div class="Cards-footer Cards-footer_center"><a class="btn btn_primary" href="#"
                                                                      data-refreshshow="tag" data-refreshoffset="20"
                                                                      data-refreshlimit="20"
+                                                                     th:attr="data-refreshquery=${tagName}"
                                                                      data-refreshid="10">Показать еще</a>
 <!--                                                                     th:attr="data-refreshquery=${tagWordDto.example}"-->
 

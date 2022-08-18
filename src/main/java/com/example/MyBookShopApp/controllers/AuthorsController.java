@@ -1,20 +1,22 @@
 package com.example.MyBookShopApp.controllers;
 
 import com.example.MyBookShopApp.data.Author;
+import com.example.MyBookShopApp.data.AuthorPageDto;
+import com.example.MyBookShopApp.data.SearchWordDto;
 import com.example.MyBookShopApp.service.AuthorService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.ui.Model;
 
 import java.util.List;
 import java.util.Map;
 
 @Controller
 @Api(description = "authors data")
+@RequestMapping("/authors")
 public class AuthorsController {
 
     private final AuthorService authorService;
@@ -29,8 +31,10 @@ public class AuthorsController {
         return authorService.getAuthorsMap();
     }
 
-    @GetMapping("/authors")
-    public String authorsPage(){
+    @GetMapping("")
+    public String authorsPage(Model model, SearchWordDto searchWordDto){
+        System.out.println("---------------authors = !!!!");
+        model.addAttribute("searchWordDto", searchWordDto);
         return "/authors/index";
     }
 
@@ -39,5 +43,23 @@ public class AuthorsController {
     @ResponseBody
     public Map<String, List<Author>> authors(){
         return authorService.getAuthorsMap();
+    }
+
+
+    @ModelAttribute("authorPageDto")
+    public AuthorPageDto authorPageDto(){
+        return new AuthorPageDto();
+    }
+
+    @GetMapping("/slug")
+    public String genresSlugPage(SearchWordDto searchWordDto, Model model,@RequestParam(value = "authorLastName", required = false) String authorLastName,
+        AuthorPageDto authorPageDto)
+    {//Model model){
+        System.out.println("--------start slug ");
+        model.addAttribute("authorPageObject",authorService.getAuthorInfo(authorLastName));
+        model.addAttribute("authorLastName",authorLastName);
+        model.addAttribute("searchWordDto", searchWordDto);
+        model.addAttribute("authorResults",authorService.getPageOfAuthorResultBooks(authorLastName,0,20));
+        return "/authors/slug";
     }
 }

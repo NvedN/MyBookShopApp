@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
-@Table(name = "books")
+@Table(name = "book")
 @ApiModel(description = "entity representing a book")
 public class Book {
 

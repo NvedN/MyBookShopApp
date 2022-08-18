@@ -39,7 +39,7 @@
           | браузера здесь&nbsp;
       | для правильного отображения сайта.
   -->
-  <footer th:replace="~{fragments/footer_fragment :: footFragment}" ></footer>
+  <header th:replace="~{fragments/header_fragment :: headFragment}"></header>
   <div class="Middle">
     <div class="wrap">
       <main class="Middle-main">
@@ -50,140 +50,27 @@
           </li>
           <li class="breadcrumbs-item"><a href="/genres/index.html">Легкое чтение</a>
           </li>
-          <li class="breadcrumbs-item breadcrumbs-item_current"><span>Детективы</span>
+          <li class="breadcrumbs-item breadcrumbs-item_current" th:text="${genreName}"><span>Детективы</span>
           </li>
         </ul>
         <header class="Middle-header">
-          <h1 class="Middle-title">Детективы
+          <h1 class="Middle-title" th:text="${genreName}">Детективы
           </h1>
         </header>
         <div class="Section">
           <div class="Cards Cards_refresh">
-            <div class="Card">
-              <div class="Card-picture"><a href="#"><img src="/assets/img/content/main/card.jpg" alt="card.jpg"/></a>
+            <div class="Card" th:each="book : ${genreResults}">
+              <div class="Card-picture"><a href="#"><img th:src="${book.image}"
+                                                         src="/assets/img/content/main/card.jpg"
+                                                         alt="card.jpg"/></a>
               </div>
               <div class="Card-content">
-                <strong class="Card-title"><a href="#">Техника</a>
+                <strong class="Card-title"><a href="#" th:text="${book.title}">Техника</a>
                 </strong>
-                <div class="Card-description">Кондратенко Александр Петрович
+                <div class="Card-description" th:text="${book.description}">Кондратенко Александр Петрович
                 </div>
-                <div class="Card-cost"><span class="Card-priceOld">₽300.00</span><span class="Card-price">₽190.00</span>
-                </div>
-              </div>
-            </div>
-            <div class="Card">
-              <div class="Card-picture"><a href="#"><img src="/assets/img/content/main/card.jpg" alt="card.jpg"/></a>
-                <div class="Card-sale">30% скидка
-                </div>
-              </div>
-              <div class="Card-content">
-                <strong class="Card-title"><a href="#">Английский язык. 5 класс. Английский в фокусе. Рабочая тетрадь. ФГОС</a>
-                </strong>
-                <div class="Card-description">Ваулина, Дули, Подоляко
-                </div>
-                <div class="Card-cost"><span class="Card-priceOld">₽250.00</span><span class="Card-price">₽210.00</span>
-                </div>
-              </div>
-            </div>
-            <div class="Card">
-              <div class="Card-picture"><a href="#"><img src="/assets/img/content/main/card.jpg" alt="card.jpg"/></a>
-              </div>
-              <div class="Card-content">
-                <strong class="Card-title"><a href="#">Английский язык. 4 класс. Английский в фокусе. Рабочая тетрадь</a>
-                </strong>
-                <div class="Card-description">Быкова, Дули, Эванс
-                </div>
-                <div class="Card-cost"><span class="Card-price">₽190.00</span>
-                </div>
-              </div>
-            </div>
-            <div class="Card">
-              <div class="Card-picture"><a href="#"><img src="/assets/img/content/main/card.jpg" alt="card.jpg"/></a>
-                <div class="Card-sale">30% скидка
-                </div>
-                <div class="Card-ribbon"><span class="Card-ribbonText">Бестселлер</span>
-                </div><a class="Card-status" title="Куплена"><img src="/assets/img/icons/check.svg" alt="check.svg"/></a>
-              </div>
-              <div class="Card-content">
-                <strong class="Card-title"><a href="#">Великая Отечественная война. 1941-1945</a>
-                </strong>
-                <div class="Card-description">Солопенко Алла, Меркулов Дмитрий
-                </div>
-                <div class="Card-cost"><span class="Card-price">₽50.00</span>
-                </div>
-              </div>
-            </div>
-            <div class="Card">
-              <div class="Card-picture"><a href="#"><img src="/assets/img/content/main/card.jpg" alt="card.jpg"/></a>
-              </div>
-              <div class="Card-content">
-                <strong class="Card-title"><a href="#">Большое путешествие по телу человека</a>
-                </strong>
-                <div class="Card-description">Джон Фарндон
-                </div>
-                <div class="Card-cost"><span class="Card-price">₽900.00</span>
-                </div>
-              </div>
-            </div>
-            <div class="Card">
-              <div class="Card-picture"><a href="#"><img src="/assets/img/content/main/card.jpg" alt="card.jpg"/></a><a class="Card-status" title="В корзине"><img src="/assets/img/icons/shopping-basket.svg" alt="shopping-basket.svg"/></a>
-              </div>
-              <div class="Card-content">
-                <strong class="Card-title"><a href="#">Великая Отечественная война. 1941-1945</a>
-                </strong>
-                <div class="Card-description">Солопенко Алла, Меркулов Дмитрий
-                </div>
-                <div class="Card-cost"><span class="Card-price">₽50.00</span>
-                </div>
-              </div>
-            </div>
-            <div class="Card">
-              <div class="Card-picture"><a href="#"><img src="/assets/img/content/main/card.jpg" alt="card.jpg"/></a>
-                <div class="Card-ribbon"><span class="Card-ribbonText">Бестселлер</span>
-                </div>
-              </div>
-              <div class="Card-content">
-                <strong class="Card-title"><a href="#">Большое путешествие по телу человека</a>
-                </strong>
-                <div class="Card-description">Джон Фарндон
-                </div>
-                <div class="Card-cost"><span class="Card-price">₽900.00</span>
-                </div>
-              </div>
-            </div>
-            <div class="Card">
-              <div class="Card-picture"><a href="#"><img src="/assets/img/content/main/card.jpg" alt="card.jpg"/></a>
-              </div>
-              <div class="Card-content">
-                <strong class="Card-title"><a href="#">Английский язык. 4 класс. Английский в фокусе. Рабочая тетрадь</a>
-                </strong>
-                <div class="Card-description">Быкова, Дули, Эванс
-                </div>
-                <div class="Card-cost"><span class="Card-price">₽190.00</span>
-                </div>
-              </div>
-            </div>
-            <div class="Card">
-              <div class="Card-picture"><a href="#"><img src="/assets/img/content/main/card.jpg" alt="card.jpg"/></a>
-              </div>
-              <div class="Card-content">
-                <strong class="Card-title"><a href="#">Великая Отечественная война. 1941-1945</a>
-                </strong>
-                <div class="Card-description">Солопенко Алла, Меркулов Дмитрий
-                </div>
-                <div class="Card-cost"><span class="Card-price">₽50.00</span>
-                </div>
-              </div>
-            </div>
-            <div class="Card">
-              <div class="Card-picture"><a href="#"><img src="/assets/img/content/main/card.jpg" alt="card.jpg"/></a><a class="Card-status" title="Отложена"><img src="/assets/img/icons/heart.svg" alt="heart.svg"/></a>
-              </div>
-              <div class="Card-content">
-                <strong class="Card-title"><a href="#">Большое путешествие по телу человека</a>
-                </strong>
-                <div class="Card-description">Джон Фарндон
-                </div>
-                <div class="Card-cost"><span class="Card-price">₽900.00</span>
+                <div class="Card-cost"><span class="Card-priceOld" th:text="${book.priceOld}">₽300.00</span><span
+                        class="Card-price" th:text="${book.price}">₽190.00</span>
                 </div>
               </div>
             </div>

@@ -3,6 +3,7 @@ package com.example.MyBookShopApp.controllers;
 import com.example.MyBookShopApp.data.Book;
 import com.example.MyBookShopApp.data.BooksPageDto;
 import com.example.MyBookShopApp.data.RecommendedBooksPageDto;
+import com.example.MyBookShopApp.data.SearchWordDto;
 import com.example.MyBookShopApp.service.BookService;
 import com.example.MyBookShopApp.service.BooksRatingAndPopularityService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,12 +22,6 @@ public class BooksController
 
 		private BooksRatingAndPopularityService booksRatingAndPopularityService;
 
-//		@Autowired
-//		public BooksController(
-//				BooksRatingAndPopularityService booksRatingAndPopularityService)
-//		{
-//				this.booksRatingAndPopularityService = booksRatingAndPopularityService;
-//		}
 
 		@Autowired
 		public BooksController(BookService bookService, BooksRatingAndPopularityService booksRatingAndPopularityService)
@@ -42,10 +37,11 @@ public class BooksController
 		}
 
 		@GetMapping("/popular")
-		public String booksPagePopular(Model model)
+		public String booksPagePopular(Model model, SearchWordDto searchWordDto)
 		{
 				model.addAttribute("popularBooks",
 						booksRatingAndPopularityService.findPopularsBooks(0,5));
+				model.addAttribute("searchWordDto", searchWordDto);
 				return "/books/popular";
 		}
 
@@ -54,7 +50,7 @@ public class BooksController
 				@RequestParam(value = "to", required = false) String toDate,
 				@RequestParam(value = "offset", required = false) Integer offset,
 				@RequestParam(value = "limit", required = false) Integer limit,
-				Model model)
+				Model model, SearchWordDto searchWordDto)
 		{
 				if (fromDate != null || toDate != null)
 				{
@@ -66,17 +62,9 @@ public class BooksController
 						model.addAttribute("recentResults",
 								bookService.findTopByPubDate(0, 20));
 				}
+				model.addAttribute("searchWordDto", searchWordDto);
 				return "/books/recent";
 		}
-		//		@GetMapping("/books/recent")
-		//		//		http://localhost:8085/books/recent?from=01.07.2022&to=02.08.2022&offset=0&limit=20
-		//		@ApiOperation("get books between start and end period")
-		//		public ResponseEntity<List<Book>> booksBetweenDates(@RequestParam("from") String fromDate,
-		//				@RequestParam("to") String toDate, @RequestParam("offset") Integer offset,
-		//				@RequestParam("limit") Integer limit)
-		//		{
-		//				return ResponseEntity.ok(bookService.findBooksByPubDateBetween(fromDate, toDate, offset, limit));
-		//		}
 
 		@GetMapping("/slug")
 		public String booksPageSlug()
@@ -90,11 +78,7 @@ public class BooksController
 				return bookService.getBooksData();
 		}
 
-		@GetMapping("/books/popular")
-		public String recentBookPage()
-		{
-				return "books/popular";
-		}
+
 
 		@GetMapping("/books/news")
 		@ResponseBody
