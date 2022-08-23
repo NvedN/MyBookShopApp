@@ -104,6 +104,9 @@ public class BooksController
 		public String bookPage(@PathVariable("slug") String slug, Model model, SearchWordDto searchWordDto)
 		{
 				Book book = bookRepository.findBookBySlug(slug);
+				System.out.println("----slug =- " + slug);
+				System.out.println("--------book = " + book);
+				System.out.println("------------book.getImage = " + book.getImage());
 				model.addAttribute("searchWordDto", searchWordDto);
 				model.addAttribute("slugBook", book);
 				return "books/slug";
