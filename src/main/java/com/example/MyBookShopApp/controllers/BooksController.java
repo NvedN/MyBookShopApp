@@ -104,11 +104,11 @@ public class BooksController
 		public String bookPage(@PathVariable("slug") String slug, Model model, SearchWordDto searchWordDto)
 		{
 				Book book = bookRepository.findBookBySlug(slug);
-				System.out.println("----slug =- " + slug);
-				System.out.println("--------book = " + book);
-				System.out.println("------------book.getImage = " + book.getImage());
-				model.addAttribute("searchWordDto", searchWordDto);
-				model.addAttribute("slugBook", book);
+				if (book != null)
+				{
+						model.addAttribute("searchWordDto", searchWordDto);
+						model.addAttribute("slugBook", book);
+				}
 				return "books/slug";
 		}
 
@@ -116,11 +116,7 @@ public class BooksController
 		public String saveNewBookImage(@RequestParam("file")MultipartFile file,@PathVariable("slug")String slug) throws IOException {
 				String savePath = storage.saveNewBookImage(file,slug);
 				Book bookToUpdate = bookRepository.findBookBySlug(slug);
-				System.out.println("--------bookToUpdate = " + bookToUpdate);
 				bookToUpdate.setImage(savePath);
-
-				System.out.println("--------bookToUpdate = " + bookToUpdate);
-
 				bookRepository.save(bookToUpdate); //save new path in db here
 				return ("redirect:/books/" + slug);
 		}
