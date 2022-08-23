@@ -55,4 +55,6 @@ public interface BookRepository extends JpaRepository<Book,Integer> {
     @Query(value = "SELECT * FROM book INNER JOIN book2genre b2g on book.id = b2g.book_id INNER JOIN genre g on b2g.genre_id = g.id WHERE name = :genreName;",nativeQuery = true)
     List<Book> findBooksByGenreName(String genreName);
 
+    Book findBookBySlug(String slug);
+
 }

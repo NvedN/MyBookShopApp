@@ -1,5 +1,6 @@
 package com.example.MyBookShopApp.data;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
@@ -59,6 +60,16 @@ public class Book {
     private Integer numberDelayed ;
 
     private String tag;
+
+    @JsonGetter("authors")
+    public String authorsFullName(){
+        return author.toString();
+    }
+
+    @JsonProperty
+    public Integer discountPrice(){
+        return priceOld - Math.toIntExact((Math.round(price * priceOld)));
+    }
 
     public String getTag()
     {
@@ -189,6 +200,7 @@ public class Book {
                 ", author=" + author +
                 ", title='" + title + '\'' +
                 ", priceOld=" + priceOld +
+                ", img path =" + image +
                 ", price=" + price +
                 '}';
     }

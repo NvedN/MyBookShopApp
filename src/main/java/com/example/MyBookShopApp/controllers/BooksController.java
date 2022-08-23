@@ -1,16 +1,16 @@
 package com.example.MyBookShopApp.controllers;
 
-import com.example.MyBookShopApp.data.Book;
-import com.example.MyBookShopApp.data.BooksPageDto;
-import com.example.MyBookShopApp.data.RecommendedBooksPageDto;
-import com.example.MyBookShopApp.data.SearchWordDto;
+import com.example.MyBookShopApp.data.*;
 import com.example.MyBookShopApp.service.BookService;
 import com.example.MyBookShopApp.service.BooksRatingAndPopularityService;
+import com.example.MyBookShopApp.service.ResourceStorage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -22,13 +22,21 @@ public class BooksController
 
 		private BooksRatingAndPopularityService booksRatingAndPopularityService;
 
+		private BookRepository bookRepository;
+
+		private final ResourceStorage storage;
 
 		@Autowired
-		public BooksController(BookService bookService, BooksRatingAndPopularityService booksRatingAndPopularityService)
+		public BooksController(BookService bookService,
+				BooksRatingAndPopularityService booksRatingAndPopularityService,
+				BookRepository bookRepository, ResourceStorage storage)
 		{
-				this.booksRatingAndPopularityService = booksRatingAndPopularityService;
 				this.bookService = bookService;
+				this.booksRatingAndPopularityService = booksRatingAndPopularityService;
+				this.bookRepository = bookRepository;
+				this.storage = storage;
 		}
+
 
 		@GetMapping("/author")
 		public String booksPageAuthor()
@@ -40,7 +48,7 @@ public class BooksController
 		public String booksPagePopular(Model model, SearchWordDto searchWordDto)
 		{
 				model.addAttribute("popularBooks",
-						booksRatingAndPopularityService.findPopularsBooks(0,5));
+						booksRatingAndPopularityService.findPopularsBooks(0, 5));
 				model.addAttribute("searchWordDto", searchWordDto);
 				return "/books/popular";
 		}
@@ -78,8 +86,6 @@ public class BooksController
 				return bookService.getBooksData();
 		}
 
-
-
 		@GetMapping("/books/news")
 		@ResponseBody
 		public RecommendedBooksPageDto getNewsBooks(@RequestParam("offset") Integer offset,
@@ -92,5 +98,27 @@ public class BooksController
 		public BooksPageDto getNextNewsPage()
 		{
 				return new BooksPageDto();
+		}
+
+		@GetMapping("/{slug}")
+		public String bookPage(@PathVariable("slug") String slug, Model model, SearchWordDto searchWordDto)
+		{
+				Book book = bookRepository.findBookBySlug(slug);
+				model.addAttribute("searchWordDto", searchWordDto);
+				model.addAttribute("slugBook", book);
+				return "books/slug";
+		}
+
+		@PostMapping("/{slug}/img/save")
+		public String saveNewBookImage(@RequestParam("file")MultipartFile file,@PathVariable("slug")String slug) throws IOException {
+				String savePath = storage.saveNewBookImage(file,slug);
+				Book bookToUpdate = bookRepository.findBookBySlug(slug);
+				System.out.println("--------bookToUpdate = " + bookToUpdate);
+				bookToUpdate.setImage(savePath);
+
+				System.out.println("--------bookToUpdate = " + bookToUpdate);
+
+				bookRepository.save(bookToUpdate); //save new path in db here
+				return ("redirect:/books/" + slug);
 		}
 }
