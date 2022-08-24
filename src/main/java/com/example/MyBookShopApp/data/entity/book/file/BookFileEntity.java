@@ -1,5 +1,7 @@
 package com.example.MyBookShopApp.data.entity.book.file;
 
+import com.example.MyBookShopApp.data.Book;
+
 import javax.persistence.*;
 
 @Entity
@@ -13,6 +15,20 @@ public class BookFileEntity
 		private String hash;
 		private String path;
 		private String type_id;
+
+		@ManyToOne
+		@JoinColumn(name = "book_id", referencedColumnName = "id")
+		private Book book;
+
+		public Book getBook()
+		{
+				return book;
+		}
+
+		public void setBook(Book book)
+		{
+				this.book = book;
+		}
 
 		public Integer getId()
 		{

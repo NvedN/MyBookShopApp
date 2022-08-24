@@ -102,23 +102,6 @@ public class BookService
 		public List<Book> findTopByPubDate(Integer offset, Integer limit)
 		{
 				Pageable nextPage = PageRequest.of(offset, limit);
-				//        2015-04-11 00:00:00.000000
-				//        DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-				//        List<Book> findedBooks = bookRepository.findAll();
-				//        System.out.println("----------fineddeBooks = - " + findedBooks);
-				//        for (Book book : findedBooks){
-				//            System.out.println("--------book= " + book);
-				//            LocalDateTime bookPubDate = book.getPubDate();
-				//            System.out.println("------bookPubDate = " + bookPubDate);
-				//        }
-				//        System.out.println("--------LocalDateTimeNow = " + LocalDateTime.now());
-				List<Book> booksList = bookRepository.findTopByOrderByPubDateDesc(nextPage).getContent();
-				for (Book book : booksList)
-				{
-						System.out.println("-----book = " + book);
-						System.out.println("-----bookPubDate = " + book.getPubDate());
-				}
-				System.out.println("----------booksList = " + booksList);
 				return bookRepository.findAllByOrderByPubDateDesc(nextPage).getContent();
 		}
 
@@ -129,8 +112,6 @@ public class BookService
 				for(Book book : allBooks){
 						output.add(book.getTag());
 				}
-				System.out.println("-------------NVN-----------output = " + output);
-
 				return output;
 		}
 

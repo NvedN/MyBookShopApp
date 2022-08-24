@@ -1,5 +1,6 @@
 package com.example.MyBookShopApp.data;
 
+import com.example.MyBookShopApp.data.entity.book.file.BookFileEntity;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -8,7 +9,9 @@ import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "book")
@@ -69,6 +72,20 @@ public class Book {
     @JsonProperty
     public Integer discountPrice(){
         return priceOld - Math.toIntExact((Math.round(price * priceOld)));
+    }
+
+    @OneToMany(mappedBy = "book")
+    private List<BookFileEntity> bookFileEntityList = new ArrayList<>();
+
+    public List<BookFileEntity> getBookFileEntityList()
+    {
+        return bookFileEntityList;
+    }
+
+    public void setBookFileEntityList(
+        List<BookFileEntity> bookFileEntityList)
+    {
+        this.bookFileEntityList = bookFileEntityList;
     }
 
     public String getTag()
