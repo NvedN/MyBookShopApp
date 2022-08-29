@@ -1,6 +1,7 @@
 package com.example.MyBookShopApp.data.entity.book.file;
 
 import com.example.MyBookShopApp.data.Book;
+import com.example.MyBookShopApp.data.BookFileType;
 
 import javax.persistence.*;
 
@@ -14,11 +15,17 @@ public class BookFileEntity
 		private Integer id;
 		private String hash;
 		private String path;
-		private String type_id;
+
+		@Column(name = "type_id")
+		private Integer typeId;
 
 		@ManyToOne
 		@JoinColumn(name = "book_id", referencedColumnName = "id")
 		private Book book;
+
+		public String getBookFileExtensionString(){
+				return BookFileType.getExtensionStringByTypeID(typeId);
+		}
 
 		public Book getBook()
 		{
@@ -60,13 +67,13 @@ public class BookFileEntity
 				this.path = path;
 		}
 
-		public String getType_id()
+		public Integer getTypeId()
 		{
-				return type_id;
+				return typeId;
 		}
 
-		public void setType_id(String type_id)
+		public void setTypeId(Integer typeId)
 		{
-				this.type_id = type_id;
+				this.typeId = typeId;
 		}
 }

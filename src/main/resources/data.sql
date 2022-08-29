@@ -3083,9 +3083,9 @@ insert into book2genre (id, book_id, genre_id) values (999, 54, 2);
 insert into book2genre (id, book_id, genre_id) values (1000, 654, 3);
 
 
-insert into book_file (id, hash, type_id, path, book_id) values (1, 'fsdl342ladads76432', 1, '/Report_4_2021-02.09.2021.xlsx',
+insert into book_file (id, hash, type_id, path, book_id) values (1, 'fsdl342ladads76432', 1, '/Report_Doc.doc.xlsx',
                                                                  1);
-insert into book_file (id, hash, type_id, path, book_id) values (2, 'asdl35436dads34235', 2, '/Интеграции ENOVIA-1С.docx',
+insert into book_file (id, hash, type_id, path, book_id) values (2, 'asdl35436dads34235', 2, '/Report_fb2.fb2.xlsx',
                                                                  1);
-insert into book_file (id, hash, type_id, path, book_id) values (3, 'qwer342lafdss34123', 3, '/Отчет ПЭО_2_2021 (3).xlsx',
+insert into book_file (id, hash, type_id, path, book_id) values (3, 'qwer342lafdss34123', 3, '/Report_PDF.pdf.xlsx',
                                                                  1);

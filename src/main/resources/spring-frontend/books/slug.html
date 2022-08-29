@@ -26,9 +26,11 @@
     <link rel="stylesheet" href="/assets/css/basic.min.css?v=87821122">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="/assets/css/extra.min.css?v=87821122">
+    <link rel="stylesheet" href="/assets/css/DownloadBookWindowStyle.css">
     <!--[if lt IE 9]>
     <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
     <script defer src="/assets/js/scripts.min.js?v=87821122"></script>
+
 </head>
 <body class="Site">
 <!--if lt IE 8
@@ -452,12 +454,11 @@ p.error-browser
 
                             <div id="myPopup">
                                 <p>Ссылки для скачивания</p>
-                                <div th:each="bookFile : ${slugBook.getBookFileEntityList()}">
-                                    <a href="#" th:href="${'/books/download/' + bookFile.hash}"
-                                       th:text="${bookFile.getBookFileExtensionString()}"></a>
+                                <div th:each="bookFile : ${slugBook?.getBookFileEntityList()}">
+                                    <a href="#" th:href="${'/books/download/' + bookFile?.hash}"
+                                       th:text="${bookFile?.getBookFileExtensionString()}"></a>
                                 </div>
                                 <span id="myPopup__close" class="close">X</span>
-
                             </div>
                             <div id="myOverlay"></div>
 
@@ -665,6 +666,7 @@ p.error-browser
 <footer th:replace="~{fragments/footer_fragment :: footFragment}"></footer>
 <script src="/assets/plg/jQuery/jquery-3.5.1.min.js"></script>
 <script src="/assets/js/UploadNewBookImageScript.js"></script>
+<script src="/assets/js/DownloadBookWindowScript.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 </body>
 </html>
