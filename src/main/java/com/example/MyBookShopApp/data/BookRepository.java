@@ -57,4 +57,6 @@ public interface BookRepository extends JpaRepository<Book,Integer> {
 
     Book findBookBySlug(String slug);
 
+    List<Book> findBooksBySlugIn(String[] slugs);
+
 }

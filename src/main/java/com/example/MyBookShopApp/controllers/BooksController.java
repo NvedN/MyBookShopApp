@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.nio.file.Path;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.logging.Logger;
 import java.util.List;
 
@@ -109,7 +111,7 @@ public class BooksController
 		}
 
 		@GetMapping("/{slug}")
-		public String bookPage(@PathVariable("slug") String slug, Model model, SearchWordDto searchWordDto)
+		public String bookPage(@PathVariable("slug") String slug, Model model, SearchWordDto searchWordDto, @CookieValue(value = "cartContents", required = false) String cartContents)
 		{
 				Book book = bookRepository.findBookBySlug(slug);
 				if (book != null)
