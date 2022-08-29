@@ -108,7 +108,9 @@ p.error-browser
                                     <div class="Cart-buttons">
                                         <div class="Cart-btn">
                                             <button class="btn btn_primary btn_outline" data-sendstatus="CART"
-                                                    data-bookid="[1111]"><span class="btn-icon"><img
+                                                    data-bookid="[1111]"
+                                                    th:attr="data-bookid = ${'cart/'+ book?.slug}">
+                                                    <span class="btn-icon"><img
                                                     src="/assets/img/icons/shopping-basket.svg"
                                                     alt="shopping-basket.svg"/></span><span
                                                     class="btn-content">Купить</span>
@@ -118,9 +120,8 @@ p.error-browser
                                     <div class="Cart-btn">
                                         <button class="btn btn_danger btn_outline" data-sendstatus="UNLINK"
                                                 data-bookid="[1122]"
-                                                th:attr="data-bookid = ${'posptponed/remove/'+book.slug}">
-                                                <span class="btn-icon"><img
-                                                        src="/assets/img/icons/trash.svg" alt="trash.svg"/></span><span
+                                                th:attr="data-bookid = ${'postponed/remove/'+ book.slug}">
+                                                <span class="btn-icon"><img src="/assets/img/icons/trash.svg" alt="trash.svg"/></span><span
                                                 class="btn-content">Удалить</span>
                                         </button>
                                     </div>

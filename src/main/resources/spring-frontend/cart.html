@@ -107,16 +107,17 @@ p.error-browser
                                 <div class="Cart-buttons">
                                     <div class="Cart-btn">
                                         <button class="btn btn_primary btn_outline" data-sendstatus="KEPT"
-                                                data-bookid="[1122]"><span class="btn-icon"><img
+                                                data-bookid="[1133]"
+                                                th:attr="data-bookid = ${'postponed/' + book?.slug}">
+                                                <span class="btn-icon"><img
                                                 src="/assets/img/icons/heart.svg" alt="heart.svg"/></span><span
                                                 class="btn-content">Отложить</span>
                                         </button>
                                     </div>
                                     <div class="Cart-btn">
                                         <button class="btn btn_danger btn_outline" data-sendstatus="UNLINK"
-                                                data-bookid="[1122]"
-                                                th:attr="data-bookid = ${'cart/remove/'+ book?.slug}">
-                                                <span class="btn-icon"><img
+                                                th:attr="data-bookid = ${'cart/remove/' +book?.slug}"
+                                                data-bookid="[1133]"><span class="btn-icon"><img
                                                 src="/assets/img/icons/trash.svg" alt="trash.svg"/></span><span
                                                 class="btn-content">Удалить</span>
                                         </button>
