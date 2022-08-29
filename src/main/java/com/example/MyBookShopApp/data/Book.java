@@ -77,6 +77,7 @@ public class Book {
     @OneToMany(mappedBy = "book")
     private List<BookFileEntity> bookFileEntityList = new ArrayList<>();
 
+
     public List<BookFileEntity> getBookFileEntityList()
     {
         return bookFileEntityList;

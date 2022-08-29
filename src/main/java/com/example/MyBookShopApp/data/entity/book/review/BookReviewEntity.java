@@ -1,5 +1,7 @@
 package com.example.MyBookShopApp.data.entity.book.review;
 
+import com.example.MyBookShopApp.data.Book;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -9,34 +11,31 @@ public class BookReviewEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
-    @Column(columnDefinition = "INT NOT NULL")
-    private int bookId;
+    @ManyToOne
+    @JoinColumn(name = "book_id", referencedColumnName = "id")
+    private Book book;
 
-    @Column(columnDefinition = "INT NOT NULL")
     private int userId;
 
-    @Column(columnDefinition = "NOT NULL")
     private LocalDateTime time;
 
-    @Column(columnDefinition = "TEXT NOT NULL")
     private String text;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
+    public void setId(Integer id)
+    {
         this.id = id;
     }
 
-    public int getBookId() {
-        return bookId;
+    public Book getBook()
+    {
+        return book;
     }
 
-    public void setBookId(int bookId) {
-        this.bookId = bookId;
+    public void setBook(Book book)
+    {
+        this.book = book;
     }
 
     public int getUserId() {
