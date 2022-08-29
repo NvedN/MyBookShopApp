@@ -34,6 +34,8 @@
                             </form>
                         </div>
                     </div>
+                    <span th:if="${searchError}" th:text="${searchError.getLocalizedMessage()}"
+                          style="color: red"></span>
                 </div>
                 <div class="row-block Header-cart">
                     <div class="CartBlock"><a class="CartBlock-block" href="/postponed.html"
