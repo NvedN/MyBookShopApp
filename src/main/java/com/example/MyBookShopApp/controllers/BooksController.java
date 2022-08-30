@@ -1,6 +1,7 @@
 package com.example.MyBookShopApp.controllers;
 
 import com.example.MyBookShopApp.data.*;
+import com.example.MyBookShopApp.data.models.BookRepository;
 import com.example.MyBookShopApp.service.BookService;
 import com.example.MyBookShopApp.service.BooksRatingAndPopularityService;
 import com.example.MyBookShopApp.service.ResourceStorage;
@@ -15,8 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.nio.file.Path;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.logging.Logger;
 import java.util.List;
 

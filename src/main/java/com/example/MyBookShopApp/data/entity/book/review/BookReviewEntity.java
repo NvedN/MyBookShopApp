@@ -1,9 +1,12 @@
 package com.example.MyBookShopApp.data.entity.book.review;
 
 import com.example.MyBookShopApp.data.Book;
+import com.example.MyBookShopApp.data.entity.book.file.BookFileEntity;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "book_review")
@@ -23,10 +26,29 @@ public class BookReviewEntity {
 
     private String text;
 
+    public Integer getId()
+    {
+        return id;
+    }
+
     public void setId(Integer id)
     {
         this.id = id;
     }
+
+//    @OneToOne(mappedBy = "book_review_like")
+//    private BookReviewLikeEntity bookReviewLikeEntities ;
+//
+//    public List<BookReviewLikeEntity> getBookReviewLikeEntities()
+//    {
+//        return bookReviewLikeEntities;
+//    }
+//
+//    public void setBookReviewLikeEntities(
+//        List<BookReviewLikeEntity> bookReviewLikeEntities)
+//    {
+//        this.bookReviewLikeEntities = bookReviewLikeEntities;
+//    }
 
     public Book getBook()
     {

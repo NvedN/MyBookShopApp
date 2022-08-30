@@ -1,13 +1,11 @@
 package com.example.MyBookShopApp.service;
 
 import com.example.MyBookShopApp.data.Book;
-import com.example.MyBookShopApp.data.BookRepository;
+import com.example.MyBookShopApp.data.models.BookRepository;
 import com.example.MyBookShopApp.data.entity.genre.GenreEntity;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
