@@ -36,7 +36,28 @@ public class BookReviewEntity {
         this.id = id;
     }
 
-//    @OneToOne(mappedBy = "book_review_like")
+    @OneToMany(mappedBy = "bookReviewEntity")
+    private List<BookReviewLikeEntity> bookReviewLikeEntities = new ArrayList<>();
+
+    public List<BookReviewLikeEntity> getBookReviewLikeEntities()
+    {
+        return bookReviewLikeEntities;
+    }
+
+    public void setBookReviewLikeEntities(
+        List<BookReviewLikeEntity> bookReviewLikeEntities)
+    {
+        this.bookReviewLikeEntities = bookReviewLikeEntities;
+    }
+    //    public List<BookReviewLikeEntity> getBookFileEntityList()
+//    {
+//        return bookReviewLikeEntities;
+//    }
+
+
+
+
+    //    @OneToOne(mappedBy = "book_review_like")
 //    private BookReviewLikeEntity bookReviewLikeEntities ;
 //
 //    public List<BookReviewLikeEntity> getBookReviewLikeEntities()
@@ -82,5 +103,16 @@ public class BookReviewEntity {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    @Override public String toString()
+    {
+        return "BookReviewEntity{" +
+            "id=" + id +
+            ", book=" + book +
+            ", userId=" + userId +
+            ", time=" + time +
+            ", text='" + text + '\'' +
+            '}';
     }
 }

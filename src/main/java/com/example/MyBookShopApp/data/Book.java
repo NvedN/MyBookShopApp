@@ -1,6 +1,7 @@
 package com.example.MyBookShopApp.data;
 
 import com.example.MyBookShopApp.data.entity.book.file.BookFileEntity;
+import com.example.MyBookShopApp.data.entity.book.review.BookReviewEntity;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -78,6 +79,7 @@ public class Book {
     private List<BookFileEntity> bookFileEntityList = new ArrayList<>();
 
 
+
     public List<BookFileEntity> getBookFileEntityList()
     {
         return bookFileEntityList;
@@ -87,6 +89,20 @@ public class Book {
         List<BookFileEntity> bookFileEntityList)
     {
         this.bookFileEntityList = bookFileEntityList;
+    }
+
+    @OneToMany(mappedBy = "book")
+    private List<BookReviewEntity>  bookReviewEntities = new ArrayList<>();
+
+    public List<BookReviewEntity> getBookReviewEntities()
+    {
+        return bookReviewEntities;
+    }
+
+    public void setBookReviewEntities(
+        List<BookReviewEntity> bookReviewEntities)
+    {
+        this.bookReviewEntities = bookReviewEntities;
     }
 
     public String getTag()

@@ -74,4 +74,15 @@ public class BookReviewLikeEntity {
     public void setValue(short value) {
         this.value = value;
     }
+
+    @Override public String toString()
+    {
+        return "BookReviewLikeEntity{" +
+            "id=" + id +
+            ", bookReviewEntity=" + bookReviewEntity +
+            ", userId=" + userId +
+            ", time=" + time +
+            ", value=" + value +
+            '}';
+    }
 }

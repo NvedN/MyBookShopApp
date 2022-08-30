@@ -1,6 +1,10 @@
 package com.example.MyBookShopApp.controllers;
 
-import com.example.MyBookShopApp.data.*;
+import com.example.MyBookShopApp.data.Book;
+import com.example.MyBookShopApp.data.BooksPageDto;
+import com.example.MyBookShopApp.data.RecommendedBooksPageDto;
+import com.example.MyBookShopApp.data.SearchWordDto;
+import com.example.MyBookShopApp.data.entity.book.review.BookReviewEntity;
 import com.example.MyBookShopApp.data.models.BookRepository;
 import com.example.MyBookShopApp.service.BookService;
 import com.example.MyBookShopApp.service.BooksRatingAndPopularityService;
@@ -14,13 +18,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import java.nio.file.Path;
+
 import java.io.IOException;
-import java.util.logging.Logger;
+import java.nio.file.Path;
 import java.util.List;
-
-
-
+import java.util.logging.Logger;
 
 @Controller
 @RequestMapping("/books")
@@ -45,7 +47,6 @@ public class BooksController
 				this.bookRepository = bookRepository;
 				this.storage = storage;
 		}
-
 
 		@GetMapping("/author")
 		public String booksPageAuthor()
@@ -110,7 +111,8 @@ public class BooksController
 		}
 
 		@GetMapping("/{slug}")
-		public String bookPage(@PathVariable("slug") String slug, Model model, SearchWordDto searchWordDto, @CookieValue(value = "cartContents", required = false) String cartContents)
+		public String bookPage(@PathVariable("slug") String slug, Model model, SearchWordDto searchWordDto,
+				@CookieValue(value = "cartContents", required = false) String cartContents)
 		{
 				Book book = bookRepository.findBookBySlug(slug);
 				if (book != null)
@@ -118,12 +120,14 @@ public class BooksController
 						model.addAttribute("searchWordDto", searchWordDto);
 						model.addAttribute("slugBook", book);
 				}
-				return "books/slug";
+				return "books/slugmy";
 		}
 
 		@PostMapping("/{slug}/img/save")
-		public String saveNewBookImage(@RequestParam("file")MultipartFile file,@PathVariable("slug")String slug) throws IOException {
-				String savePath = storage.saveNewBookImage(file,slug);
+		public String saveNewBookImage(@RequestParam("file") MultipartFile file, @PathVariable("slug") String slug)
+				throws IOException
+		{
+				String savePath = storage.saveNewBookImage(file, slug);
 				Book bookToUpdate = bookRepository.findBookBySlug(slug);
 				bookToUpdate.setImage(savePath);
 				bookRepository.save(bookToUpdate); //save new path in db here
@@ -131,20 +135,29 @@ public class BooksController
 		}
 
 		@GetMapping("/download/{hash}")
-		public ResponseEntity<ByteArrayResource> bookFile(@PathVariable("hash")String hash) throws IOException{
+		public ResponseEntity<ByteArrayResource> bookFile(@PathVariable("hash") String hash) throws IOException
+		{
 				Path path = storage.getBookFilePath(hash);
-				Logger.getLogger(this.getClass().getSimpleName()).info("book file path: "+path);
-
+				Logger.getLogger(this.getClass().getSimpleName()).info("book file path: " + path);
 				MediaType mediaType = storage.getBookFileMime(hash);
-				Logger.getLogger(this.getClass().getSimpleName()).info("book file mime type: "+mediaType);
-
+				Logger.getLogger(this.getClass().getSimpleName()).info("book file mime type: " + mediaType);
 				byte[] data = storage.getBookFileByteArray(hash);
-				Logger.getLogger(this.getClass().getSimpleName()).info("book file data len: "+data.length);
-
+				Logger.getLogger(this.getClass().getSimpleName()).info("book file data len: " + data.length);
 				return ResponseEntity.ok()
-						.header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename="+path.getFileName().toString())
+						.header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + path.getFileName().toString())
 						.contentType(mediaType)
 						.contentLength(data.length)
 						.body(new ByteArrayResource(data));
+		}
+
+		@PostMapping("/bookReview/{slug}/{text}")
+		public String changeBookRating(@PathVariable("slug") String slug, @PathVariable("text") String text)
+		{
+				System.out.println("----slug = " + slug);
+				System.out.println("-------text = " + text);
+				Book book = bookRepository.findBookBySlug(slug);
+				List<BookReviewEntity> bookReviewEntityList = book.getBookReviewEntities();
+				System.out.println("-------------NVN-----------bookReviewEntityList = " + bookReviewEntityList);
+				return ("redirect:/books/" + slug);
 		}
 }
