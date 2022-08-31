@@ -5,7 +5,9 @@ import com.example.MyBookShopApp.data.BooksPageDto;
 import com.example.MyBookShopApp.data.RecommendedBooksPageDto;
 import com.example.MyBookShopApp.data.SearchWordDto;
 import com.example.MyBookShopApp.data.entity.book.review.BookReviewEntity;
+import com.example.MyBookShopApp.data.entity.book.review.BookReviewLikeEntity;
 import com.example.MyBookShopApp.data.models.BookRepository;
+import com.example.MyBookShopApp.data.models.ReviewLikeRepository;
 import com.example.MyBookShopApp.data.models.ReviewRepository;
 import com.example.MyBookShopApp.service.BookService;
 import com.example.MyBookShopApp.service.BooksRatingAndPopularityService;
@@ -20,9 +22,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -41,16 +47,19 @@ public class BooksController
 
 		private ReviewRepository reviewRepository;
 
+		private ReviewLikeRepository reviewLikeRepository;
+
 		@Autowired
 		public BooksController(BookService bookService,
 				BooksRatingAndPopularityService booksRatingAndPopularityService,
-				BookRepository bookRepository, ResourceStorage storage, ReviewRepository reviewRepository)
+				BookRepository bookRepository, ResourceStorage storage, ReviewRepository reviewRepository,ReviewLikeRepository reviewLikeRepository)
 		{
 				this.bookService = bookService;
 				this.booksRatingAndPopularityService = booksRatingAndPopularityService;
 				this.bookRepository = bookRepository;
 				this.storage = storage;
 				this.reviewRepository = reviewRepository;
+				this.reviewLikeRepository = reviewLikeRepository;
 		}
 
 		@GetMapping("/author")
@@ -159,24 +168,68 @@ public class BooksController
 						.body(new ByteArrayResource(data));
 		}
 
+//		/books/changeBookStatus/' + + $this.data('bookid')
+		@PostMapping("/changeBookStatus/{slug}/{rating}")
+		public void addRatingToCookie(@PathVariable("slug") String slug, @PathVariable("rating") String rating,
+				HttpServletResponse response){
+				Cookie cookie = new Cookie("slugCookie", rating);
+				cookie.setPath("/books");
+				response.addCookie(cookie);
+
+		}
+
 		@PostMapping("/bookReview/{slug}/{text}")
-		public String changeBookRating(@PathVariable("slug") String slug, @PathVariable("text") String text)
+		public String changeBookRating(@PathVariable("slug") String slug, @PathVariable("text") String text,@CookieValue(name =
+				"slugCookie", required = false) String slugCookie, HttpServletResponse response) throws Exception
 		{
 				System.out.println("----slug = " + slug);
 				System.out.println("-------text = " + text);
 				Book book = bookRepository.findBookBySlug(slug);
 				BookReviewEntity previousReviewInDb =  reviewRepository.findTopByOrderByIdDesc();
 				System.out.println("---previous review = " + previousReviewInDb);
-				BookReviewEntity bookReviewEntity  = new BookReviewEntity();
-				bookReviewEntity.setBook(book);
-				bookReviewEntity.setText(text);
+
 				Integer nextId = previousReviewInDb.getId();
 				Integer nextUserId = previousReviewInDb.getUserId();
-				bookReviewEntity.setId(++nextId);
-				bookReviewEntity.setUserId(++nextUserId);
+				nextId++;
+				nextUserId++;
+				Integer rating = 0;
+				System.out.println("-----slugCookie = " + slugCookie);
+				if (slugCookie != null || !slugCookie.equals(""))
+				{
+						ArrayList<String> cookieBooks = new ArrayList<>(Arrays.asList(slugCookie.split("/")));
+						System.out.println("------cookie Books = " + cookieBooks);
+//						rating = Integer.parseInt(cookieBooks.get(slugCookie));
+						rating = Integer.valueOf(slugCookie);
+				}
+				System.out.println("----------raitng = " + rating);
+				BookReviewEntity bookReviewEntity  = new BookReviewEntity();
+//				reviewRepository.save(bookReviewEntity);
+				bookReviewEntity.setBook(book);
+				bookReviewEntity.setText(text);
+
+				bookReviewEntity.setId(nextId);
+				bookReviewEntity.setUserId(nextUserId);
 				bookReviewEntity.setTime(LocalDateTime.now());
 				System.out.println("----------bookReviewEntity = " + bookReviewEntity);
-				reviewRepository.save(bookReviewEntity);
+
+				BookReviewLikeEntity bookReviewLikeEntity = new BookReviewLikeEntity();
+				bookReviewLikeEntity.setId(nextId);
+				bookReviewLikeEntity.setValue(rating);
+				bookReviewLikeEntity.setTime(LocalDateTime.now());
+				bookReviewLikeEntity.setUserId(nextUserId);
+				bookReviewLikeEntity.setBookReviewEntity(bookReviewEntity);
+
+				System.out.println("-----bookReviewLikeEntity = " + bookReviewLikeEntity);
+
+				try
+				{
+						reviewRepository.save(bookReviewEntity);
+						reviewLikeRepository.save(bookReviewLikeEntity);
+				}catch (Exception e){
+						System.out.println("-------Start Exception?");
+						e.printStackTrace(System.out);
+				}
+
 				return ("redirect:/books/" + slug);
 		}
 }

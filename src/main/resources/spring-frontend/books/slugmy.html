@@ -26,6 +26,7 @@
     <link rel="stylesheet" href="/assets/css/fonts.min.css?v=79103183">
     <link rel="stylesheet" href="/assets/css/basic.min.css?v=79103183">
     <link rel="stylesheet" href="/assets/css/extra.min.css?v=79103183">
+    <link rel="stylesheet" href="/assets/css/DownloadBookWindowStyle.css">
     <!--[if lt IE 9]>
     <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
     <script defer src="/assets/js/scripts.min.js?v=79103183"></script>
@@ -391,8 +392,10 @@ p.error-browser
                             <div class="ProductCard-tags"><span class="ProductCard-titleProp">Тэги:</span><a
                                     href="/tags/">Современные</a>,&#32;<a href="/tags/">Психологическая проза</a>
                             </div>
-                            <div class="ProductCard-cost"><span class="ProductCard-titleProp" th:text="${slugBook?.priceOld}">Цена:</span><span
-                                    class="ProductCard-priceOld">₽300</span><span class="ProductCard-price" th:text="${slugBook?.discountPrice()}" >₽180</span>
+                            <div class="ProductCard-cost"><span class="ProductCard-titleProp"
+                                                                th:text="${slugBook?.priceOld}">Цена:</span><span
+                                    class="ProductCard-priceOld">₽300</span><span class="ProductCard-price"
+                                                                                  th:text="${slugBook?.discountPrice()}">₽180</span>
                             </div>
                             <!--+div.-info
                             //+div.-cost
@@ -403,8 +406,9 @@ p.error-browser
                             //        +img('change.svg','icons/card').-icon
                             -->
                         </div>
-                        <div class="ProductCard-text" >
-                            <p th:text="${slugBook?.description}">Таких, как я, называют Марами - отмеченными самой богиней смерти Мораной. Когда-то у меня
+                        <div class="ProductCard-text">
+                            <p th:text="${slugBook?.description}">Таких, как я, называют Марами - отмеченными самой
+                                богиней смерти Мораной. Когда-то у меня
                                 и моих шести сестер был свой путь. Тогда люди нас уважали и просили о милосердии. Они
                                 приносили нам подношения и молились нам. Но 200 лет назад все изменилось, когда принц
                                 Серата осмелился поднять руку на одну из нас. Я пыталась отомстить, но погибли мы все.
@@ -463,11 +467,11 @@ p.error-browser
                             <div id="myOverlay"></div>
 
                         </div>
-<!--                        +div.-cart-->
-<!--                            //+div.-cartElement.-cartElement_amount-->
-<!--                            //    +Amount._product-->
-<!--                            +div.-cartElement-->
-<!--                                +btn('button')(data-sendstatus='UNLINK' data-bookid="[1111]")._muted Вернуть из архива-->
+                        <!--                        +div.-cart-->
+                        <!--                            //+div.-cartElement.-cartElement_amount-->
+                        <!--                            //    +Amount._product-->
+                        <!--                            +div.-cartElement-->
+                        <!--                                +btn('button')(data-sendstatus='UNLINK' data-bookid="[1111]")._muted Вернуть из архива-->
                     </div>
                 </div>
                 <div class="Product-comments">
@@ -520,7 +524,8 @@ p.error-browser
                     <strong class="Comments-title">Написать отзыв
                     </strong>
                     <div class="Comments-addComment">
-                        <form class="form" action="#" method="post" data-bookid="1111" th:attr="data-bookid = ${slugBook?.slug}">
+                        <form class="form" action="#" method="post" data-bookid="1111"
+                              th:attr="data-bookid = ${slugBook?.slug}">
                             <div class="form-group">
                                 <textarea class="form-textarea Comments-review" name="review" id="review"
                                           placeholder="Текст отзыва" data-validate="require"></textarea>
@@ -539,9 +544,10 @@ p.error-browser
                         <div class="Comment-column">
                             <header class="Comment-header">
                                 <div>
-                                    <strong class="Comment-title" th:text="${userReview?.id}">Александр Кузнецов<span class="Comment-rating"><span
+                                    <strong class="Comment-title" th:text="${userReview?.id}">Александр Кузнецов<span
+                                            class="Comment-rating"  th:text="${userReview?.bookRating()}"><span
                                             class="Rating Rating_comment"><span class="Rating-stars"><span
-                                            class="Rating-star Rating-star_view" th:text="${userReview?.bookRating()}">
+                                            class="Rating-star Rating-star_view">
                               <svg xmlns="http://www.w3.org/2000/svg" width="19" height="18" viewBox="0 0 19 18">
                                 <g>
                                   <g>
@@ -582,11 +588,13 @@ p.error-browser
                                   </g>
                                 </g>
                               </svg></span></span></span></span>
-                                    </strong><span class="Comment-date" th:text="${userReview?.time}">17.04.2020 16:40</span>
+                                    </strong><span class="Comment-date"
+                                                   th:text="${userReview?.time}">17.04.2020 16:40</span>
                                 </div>
                             </header>
                             <div class="Comment-content">
-                                <p th:text="${userReview?.text}">Lorem ipsum dolor sit amet, consectetuer adipiscing elit doli. Aenean commodo ligula
+                                <p th:text="${userReview?.text}">Lorem ipsum dolor sit amet, consectetuer adipiscing
+                                    elit doli. Aenean commodo ligula
                                     eget dolor. Aenean massa. Cumtipsu sociis natoque penatibus et magnis dis parturient
                                     montesti, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque
                                     eutu, pretiumem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel,
@@ -620,5 +628,8 @@ p.error-browser
 </div>
 <footer th:replace="~{fragments/footer_fragment :: footFragment}"></footer>
 <script src="/assets/plg/jQuery/jquery-3.5.1.min.js"></script>
+<script src="/assets/js/UploadNewBookImageScript.js"></script>
+<script src="/assets/js/DownloadBookWindowScript.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 </body>
 </html>
