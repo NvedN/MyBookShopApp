@@ -2,6 +2,7 @@ package com.example.MyBookShopApp.data;
 
 import com.example.MyBookShopApp.data.entity.book.file.BookFileEntity;
 import com.example.MyBookShopApp.data.entity.book.review.BookReviewEntity;
+import com.example.MyBookShopApp.data.entity.book.review.BookReviewLikeEntity;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -104,6 +105,28 @@ public class Book {
     {
         this.bookReviewEntities = bookReviewEntities;
     }
+    @JsonProperty
+    public Integer bookRating(){
+        Integer calculatedValue = 0;
+        Integer rating = 0;
+        Integer div  = 0;
+        for (BookReviewEntity bookReviewEntity : bookReviewEntities ){
+           List<BookReviewLikeEntity> bookReviewLikeEntities =  bookReviewEntity.getBookReviewLikeEntities();
+           for (BookReviewLikeEntity bookReviewLikeEntity : bookReviewLikeEntities){
+               rating +=  bookReviewLikeEntity.getValue();
+               div++;
+           }
+        }
+        System.out.println("-------rating = " + rating);
+        System.out.println("-------div = " + div);
+
+        calculatedValue = rating / div;
+
+        System.out.println("-------calculatedValue = " + calculatedValue);
+
+        return calculatedValue;
+    };
+
 
     public String getTag()
     {

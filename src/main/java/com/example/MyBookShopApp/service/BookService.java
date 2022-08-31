@@ -1,6 +1,7 @@
 package com.example.MyBookShopApp.service;
 
 import com.example.MyBookShopApp.data.Book;
+import com.example.MyBookShopApp.data.entity.book.review.BookReviewEntity;
 import com.example.MyBookShopApp.data.models.BookRepository;
 import com.example.MyBookShopApp.exceptions.BookstoreApiWrongParameterException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -130,5 +131,11 @@ public class BookService
 				Pageable nextPage = PageRequest.of(offset, limit);
 				return bookRepository.findBookByTagContaining(tag, nextPage);
 		}
+
+
+		public List<BookReviewEntity> bookReviewEntityList(Book book){
+			return book.getBookReviewEntities();
+		}
+
 
 }

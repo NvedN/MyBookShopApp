@@ -6,6 +6,7 @@ import com.example.MyBookShopApp.data.RecommendedBooksPageDto;
 import com.example.MyBookShopApp.data.SearchWordDto;
 import com.example.MyBookShopApp.data.entity.book.review.BookReviewEntity;
 import com.example.MyBookShopApp.data.models.BookRepository;
+import com.example.MyBookShopApp.data.models.ReviewRepository;
 import com.example.MyBookShopApp.service.BookService;
 import com.example.MyBookShopApp.service.BooksRatingAndPopularityService;
 import com.example.MyBookShopApp.service.ResourceStorage;
@@ -21,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -37,15 +39,18 @@ public class BooksController
 
 		private final ResourceStorage storage;
 
+		private ReviewRepository reviewRepository;
+
 		@Autowired
 		public BooksController(BookService bookService,
 				BooksRatingAndPopularityService booksRatingAndPopularityService,
-				BookRepository bookRepository, ResourceStorage storage)
+				BookRepository bookRepository, ResourceStorage storage, ReviewRepository reviewRepository)
 		{
 				this.bookService = bookService;
 				this.booksRatingAndPopularityService = booksRatingAndPopularityService;
 				this.bookRepository = bookRepository;
 				this.storage = storage;
+				this.reviewRepository = reviewRepository;
 		}
 
 		@GetMapping("/author")
@@ -117,8 +122,12 @@ public class BooksController
 				Book book = bookRepository.findBookBySlug(slug);
 				if (book != null)
 				{
+						System.out.println("-----book.bookRating(); = "  + book.bookRating());
 						model.addAttribute("searchWordDto", searchWordDto);
 						model.addAttribute("slugBook", book);
+						model.addAttribute("reviewList", bookService.bookReviewEntityList(book));
+
+//						model.addAttribute("test", bookService.)
 				}
 				return "books/slugmy";
 		}
@@ -156,8 +165,18 @@ public class BooksController
 				System.out.println("----slug = " + slug);
 				System.out.println("-------text = " + text);
 				Book book = bookRepository.findBookBySlug(slug);
-				List<BookReviewEntity> bookReviewEntityList = book.getBookReviewEntities();
-				System.out.println("-------------NVN-----------bookReviewEntityList = " + bookReviewEntityList);
+				BookReviewEntity previousReviewInDb =  reviewRepository.findTopByOrderByIdDesc();
+				System.out.println("---previous review = " + previousReviewInDb);
+				BookReviewEntity bookReviewEntity  = new BookReviewEntity();
+				bookReviewEntity.setBook(book);
+				bookReviewEntity.setText(text);
+				Integer nextId = previousReviewInDb.getId();
+				Integer nextUserId = previousReviewInDb.getUserId();
+				bookReviewEntity.setId(++nextId);
+				bookReviewEntity.setUserId(++nextUserId);
+				bookReviewEntity.setTime(LocalDateTime.now());
+				System.out.println("----------bookReviewEntity = " + bookReviewEntity);
+				reviewRepository.save(bookReviewEntity);
 				return ("redirect:/books/" + slug);
 		}
 }

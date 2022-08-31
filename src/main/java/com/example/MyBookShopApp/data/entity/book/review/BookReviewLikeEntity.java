@@ -24,7 +24,7 @@ public class BookReviewLikeEntity {
     private LocalDateTime time;
 
     @Column(columnDefinition = "SMALLINT NOT NULL")
-    private short value;
+    private Integer value;
 
     public int getId() {
         return id;
@@ -67,11 +67,13 @@ public class BookReviewLikeEntity {
         this.time = time;
     }
 
-    public short getValue() {
+    public Integer getValue()
+    {
         return value;
     }
 
-    public void setValue(short value) {
+    public void setValue(Integer value)
+    {
         this.value = value;
     }
 
