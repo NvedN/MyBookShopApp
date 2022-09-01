@@ -13,7 +13,7 @@ import java.util.List;
 public class BookReviewEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     @ManyToOne
@@ -25,6 +25,13 @@ public class BookReviewEntity {
     private LocalDateTime time;
 
     private String text;
+
+    public BookReviewEntity(Integer nextId, Book book, String text, Integer nextUserId, LocalDateTime now)
+    {
+    }
+    public BookReviewEntity(){
+
+    }
 
     public Integer getId()
     {
@@ -49,27 +56,6 @@ public class BookReviewEntity {
     {
         this.bookReviewLikeEntities = bookReviewLikeEntities;
     }
-    //    public List<BookReviewLikeEntity> getBookFileEntityList()
-//    {
-//        return bookReviewLikeEntities;
-//    }
-
-
-
-
-    //    @OneToOne(mappedBy = "book_review_like")
-//    private BookReviewLikeEntity bookReviewLikeEntities ;
-//
-//    public List<BookReviewLikeEntity> getBookReviewLikeEntities()
-//    {
-//        return bookReviewLikeEntities;
-//    }
-//
-//    public void setBookReviewLikeEntities(
-//        List<BookReviewLikeEntity> bookReviewLikeEntities)
-//    {
-//        this.bookReviewLikeEntities = bookReviewLikeEntities;
-//    }
 
     public Book getBook()
     {

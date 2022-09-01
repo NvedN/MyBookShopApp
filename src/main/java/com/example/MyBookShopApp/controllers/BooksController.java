@@ -52,7 +52,8 @@ public class BooksController
 		@Autowired
 		public BooksController(BookService bookService,
 				BooksRatingAndPopularityService booksRatingAndPopularityService,
-				BookRepository bookRepository, ResourceStorage storage, ReviewRepository reviewRepository,ReviewLikeRepository reviewLikeRepository)
+				BookRepository bookRepository, ResourceStorage storage, ReviewRepository reviewRepository,
+				ReviewLikeRepository reviewLikeRepository)
 		{
 				this.bookService = bookService;
 				this.booksRatingAndPopularityService = booksRatingAndPopularityService;
@@ -131,12 +132,9 @@ public class BooksController
 				Book book = bookRepository.findBookBySlug(slug);
 				if (book != null)
 				{
-						System.out.println("-----book.bookRating(); = "  + book.bookRating());
 						model.addAttribute("searchWordDto", searchWordDto);
 						model.addAttribute("slugBook", book);
 						model.addAttribute("reviewList", bookService.bookReviewEntityList(book));
-
-//						model.addAttribute("test", bookService.)
 				}
 				return "books/slugmy";
 		}
@@ -168,68 +166,46 @@ public class BooksController
 						.body(new ByteArrayResource(data));
 		}
 
-//		/books/changeBookStatus/' + + $this.data('bookid')
 		@PostMapping("/changeBookStatus/{slug}/{rating}")
 		public void addRatingToCookie(@PathVariable("slug") String slug, @PathVariable("rating") String rating,
-				HttpServletResponse response){
+				HttpServletResponse response)
+		{
 				Cookie cookie = new Cookie("slugCookie", rating);
 				cookie.setPath("/books");
 				response.addCookie(cookie);
-
 		}
 
 		@PostMapping("/bookReview/{slug}/{text}")
-		public String changeBookRating(@PathVariable("slug") String slug, @PathVariable("text") String text,@CookieValue(name =
-				"slugCookie", required = false) String slugCookie, HttpServletResponse response) throws Exception
+		public String changeBookRating(@PathVariable("slug") String slug, @PathVariable("text") String text,
+				@CookieValue(name =
+						"slugCookie", required = false) String slugCookie, HttpServletResponse response) throws Exception
 		{
-				System.out.println("----slug = " + slug);
-				System.out.println("-------text = " + text);
 				Book book = bookRepository.findBookBySlug(slug);
-				BookReviewEntity previousReviewInDb =  reviewRepository.findTopByOrderByIdDesc();
-				System.out.println("---previous review = " + previousReviewInDb);
-
+				BookReviewEntity previousReviewInDb = reviewRepository.findTopByOrderByIdDesc();
 				Integer nextId = previousReviewInDb.getId();
 				Integer nextUserId = previousReviewInDb.getUserId();
-				nextId++;
+//								nextId++;
 				nextUserId++;
 				Integer rating = 0;
-				System.out.println("-----slugCookie = " + slugCookie);
 				if (slugCookie != null || !slugCookie.equals(""))
 				{
 						ArrayList<String> cookieBooks = new ArrayList<>(Arrays.asList(slugCookie.split("/")));
-						System.out.println("------cookie Books = " + cookieBooks);
-//						rating = Integer.parseInt(cookieBooks.get(slugCookie));
 						rating = Integer.valueOf(slugCookie);
 				}
-				System.out.println("----------raitng = " + rating);
-				BookReviewEntity bookReviewEntity  = new BookReviewEntity();
-//				reviewRepository.save(bookReviewEntity);
+				BookReviewEntity bookReviewEntity = new BookReviewEntity();
 				bookReviewEntity.setBook(book);
 				bookReviewEntity.setText(text);
-
 				bookReviewEntity.setId(nextId);
 				bookReviewEntity.setUserId(nextUserId);
 				bookReviewEntity.setTime(LocalDateTime.now());
-				System.out.println("----------bookReviewEntity = " + bookReviewEntity);
-
 				BookReviewLikeEntity bookReviewLikeEntity = new BookReviewLikeEntity();
 				bookReviewLikeEntity.setId(nextId);
 				bookReviewLikeEntity.setValue(rating);
 				bookReviewLikeEntity.setTime(LocalDateTime.now());
 				bookReviewLikeEntity.setUserId(nextUserId);
 				bookReviewLikeEntity.setBookReviewEntity(bookReviewEntity);
-
-				System.out.println("-----bookReviewLikeEntity = " + bookReviewLikeEntity);
-
-				try
-				{
-						reviewRepository.save(bookReviewEntity);
-						reviewLikeRepository.save(bookReviewLikeEntity);
-				}catch (Exception e){
-						System.out.println("-------Start Exception?");
-						e.printStackTrace(System.out);
-				}
-
+				reviewRepository.save(bookReviewEntity);
+				reviewLikeRepository.save(bookReviewLikeEntity);
 				return ("redirect:/books/" + slug);
 		}
 }

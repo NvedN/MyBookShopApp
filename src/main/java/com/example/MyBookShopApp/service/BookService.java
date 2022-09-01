@@ -134,7 +134,7 @@ public class BookService
 
 
 		public List<BookReviewEntity> bookReviewEntityList(Book book){
-			return book.getBookReviewEntities();
+			return book.getBookReviewEntityList();
 		}
 
 

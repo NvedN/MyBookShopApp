@@ -10,8 +10,8 @@ import java.time.LocalDateTime;
 public class BookReviewLikeEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "book_review_id", referencedColumnName = "id")
@@ -26,11 +26,20 @@ public class BookReviewLikeEntity {
     @Column(columnDefinition = "SMALLINT NOT NULL")
     private Integer value;
 
-    public int getId() {
+    public BookReviewLikeEntity(Integer nextId, Integer rating, LocalDateTime now, Integer nextUserId, BookReviewEntity bookReviewEntity)
+    {
+    }
+    public  BookReviewLikeEntity(){
+
+    }
+
+    public Integer getId()
+    {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id)
+    {
         this.id = id;
     }
 
@@ -43,13 +52,6 @@ public class BookReviewLikeEntity {
     {
         this.bookReviewEntity = bookReviewEntity;
     }
-    //    public int getReviewId() {
-//        return reviewId;
-//    }
-//
-//    public void setReviewId(int reviewId) {
-//        this.reviewId = reviewId;
-//    }
 
     public int getUserId() {
         return userId;
