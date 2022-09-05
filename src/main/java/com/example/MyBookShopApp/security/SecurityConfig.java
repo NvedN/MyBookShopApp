@@ -16,38 +16,38 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-		private final BookstoreUserDetailsService bookstoreUserDetailsService;
+    private final BookstoreUserDetailsService bookstoreUserDetailsService;
 
-		@Autowired
-		public SecurityConfig(BookstoreUserDetailsService bookstoreUserDetailsService) {
-				this.bookstoreUserDetailsService = bookstoreUserDetailsService;
-		}
+    @Autowired
+    public SecurityConfig(BookstoreUserDetailsService bookstoreUserDetailsService) {
+        this.bookstoreUserDetailsService = bookstoreUserDetailsService;
+    }
 
-		@Bean
-		PasswordEncoder getPasswordEncoder(){
-				return new BCryptPasswordEncoder();
-		}
+    @Bean
+    PasswordEncoder getPasswordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
 
-		@Bean
-		@Override
-		public AuthenticationManager authenticationManagerBean() throws Exception{
-				return super.authenticationManagerBean();
-		}
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception{
+        return super.authenticationManagerBean();
+    }
 
-		@Override
-		protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-				auth
-						.userDetailsService(bookstoreUserDetailsService)
-						.passwordEncoder(getPasswordEncoder());
-		}
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth
+                .userDetailsService(bookstoreUserDetailsService)
+                .passwordEncoder(getPasswordEncoder());
+    }
 
-		@Override
-		protected void configure(HttpSecurity http) throws Exception {
-				http
-						.authorizeRequests()
-						.antMatchers("/my","/profile").hasRole("USER")
-						.antMatchers("/**").permitAll()
-						.and().formLogin()
-						.loginPage("/signin").failureUrl("/signin");
-		}
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .authorizeRequests()
+                .antMatchers("/my","/profile").hasRole("USER")
+                .antMatchers("/**").permitAll()
+                .and().formLogin()
+                .loginPage("/signin").failureUrl("/signin");
+    }
 }

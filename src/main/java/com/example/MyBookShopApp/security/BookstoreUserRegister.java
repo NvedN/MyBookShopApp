@@ -29,6 +29,7 @@ public class BookstoreUserRegister {
             user.setName(registrationForm.getName());
             user.setEmail(registrationForm.getEmail());
             user.setPhone(registrationForm.getPhone());
+            System.out.println("--------registrationForm .get Pass = " + registrationForm.getPass());
             user.setPassword(passwordEncoder.encode(registrationForm.getPass()));
             bookstoreUserRepository.save(user);
         }

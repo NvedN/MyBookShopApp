@@ -30,11 +30,11 @@ public class AuthUserController
 		public String handleSignin(Model model, SearchWordDto searchWordDto)
 		{
 				model.addAttribute("searchWordDto", searchWordDto);
-        return "signin";
+				return "signin";
 		}
 
 		@GetMapping("/signup")
-		public String handleSignUp(Model model, SearchWordDto searchWordDto)
+		public String handleSignUp(Model model,SearchWordDto searchWordDto)
 		{
 				model.addAttribute("regForm", new RegistrationForm());
 				model.addAttribute("searchWordDto", searchWordDto);
@@ -89,16 +89,15 @@ public class AuthUserController
 		@GetMapping("/profile")
 		public String handleProfile(Model model, SearchWordDto searchWordDto)
 		{
-				model.addAttribute("searchWordDto", searchWordDto);
 				model.addAttribute("curUsr", userRegister.getCurrentUser());
+				model.addAttribute("searchWordDto", searchWordDto);
+
 				return "profile";
 		}
 
 		@GetMapping("/logout")
-		public String handleLogout(HttpServletRequest request, SearchWordDto searchWordDto, Model model)
+		public String handleLogout(HttpServletRequest request)
 		{
-				model.addAttribute("searchWordDto", searchWordDto);
-
 				HttpSession session = request.getSession();
 				SecurityContextHolder.clearContext();
 				if (session != null)
