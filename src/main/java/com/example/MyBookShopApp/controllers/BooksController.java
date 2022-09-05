@@ -189,7 +189,6 @@ public class BooksController
 				Integer rating = 0;
 				if (slugCookie != null || !slugCookie.equals(""))
 				{
-						ArrayList<String> cookieBooks = new ArrayList<>(Arrays.asList(slugCookie.split("/")));
 						rating = Integer.valueOf(slugCookie);
 				}
 				BookReviewEntity bookReviewEntity = new BookReviewEntity();
