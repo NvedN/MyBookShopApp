@@ -20,12 +20,4 @@ public class ContactConfirmationPayload {
     public void setCode(String code) {
         this.code = code;
     }
-
-    @Override public String toString()
-    {
-        return "ContactConfirmationPayload{" +
-            "contact='" + contact + '\'' +
-            ", code='" + code + '\'' +
-            '}';
-    }
 }
