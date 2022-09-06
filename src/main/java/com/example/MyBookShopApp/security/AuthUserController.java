@@ -34,11 +34,10 @@ public class AuthUserController
 		}
 
 		@GetMapping("/signup")
-		public String handleSignUp(Model model,SearchWordDto searchWordDto)
+		public String handleSignUp(Model model, SearchWordDto searchWordDto)
 		{
 				model.addAttribute("regForm", new RegistrationForm());
 				model.addAttribute("searchWordDto", searchWordDto);
-
 				return "signup";
 		}
 
@@ -67,7 +66,6 @@ public class AuthUserController
 				userRegister.registerNewUser(registrationForm);
 				model.addAttribute("regOk", true);
 				model.addAttribute("searchWordDto", searchWordDto);
-
 				return "signin";
 		}
 
@@ -82,7 +80,6 @@ public class AuthUserController
 		public String handleMy(Model model, SearchWordDto searchWordDto)
 		{
 				model.addAttribute("searchWordDto", searchWordDto);
-
 				return "my";
 		}
 
@@ -91,7 +88,6 @@ public class AuthUserController
 		{
 				model.addAttribute("curUsr", userRegister.getCurrentUser());
 				model.addAttribute("searchWordDto", searchWordDto);
-
 				return "profile";
 		}
 

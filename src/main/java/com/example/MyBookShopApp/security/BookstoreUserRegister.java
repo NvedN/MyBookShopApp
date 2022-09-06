@@ -29,7 +29,6 @@ public class BookstoreUserRegister {
             user.setName(registrationForm.getName());
             user.setEmail(registrationForm.getEmail());
             user.setPhone(registrationForm.getPhone());
-            System.out.println("--------registrationForm .get Pass = " + registrationForm.getPass());
             user.setPassword(passwordEncoder.encode(registrationForm.getPass()));
             bookstoreUserRepository.save(user);
         }
@@ -38,7 +37,7 @@ public class BookstoreUserRegister {
     public ContactConfirmationResponse login(ContactConfirmationPayload payload) {
         Authentication authentication =
                 authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(payload.getContact(),
-                payload.getCode()));
+                payload.getCode().replaceAll(" ","")));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         ContactConfirmationResponse response = new ContactConfirmationResponse();
