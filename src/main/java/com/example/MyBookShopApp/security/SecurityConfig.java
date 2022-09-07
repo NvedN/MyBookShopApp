@@ -48,15 +48,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
-                .authorizeRequests()
-                .antMatchers("/my","/profile").hasRole("USER")
-                .antMatchers("/**").permitAll()
-                .and().formLogin()
-                .loginPage("/signin").failureUrl("/signin")
-                .and().logout().logoutUrl("/logout").logoutSuccessUrl("/signin").deleteCookies("token");
+            .csrf().disable()
+            .authorizeRequests()
+            .antMatchers("/my","/profile").authenticated()//.hasRole("USER")
+            .antMatchers("/**").permitAll()
+            .and().formLogin()
+            .loginPage("/signin").failureUrl("/signin")
+            .and().logout().logoutUrl("/logout").logoutSuccessUrl("/signin").deleteCookies("token")
+            .and().oauth2Login()
+            .and().oauth2Client();
 
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        //http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
     }
 }
