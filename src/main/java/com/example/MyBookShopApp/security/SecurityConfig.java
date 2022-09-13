@@ -57,8 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .and().logout().logoutUrl("/logout").logoutSuccessUrl("/signin").deleteCookies("token")
             .and().oauth2Login()
             .and().oauth2Client();
-
-        //http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+//        https://oauth.vk.com/authorize?client_id=51419692&redirect_uri=http://localhost:8085/my&scope=12
         http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
     }
 }
