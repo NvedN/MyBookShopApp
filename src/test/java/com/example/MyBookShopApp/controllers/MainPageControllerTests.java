@@ -20,7 +20,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-//@TestPropertySource("/application-test.properties")
 class MainPageControllerTests {
 
     private final MockMvc mockMvc;
