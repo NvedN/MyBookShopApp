@@ -1,6 +1,7 @@
 package com.example.MyBookShopApp.security;
 
 import com.example.MyBookShopApp.data.SearchWordDto;
+import com.example.MyBookShopApp.exceptions.UserAttributesException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -73,12 +74,14 @@ public class AuthUserController {
     }
 
     @GetMapping("/my")
-    public String handleMy() {
+    public String handleMy(SearchWordDto searchWordDto, Model model) {
+        model.addAttribute("searchWordDto", searchWordDto);
         return "my";
     }
 
     @GetMapping("/profile")
-    public String handleProfile(Model model,SearchWordDto searchWordDto) {
+    public String handleProfile(Model model,SearchWordDto searchWordDto) throws UserAttributesException
+    {
         model.addAttribute("curUsr", userRegister.getCurrentUser());
         model.addAttribute("searchWordDto", searchWordDto);
         return "profile";
