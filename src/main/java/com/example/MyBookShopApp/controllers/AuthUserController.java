@@ -1,7 +1,11 @@
-package com.example.MyBookShopApp.security;
+package com.example.MyBookShopApp.controllers;
 
 import com.example.MyBookShopApp.data.SearchWordDto;
 import com.example.MyBookShopApp.exceptions.UserAttributesException;
+import com.example.MyBookShopApp.security.BookstoreUserRegister;
+import com.example.MyBookShopApp.security.ContactConfirmationPayload;
+import com.example.MyBookShopApp.security.ContactConfirmationResponse;
+import com.example.MyBookShopApp.security.RegistrationForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -27,8 +31,7 @@ public class AuthUserController {
     }
 
     @GetMapping("/signin")
-    public String handleSignin(Model model, SearchWordDto searchWordDto) {
-        model.addAttribute("searchWordDto", searchWordDto);
+    public String handleSignin() {
         return "signin";
     }
 
