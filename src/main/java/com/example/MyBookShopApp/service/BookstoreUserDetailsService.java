@@ -24,7 +24,8 @@ public class BookstoreUserDetailsService implements UserDetailsService {
         BookstoreUser bookstoreUser = bookstoreUserRepository.findBookstoreUserByEmail(s);
         if(bookstoreUser!=null){
             return new BookstoreUserDetails(bookstoreUser);
-        }else{
+        }
+        else{
             throw new UsernameNotFoundException("user not found doh!");
         }
     }

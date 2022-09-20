@@ -36,11 +36,6 @@ public class ResourceStorage
 
 		public String saveNewBookImage(MultipartFile file, String slug) throws IOException
 		{
-				System.out.println("-------uploadPath = " + uploadPath);
-				System.out.println("--------test w1 ");
-				System.out.println("Paths.get(uploadPath) = " + Paths.get(uploadPath));
-				System.out.println("----------test = !");
-				System.out.println("new File(uploadPath).exists() = " + new File(uploadPath).exists());
 				String resourceURI = null;
 				if (!file.isEmpty())
 				{
