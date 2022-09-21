@@ -28,6 +28,14 @@ public class Author {
     private String 	description ;
 
 
+    public Author(List<String> authors){
+        if (authors != null){
+            this.firstName = authors.toString();
+        }
+    }
+
+    public Author(){}
+
     @OneToMany(mappedBy = "author")
     @JsonIgnore
     private List<Book> bookList = new ArrayList<>();
