@@ -3,20 +3,15 @@ package com.example.MyBookShopApp.controllers;
 import com.example.MyBookShopApp.data.SearchWordDto;
 import com.example.MyBookShopApp.data.SmsCode;
 import com.example.MyBookShopApp.exceptions.UserAttributesException;
-import com.example.MyBookShopApp.security.BookstoreUserRegister;
-import com.example.MyBookShopApp.security.ContactConfirmationPayload;
-import com.example.MyBookShopApp.security.ContactConfirmationResponse;
-import com.example.MyBookShopApp.security.RegistrationForm;
+import com.example.MyBookShopApp.security.*;
 import com.example.MyBookShopApp.service.SmsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -31,14 +26,19 @@ public class AuthUserController
 
 		private final JavaMailSender javaMailSender;
 
+		private final PasswordEncoder passwordEncoder;
+
+		private final BookstoreUserRepository bookstoreUserRepository;
+
 		@Autowired
-		public AuthUserController(BookstoreUserRegister userRegister,SmsService smsService,JavaMailSender javaMailSender)
+		public AuthUserController(BookstoreUserRegister userRegister, SmsService smsService, JavaMailSender javaMailSender,
+				PasswordEncoder passwordEncoder, BookstoreUserRepository bookstoreUserRepository)
 		{
-
-        this.userRegister = userRegister;
-        this.smsService = smsService;
-        this.javaMailSender = javaMailSender;
-
+				this.userRegister = userRegister;
+				this.smsService = smsService;
+				this.javaMailSender = javaMailSender;
+				this.passwordEncoder = passwordEncoder;
+				this.bookstoreUserRepository = bookstoreUserRepository;
 		}
 
 		@GetMapping("/signin")
@@ -57,15 +57,18 @@ public class AuthUserController
 
 		@PostMapping("/requestContactConfirmation")
 		@ResponseBody
-		public ContactConfirmationResponse handleRequestContactConfirmation(@RequestBody ContactConfirmationPayload payload) {
+		public ContactConfirmationResponse handleRequestContactConfirmation(@RequestBody ContactConfirmationPayload payload)
+		{
 				ContactConfirmationResponse response = new ContactConfirmationResponse();
 				response.setResult("true");
-
-				if(payload.getContact().contains("@")){
+				if (payload.getContact().contains("@"))
+				{
 						return response;
-				}else{
+				}
+				else
+				{
 						String smsCodeString = smsService.sendSecretCodeSms(payload.getContact());
-						smsService.saveNewCode(new SmsCode(smsCodeString,60)); //expires in 1 min.
+						smsService.saveNewCode(new SmsCode(smsCodeString, 60)); //expires in 1 min.
 						return response;
 				}
 		}
@@ -127,9 +130,29 @@ public class AuthUserController
 		public String handleProfile(Model model, SearchWordDto searchWordDto) throws UserAttributesException
 		{
 				model.addAttribute("curUsr", userRegister.getCurrentUser());
+				model.addAttribute("editForm", new RegistrationForm());
 				model.addAttribute("searchWordDto", searchWordDto);
 				return "profile";
 		}
+
+		@PostMapping("/profile")
+		public String saveProfile(Model model, SearchWordDto searchWordDto,
+				@RequestParam(value = "pass", required = false) String pass) throws UserAttributesException
+		{
+				if (pass != null)
+				{
+						BookstoreUser userDetails = (BookstoreUser) userRegister.getCurrentUser();
+						userDetails.setPassword(passwordEncoder.encode(pass));
+						bookstoreUserRepository.save(userDetails);
+				}
+				model.addAttribute("curUsr", userRegister.getCurrentUser());
+				model.addAttribute("editForm", new RegistrationForm());
+				model.addAttribute("searchWordDto", searchWordDto);
+				return "profile";
+		}
+
+
+
 		//    @GetMapping("/logout")
 		//    public String handleLogout(HttpServletRequest request) {
 		//        HttpSession session = request.getSession();
