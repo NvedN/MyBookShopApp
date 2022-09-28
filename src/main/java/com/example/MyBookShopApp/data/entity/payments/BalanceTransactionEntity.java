@@ -1,6 +1,10 @@
 package com.example.MyBookShopApp.data.entity.payments;
 
+import com.example.MyBookShopApp.security.BookstoreUser;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -11,19 +15,20 @@ public class BalanceTransactionEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(columnDefinition = "INT NOT NULL")
-    private int userId;
 
-    @Column(columnDefinition = "TIMESTAMP NOT NULL")
-    private LocalDateTime time;
 
-    @Column(columnDefinition = "INT NOT NULL  DEFAULT 0")
+    @ManyToOne
+    @JoinColumn(name = "bookstoreUser_id", referencedColumnName = "id")
+    @JsonIgnore
+    private BookstoreUser bookstoreUser;
+
+
+    private LocalDate time;
+
     private int value;
 
-    @Column(columnDefinition = "INT NOT NULL")
     private int bookId;
 
-    @Column(columnDefinition = "TEXT NOT NULL")
     private String description;
 
     public int getId() {
@@ -34,19 +39,21 @@ public class BalanceTransactionEntity {
         this.id = id;
     }
 
-    public int getUserId() {
-        return userId;
+    public BookstoreUser getBookstoreUser()
+    {
+        return bookstoreUser;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setBookstoreUser(BookstoreUser bookstoreUser)
+    {
+        this.bookstoreUser = bookstoreUser;
     }
 
-    public LocalDateTime getTime() {
+    public LocalDate getTime() {
         return time;
     }
 
-    public void setTime(LocalDateTime time) {
+    public void setTime(LocalDate time) {
         this.time = time;
     }
 
@@ -72,5 +79,17 @@ public class BalanceTransactionEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override public String toString()
+    {
+        return "BalanceTransactionEntity{" +
+            "id=" + id +
+            ", bookstoreUser=" + bookstoreUser +
+            ", time=" + time +
+            ", value=" + value +
+            ", bookId=" + bookId +
+            ", description='" + description + '\'' +
+            '}';
     }
 }

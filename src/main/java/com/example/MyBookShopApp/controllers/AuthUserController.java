@@ -2,6 +2,8 @@ package com.example.MyBookShopApp.controllers;
 
 import com.example.MyBookShopApp.data.SearchWordDto;
 import com.example.MyBookShopApp.data.SmsCode;
+import com.example.MyBookShopApp.data.entity.payments.BalanceTransactionEntity;
+import com.example.MyBookShopApp.data.entity.payments.BalanceTransactionRepository;
 import com.example.MyBookShopApp.exceptions.UserAttributesException;
 import com.example.MyBookShopApp.security.*;
 import com.example.MyBookShopApp.service.SmsService;
@@ -15,6 +17,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Controller
 public class AuthUserController
@@ -30,15 +35,19 @@ public class AuthUserController
 
 		private final BookstoreUserRepository bookstoreUserRepository;
 
+		private final BalanceTransactionRepository balanceTransactionRepository;
+
 		@Autowired
 		public AuthUserController(BookstoreUserRegister userRegister, SmsService smsService, JavaMailSender javaMailSender,
-				PasswordEncoder passwordEncoder, BookstoreUserRepository bookstoreUserRepository)
+				PasswordEncoder passwordEncoder, BookstoreUserRepository bookstoreUserRepository,BalanceTransactionRepository balanceTransactionRepository)
 		{
 				this.userRegister = userRegister;
 				this.smsService = smsService;
 				this.javaMailSender = javaMailSender;
 				this.passwordEncoder = passwordEncoder;
 				this.bookstoreUserRepository = bookstoreUserRepository;
+				this.balanceTransactionRepository = balanceTransactionRepository;
+
 		}
 
 		@GetMapping("/signin")
@@ -129,30 +138,49 @@ public class AuthUserController
 		@GetMapping("/profile")
 		public String handleProfile(Model model, SearchWordDto searchWordDto) throws UserAttributesException
 		{
-				model.addAttribute("curUsr", userRegister.getCurrentUser());
+				BookstoreUser userDetails = (BookstoreUser) userRegister.getCurrentUser();
+				List<BalanceTransactionEntity> balanceTransactionEntities = userDetails.getBalanceTransactionEntitiesList();
+
+				System.out.println("------------balanceTransactionEntities = " + balanceTransactionEntities);
+
+				model.addAttribute("curUsr", userDetails);
 				model.addAttribute("editForm", new RegistrationForm());
+//				model.addAttribute("balanceForm", new BalanceEntity());
+				model.addAttribute("balanceTransaction",balanceTransactionEntities);
 				model.addAttribute("searchWordDto", searchWordDto);
 				return "profile";
 		}
 
 		@PostMapping("/profile")
 		public String saveProfile(Model model, SearchWordDto searchWordDto,
-				@RequestParam(value = "pass", required = false) String pass) throws UserAttributesException
+				@RequestParam(value = "pass", required = false) String pass,
+				@RequestParam(value = "value", required = false) Integer value) throws UserAttributesException
 		{
+				BookstoreUser userDetails = (BookstoreUser) userRegister.getCurrentUser();
 				if (pass != null)
 				{
-						BookstoreUser userDetails = (BookstoreUser) userRegister.getCurrentUser();
 						userDetails.setPassword(passwordEncoder.encode(pass));
 						bookstoreUserRepository.save(userDetails);
 				}
-				model.addAttribute("curUsr", userRegister.getCurrentUser());
+				if (value != null)
+				{
+						BalanceTransactionEntity balance = new BalanceTransactionEntity();
+						balance.setBookstoreUser(userDetails);
+						balance.setTime(LocalDate.now());
+						balance.setValue(value);
+						balance.setDescription("account top-up inside bookshop");
+						balanceTransactionRepository.save(balance);
+						System.out.println("------balacne = " + balance);
+						System.out.println("-------value = " + value);
+
+				}
+				model.addAttribute("curUsr", userDetails);
 				model.addAttribute("editForm", new RegistrationForm());
+				model.addAttribute("balanceForm", new BalanceTransactionEntity());
+				//				model.addAttribute("balanceTransaction", new BalanceTransactionEntity());
 				model.addAttribute("searchWordDto", searchWordDto);
 				return "profile";
 		}
-
-
-
 		//    @GetMapping("/logout")
 		//    public String handleLogout(HttpServletRequest request) {
 		//        HttpSession session = request.getSession();
