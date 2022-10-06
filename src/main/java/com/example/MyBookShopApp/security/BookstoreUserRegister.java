@@ -84,16 +84,21 @@ public class BookstoreUserRegister
 				//todo info additional info about signin user
 				if (context instanceof BookstoreUserDetails)
 				{
+					System.out.println("-here1");
 						BookstoreUserDetails userDetails =
 								(BookstoreUserDetails) context;
 						return userDetails.getBookstoreUser();
 				}else if (context instanceof DefaultOidcUser){
-						DefaultOidcUser userDetails = (DefaultOidcUser) context;
+					System.out.println("-here2");
+
+					DefaultOidcUser userDetails = (DefaultOidcUser) context;
 						System.out.println("-----------DefaultOidcUser = " + userDetails.getClaims());
 
 						return userDetails.getClaims();
 				}else{
-						DefaultOAuth2User userDetails = (DefaultOAuth2User) context;
+					System.out.println("-here3");
+
+					DefaultOAuth2User userDetails = (DefaultOAuth2User) context;
 						System.out.println("-----------uszerDetails .get info = " + userDetails.getAttributes());
 
 						return userDetails.getAttributes();

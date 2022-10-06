@@ -81,15 +81,15 @@ public class BalanceTransactionEntity {
         this.description = description;
     }
 
-    @Override public String toString()
-    {
-        return "BalanceTransactionEntity{" +
-            "id=" + id +
-            ", bookstoreUser=" + bookstoreUser +
-            ", time=" + time +
-            ", value=" + value +
-            ", bookId=" + bookId +
-            ", description='" + description + '\'' +
-            '}';
-    }
+//    @Override public String toString()
+//    {
+//        return "BalanceTransactionEntity{" +
+//            "id=" + id +
+//            ", bookstoreUser=" + bookstoreUser +
+//            ", time=" + time +
+//            ", value=" + value +
+//            ", bookId=" + bookId +
+//            ", description='" + description + '\'' +
+//            '}';
+//    }
 }

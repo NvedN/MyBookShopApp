@@ -25,7 +25,7 @@ public class BookstoreUser
     private String password;
 
 
-    @OneToMany(mappedBy = "bookstoreUser")
+    @OneToMany(fetch = FetchType. EAGER,mappedBy = "bookstoreUser")
     @JsonIgnore
     private List<BalanceTransactionEntity> balanceTransactionEntitiesList = new ArrayList<>();
 
@@ -88,5 +88,17 @@ public class BookstoreUser
     public void setPassword(String password)
     {
         this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "BookstoreUser{" +
+            "id=" + id +
+            ", name='" + name + '\'' +
+            ", email='" + email + '\'' +
+            ", phone='" + phone + '\'' +
+            ", password='" + password + '\'' +
+            ", balanceTransactionEntitiesList=" + balanceTransactionEntitiesList +
+            '}';
     }
 }

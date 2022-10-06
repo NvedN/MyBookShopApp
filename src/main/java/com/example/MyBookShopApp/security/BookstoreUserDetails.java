@@ -53,4 +53,12 @@ public class BookstoreUserDetails implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+
+    @Override
+    public String toString() {
+        return "BookstoreUserDetails{" +
+            "bookstoreUser=" + bookstoreUser +
+            '}';
+    }
 }

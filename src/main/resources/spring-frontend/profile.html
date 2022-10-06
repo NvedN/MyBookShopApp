@@ -188,13 +188,13 @@ p.error-browser
                                             <label class="form-label" for="name">Имя
                                             </label>
                                             <input class="form-input" id="name" name="name" type="text"
-                                                   th:value="${curUsr?.name}" value="Михаил"/>
+                                                   th:value="${curUsr?.name}" th:field="*{name}" value="Михаил"/>
                                         </div>
                                         <div class="form-group">
                                             <label class="form-label" for="mail">E-mail
                                             </label>
                                             <input class="form-input" id="mail" name="mail" type="text"
-                                                   th:value="${curUsr?.email}" value="addr@sait.com"
+                                                   th:value="${curUsr?.email}"  th:field="*{email}" value="addr@sait.com"
                                                    data-validate="require mail"/>
                                             <div class="Profile-btn Profile-btn_confirm">
                                                 <button class="btn btn_primary" type="button">Подтвердить
@@ -204,11 +204,11 @@ p.error-browser
                                         <div class="form-group">
                                             <label class="form-label" for="phone">Телефон
                                             </label>
-                                            <input class="form-input" id="phone" name="phone" type="text"
+                                            <input class="form-input" id="phone" name="phone"  th:field="*{phone}" type="text"
                                                    value="+70000000000" data-mask="+7 (999) 999-99-99"
                                                    data-validate="require"/>
                                             <div class="Profile-btn Profile-btn_confirm">
-                                                <button class="btn btn_primary" type="button">Подтвердить
+                                                <button class="btn btn_primary" type="button" data-check="">Подтвердить
                                                 </button>
                                             </div>
                                         </div>
