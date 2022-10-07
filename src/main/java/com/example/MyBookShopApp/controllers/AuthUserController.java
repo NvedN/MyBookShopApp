@@ -11,12 +11,17 @@ import com.example.MyBookShopApp.security.BookstoreUserRepository;
 import com.example.MyBookShopApp.security.ContactConfirmationPayload;
 import com.example.MyBookShopApp.security.ContactConfirmationResponse;
 import com.example.MyBookShopApp.security.RegistrationForm;
+import com.example.MyBookShopApp.security.jwt.JWTUtil;
+import com.example.MyBookShopApp.service.BookstoreUserDetailsService;
 import com.example.MyBookShopApp.service.SmsService;
+import com.example.MyBookShopApp.util.Util;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,6 +32,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.WebRequest;
 
 @Controller
 public class AuthUserController {
@@ -43,18 +49,32 @@ public class AuthUserController {
 
   private final BalanceTransactionRepository balanceTransactionRepository;
 
+  private final JWTUtil jwtUtil;
+
+  private final BookstoreUserDetailsService bookstoreUserDetailsService;
+
+  private MessageSource messages;
+
   @Autowired
-  public AuthUserController(BookstoreUserRegister userRegister, SmsService smsService,
+  public AuthUserController(
+      BookstoreUserRegister userRegister,
+      SmsService smsService,
       JavaMailSender javaMailSender,
-      PasswordEncoder passwordEncoder, BookstoreUserRepository bookstoreUserRepository,
-      BalanceTransactionRepository balanceTransactionRepository) {
+      PasswordEncoder passwordEncoder,
+      BookstoreUserRepository bookstoreUserRepository,
+      BalanceTransactionRepository balanceTransactionRepository,
+      JWTUtil jwtUtil,
+      BookstoreUserDetailsService bookstoreUserDetailsService,
+      MessageSource messages) {
     this.userRegister = userRegister;
     this.smsService = smsService;
     this.javaMailSender = javaMailSender;
     this.passwordEncoder = passwordEncoder;
     this.bookstoreUserRepository = bookstoreUserRepository;
     this.balanceTransactionRepository = balanceTransactionRepository;
-
+    this.jwtUtil = jwtUtil;
+    this.bookstoreUserDetailsService = bookstoreUserDetailsService;
+    this.messages = messages;
   }
 
   @GetMapping("/signin")
@@ -79,7 +99,7 @@ public class AuthUserController {
       return response;
     } else {
       String smsCodeString = smsService.sendSecretCodeSms(payload.getContact());
-      smsService.saveNewCode(new SmsCode(smsCodeString, 60)); //expires in 1 min.
+      smsService.saveNewCode(new SmsCode(smsCodeString, 60)); // expires in 1 min.
       return response;
     }
   }
@@ -92,7 +112,7 @@ public class AuthUserController {
     SimpleMailMessage message = new SimpleMailMessage();
     message.setFrom("mybook.shopapp@bk.ru");
     message.setTo(payload.getContact());
-    SmsCode smsCode = new SmsCode(smsService.generateCode(), 300); //5 minutes
+    SmsCode smsCode = new SmsCode(smsService.generateCode(), 300); // 5 minutes
     smsService.saveNewCode(smsCode);
     message.setSubject("Bookstore email verification!");
     message.setText("Verification code is: " + smsCode.getCode());
@@ -120,8 +140,8 @@ public class AuthUserController {
 
   @PostMapping("/login")
   @ResponseBody
-  public ContactConfirmationResponse handleLogin(@RequestBody ContactConfirmationPayload payload,
-      HttpServletResponse httpServletResponse) {
+  public ContactConfirmationResponse handleLogin(
+      @RequestBody ContactConfirmationPayload payload, HttpServletResponse httpServletResponse) {
     ContactConfirmationResponse loginResponse = userRegister.jwtLogin(payload);
     Cookie cookie = new Cookie("token", loginResponse.getResult());
     httpServletResponse.addCookie(cookie);
@@ -138,7 +158,8 @@ public class AuthUserController {
   public String handleProfile(Model model, SearchWordDto searchWordDto)
       throws UserAttributesException {
     BookstoreUser userDetails = (BookstoreUser) userRegister.getCurrentUser();
-    List<BalanceTransactionEntity> balanceTransactionEntities = userDetails.getBalanceTransactionEntitiesList();
+    List<BalanceTransactionEntity> balanceTransactionEntities =
+        userDetails.getBalanceTransactionEntitiesList();
     model.addAttribute("curUsr", userDetails);
     model.addAttribute("editForm", new RegistrationForm());
     model.addAttribute("balanceForm", new BalanceTransactionEntity());
@@ -147,38 +168,48 @@ public class AuthUserController {
     return "profile";
   }
 
+  //  @PostMapping("/profileSave")
   @PostMapping("/profile")
-  public String saveProfile(Model model, SearchWordDto searchWordDto,
+  public String saveProfile(
+      Model model,
+      SearchWordDto searchWordDto,
       @RequestParam(value = "password", required = false) String pass,
-      @RequestParam(value = "email",required = false) String email,
-      @RequestParam(value = "name",required = false) String name,
-      @RequestParam(value = "phone",required = false) String phone,
+      @RequestParam(value = "email", required = false) String email,
+      @RequestParam(value = "name", required = false) String name,
+      @RequestParam(value = "phone", required = false) String phone,
       @RequestParam(value = "value", required = false) Integer value)
       throws UserAttributesException {
     BookstoreUser userDetails = (BookstoreUser) userRegister.getCurrentUser();
-    if (pass != null) {
+    pass = pass.replaceAll(",", ""); // only for bad html file
+    boolean isEdited = false;
+    if (!pass.equals("")) {
       userDetails.setPassword(passwordEncoder.encode(pass));
+      isEdited = true;
     }
-    if(email != null&&!userDetails.getEmail().equals(email)){
-      userDetails.setEmail(passwordEncoder.encode(pass));
+    if (name != null && !userDetails.getName().equals(name)) {
+      userDetails.setName(name);
+      isEdited = true;
     }
-    if(phone!= null&&!userDetails.getPhone().equals(phone)){
-      userDetails.setPhone(passwordEncoder.encode(pass));
+    if (email != null && !userDetails.getEmail().equals(email)) {
+      userDetails.setEmail(email);
+      isEdited = true;
     }
-   if( userDetails.equals(userRegister.getCurrentUser())){
-//     SimpleMailMessage message = new SimpleMailMessage();
-//     message.setFrom("mybook.shopapp@bk.ru");
-//     message.setTo(payload.getContact());
-//     SmsCode smsCode = new SmsCode(smsService.generateCode(), 300); //5 minutes
-//     smsService.saveNewCode(smsCode);
-//     message.setSubject("Bookstore email verification!");
-//     message.setText("Verification code is: " + smsCode.getCode());
-//     System.out.println("------javaMailSender = " + javaMailSender);
-//     javaMailSender.send(message);
-////     bookstoreUserRepository.save(userDetails);
+    if (phone != null && !userDetails.getPhone().equals(phone)) {
+      userDetails.setPhone(phone);
+      isEdited = true;
     }
 
-
+    if (isEdited) {
+      String jwtToken = jwtUtil.generateTokenDetails(userDetails);
+      SimpleMailMessage message = new SimpleMailMessage();
+      message.setFrom("mybook.shopapp@bk.ru");
+      message.setTo(email);
+      message.setSubject("Bookstore change profile conformation!");
+      message.setText(
+          "Verification link is: http://localhost:8085/conformationCheck?token=" + jwtToken);
+      javaMailSender.send(message);
+      System.out.println("------javaMailSender = " + javaMailSender);
+    }
 
     if (value != null) {
       BalanceTransactionEntity balance = new BalanceTransactionEntity();
@@ -187,16 +218,11 @@ public class AuthUserController {
       balance.setValue(value);
       balance.setDescription("account top-up inside bookshop");
       balanceTransactionRepository.save(balance);
-      System.out.println("------balacne = " + balance);
-      System.out.println("-------value = " + value);
-
     }
     model.addAttribute("curUsr", userDetails);
-//    model.addAttribute("editForm", new RegistrationForm());
     model.addAttribute("balanceForm", new BalanceTransactionEntity());
-    //				model.addAttribute("balanceTransaction", new BalanceTransactionEntity());
     model.addAttribute("searchWordDto", searchWordDto);
-    return "profile";
+    return "redirect:/profile";
   }
   //    @GetMapping("/logout")
   //    public String handleLogout(HttpServletRequest request) {
@@ -212,4 +238,19 @@ public class AuthUserController {
   //
   //        return "redirect:/";
   //    }
+
+  @GetMapping("/conformationCheck")
+  public String confirmRegistration(
+      WebRequest request, Model model, @RequestParam("token") String token)
+      throws UserAttributesException {
+    ArrayList<String> params =
+        Util.split(
+            jwtUtil.extractUsername(token), ","); // 0 - Name, 1 - email, 2 - pass , 3 - phone
+    BookstoreUser userDetails = (BookstoreUser) userRegister.getCurrentUser();
+    userDetails.setName(params.get(0));
+    userDetails.setEmail(params.get(1));
+    userDetails.setPassword(params.get(2));
+    bookstoreUserRepository.save(userDetails);
+    return "redirect:/profile";
+  }
 }

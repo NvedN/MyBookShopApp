@@ -1,9 +1,11 @@
 package com.example.MyBookShopApp.security.jwt;
 
+import com.example.MyBookShopApp.security.BookstoreUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -28,9 +30,26 @@ public class JWTUtil {
                 .signWith(SignatureAlgorithm.HS256, secret).compact();
     }
 
+    private String createTokenAdditional(Map<String, Object> claims, String username,String email,String pass, String phone) {
+        return Jwts
+            .builder()
+            .setClaims(claims)
+            .setSubject(username + "," + email + "," + pass + "," + phone)
+            .setIssuedAt(new Date(System.currentTimeMillis()))
+            .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
+            .signWith(SignatureAlgorithm.HS256, secret).compact();
+    }
+
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         return createToken(claims, userDetails.getUsername());
+    }
+
+
+    public String generateTokenDetails(BookstoreUser user){
+        Map<String, Object> claims = new HashMap<>();
+        return createTokenAdditional(claims, user.getName(),user.getEmail(),user.getPassword(),user.getPhone());
+
     }
 
     public <T> T extractClaim(String token, Function<Claims,T> claimsResolver){
