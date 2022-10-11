@@ -50,27 +50,45 @@ p.error-browser
                 </li>
                 <li class="breadcrumbs-item"><a href="/genres/index.html">Книги</a>
                 </li>
-                <li class="breadcrumbs-item breadcrumbs-item_current"><span>Недавно просмотренные</span>
+                <li class="breadcrumbs-item breadcrumbs-item_current"><span>Новинки</span>
                 </li>
             </ul>
             <div class="Section">
                 <div class="Section-header">
-                    <h1 class="Section-title">Недавно просмотренные
+                    <h1 class="Section-title">Новинки
                     </h1>
+                    <form class="form form_inline Section-header-form" action="#" method="post">
+                        <div class="form-group">
+                            <label class="form-label">с
+                            </label>
+                            <input class="form-input form-input_date form-input_date_uninit" id="fromdaterecent"
+                                   name="fromdaterecent" type="text" placeholder="Дата" data-refreshoffset="20"
+                                   data-refreshlimit="20" data-refreshshow="changedate" data-refreshfrom="0"
+                                   autocomplete="off"/>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">по
+                            </label>
+                            <input class="form-input form-input_date form-input_date_uninit" id="enddaterecent"
+                                   name="enddaterecent" type="text" placeholder="Дата" data-refreshoffset="20"
+                                   data-refreshlimit="20" data-refreshshow="changedate" data-refreshto="0"
+                                   autocomplete="off"/>
+                        </div>
+                    </form>
                 </div>
                 <div class="Cards Cards_refresh">
                     <div class="Card" th:each="book : ${recentResults}">
-                        <div class="Card-picture"><a href="#"><img th:src="${book.getBook().image}"
+                        <div class="Card-picture"><a href="#"><img th:src="${book.image}"
                                                                    src="/assets/img/content/main/card.jpg"
                                                                    alt="card.jpg"/></a>
                         </div>
                         <div class="Card-content">
-                            <strong class="Card-title"><a href="#" th:text="${book.getBook().title}">Техника</a>
+                            <strong class="Card-title"><a href="#" th:text="${book.title}">Техника</a>
                             </strong>
-                            <div class="Card-description" th:text="${book.getBook().description}">Кондратенко Александр Петрович
+                            <div class="Card-description" th:text="${book.description}">Кондратенко Александр Петрович
                             </div>
-                            <div class="Card-cost"><span class="Card-priceOld" th:text="${book.getBook().priceOld}">₽300.00</span><span
-                                    class="Card-price" th:text="${book.getBook().price}">₽190.00</span>
+                            <div class="Card-cost"><span class="Card-priceOld" th:text="${book.priceOld}">₽300.00</span><span
+                                    class="Card-price" th:text="${book.price}">₽190.00</span>
                             </div>
                         </div>
                     </div>

@@ -1,5 +1,10 @@
 package com.example.MyBookShopApp.data.entity.book.links;
 
+import com.example.MyBookShopApp.data.Author;
+import com.example.MyBookShopApp.data.Book;
+import com.example.MyBookShopApp.data.entity.user.BookstoreUser;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.time.LocalDate;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -12,16 +17,18 @@ public class Book2UserEntity {
     private int id;
 
     @Column(columnDefinition = "TIMESTAMP NOT NULL")
-    private LocalDateTime time;
+    private LocalDate time;
 
-    @Column(columnDefinition = "INT NOT NULL")
-    private int typeId;
 
-    @Column(columnDefinition = "INT NOT NULL")
-    private int bookId;
+    @ManyToOne
+    @JoinColumn(name = "book_id", referencedColumnName = "id")
+    @JsonIgnore
+    private Book book;
 
-    @Column(columnDefinition = "INT NOT NULL")
-    private int userId;
+    @ManyToOne
+    @JoinColumn(name = "users_id", referencedColumnName = "id")
+    @JsonIgnore
+    private BookstoreUser bookstoreUser;
 
     public int getId() {
         return id;
@@ -31,35 +38,45 @@ public class Book2UserEntity {
         this.id = id;
     }
 
-    public LocalDateTime getTime() {
+    public LocalDate getTime() {
         return time;
     }
 
-    public void setTime(LocalDateTime time) {
+    public void setTime(LocalDate time) {
         this.time = time;
     }
 
-    public int getTypeId() {
-        return typeId;
+//    public int getTypeId() {
+//        return typeId;
+//    }
+//
+//    public void setTypeId(int typeId) {
+//        this.typeId = typeId;
+//    }
+
+    public Book getBook() {
+        return book;
     }
 
-    public void setTypeId(int typeId) {
-        this.typeId = typeId;
+    public void setBook(Book book) {
+        this.book = book;
     }
 
-    public int getBookId() {
-        return bookId;
+    public BookstoreUser getBookstoreUser() {
+        return bookstoreUser;
     }
 
-    public void setBookId(int bookId) {
-        this.bookId = bookId;
+    public void setBookstoreUser(BookstoreUser bookstoreUser) {
+        this.bookstoreUser = bookstoreUser;
     }
 
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
+    @Override
+    public String toString() {
+        return "Book2UserEntity{" +
+            "id=" + id +
+            ", time=" + time +
+            ", book=" + book +
+            ", bookstoreUser=" + bookstoreUser +
+            '}';
     }
 }

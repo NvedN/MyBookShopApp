@@ -1,4 +1,4 @@
-package com.example.MyBookShopApp.security;
+package com.example.MyBookShopApp.data.entity.user;
 
 import com.example.MyBookShopApp.data.entity.payments.BalanceTransactionEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;

@@ -1,11 +1,10 @@
 package com.example.MyBookShopApp.security.jwt;
 
-import com.example.MyBookShopApp.security.BookstoreUser;
+import com.example.MyBookShopApp.data.entity.user.BookstoreUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 

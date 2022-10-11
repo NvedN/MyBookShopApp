@@ -1,11 +1,10 @@
 package com.example.MyBookShopApp.data.entity.payments;
 
-import com.example.MyBookShopApp.security.BookstoreUser;
+import com.example.MyBookShopApp.data.entity.user.BookstoreUser;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "balance_transaction")

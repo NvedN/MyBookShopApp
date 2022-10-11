@@ -254,12 +254,12 @@ p.error-browser
               </form>
             </div>
           </div>
-          <div class="Tabs-block" id="transactions" th:each="info : ${balanceTransaction}">
-            <div class="Transactions">
-              <div class="tableWrap">
-                <table class="table table_noMargin">
+          <div class="Tabs-block" id="transactions" >
+            <div class="Transactions" >
+              <div class="tableWrap" >
+                <table class="table table_noMargin" th:each="info : ${balanceTransaction}" >
                   <thead>
-                  <tr>
+                  <tr >
                     <th>Дата и время
                     </th>
                     <th>Сумма

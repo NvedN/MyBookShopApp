@@ -4,8 +4,8 @@ import com.example.MyBookShopApp.data.SearchWordDto;
 import com.example.MyBookShopApp.data.SmsCode;
 import com.example.MyBookShopApp.data.entity.payments.BalanceTransactionEntity;
 import com.example.MyBookShopApp.data.entity.payments.BalanceTransactionRepository;
+import com.example.MyBookShopApp.data.entity.user.BookstoreUser;
 import com.example.MyBookShopApp.exceptions.UserAttributesException;
-import com.example.MyBookShopApp.security.BookstoreUser;
 import com.example.MyBookShopApp.security.BookstoreUserRegister;
 import com.example.MyBookShopApp.security.BookstoreUserRepository;
 import com.example.MyBookShopApp.security.ContactConfirmationPayload;
@@ -180,7 +180,11 @@ public class AuthUserController {
       @RequestParam(value = "value", required = false) Integer value)
       throws UserAttributesException {
     BookstoreUser userDetails = (BookstoreUser) userRegister.getCurrentUser();
-    pass = pass.replaceAll(",", ""); // only for bad html file
+    if (pass != null) {
+      pass = pass.replaceAll(",", ""); // only for bad html file
+    }else{
+      pass = "";
+    }
     boolean isEdited = false;
     if (!pass.equals("")) {
       userDetails.setPassword(passwordEncoder.encode(pass));
@@ -211,6 +215,7 @@ public class AuthUserController {
       System.out.println("------javaMailSender = " + javaMailSender);
     }
 
+    System.out.println("-----value = " + value);
     if (value != null) {
       BalanceTransactionEntity balance = new BalanceTransactionEntity();
       balance.setBookstoreUser(userDetails);
