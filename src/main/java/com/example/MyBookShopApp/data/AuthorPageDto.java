@@ -25,11 +25,8 @@ public class AuthorPageDto
 				this.count = count;
 		}
 
-		public List<Author> getBooks() {
-				return authors;
-		}
+	public List<Author> getAuthors() {
+		return authors;
+	}
 
-		public void setBooks(List<Author> books) {
-				this.authors = authors;
-		}
 }

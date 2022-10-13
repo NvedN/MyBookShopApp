@@ -224,7 +224,7 @@ public class BooksController {
     //								nextId++;
     nextUserId++;
     Integer rating = 0;
-    if (slugCookie != null || !slugCookie.equals("")) {
+    if (slugCookie != null && !slugCookie.equals("")) {
       rating = Integer.valueOf(slugCookie);
     }
     BookReviewEntity bookReviewEntity = new BookReviewEntity();
