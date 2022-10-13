@@ -8,10 +8,10 @@ import com.example.MyBookShopApp.data.entity.book.links.Book2UserEntity;
 import com.example.MyBookShopApp.data.entity.book.review.BookReviewEntity;
 import com.example.MyBookShopApp.data.entity.book.review.BookReviewLikeEntity;
 import com.example.MyBookShopApp.data.entity.user.BookstoreUser;
-import com.example.MyBookShopApp.data.models.Book2UserRepository;
-import com.example.MyBookShopApp.data.models.BookRepository;
-import com.example.MyBookShopApp.data.models.ReviewLikeRepository;
-import com.example.MyBookShopApp.data.models.ReviewRepository;
+import com.example.MyBookShopApp.data.repository.Book2UserRepository;
+import com.example.MyBookShopApp.data.repository.BookRepository;
+import com.example.MyBookShopApp.data.repository.ReviewLikeRepository;
+import com.example.MyBookShopApp.data.repository.ReviewRepository;
 import com.example.MyBookShopApp.exceptions.UserAttributesException;
 import com.example.MyBookShopApp.security.BookstoreUserRegister;
 import com.example.MyBookShopApp.service.BookService;
@@ -102,7 +102,6 @@ public class BooksController {
       @RequestParam(value = "limit", required = false) Integer limit,
       Model model,
       SearchWordDto searchWordDto) {
-    System.out.println("--------recent?");
     if (fromDate != null || toDate != null) {
       model.addAttribute(
           "recentResults", bookService.findBooksByPubDateBetween(fromDate, toDate, offset, limit));
@@ -164,6 +163,8 @@ public class BooksController {
       book2UserEntity.setBook(book);
       book2UserEntity.setTime(LocalDate.now());
       book2UserRepository.save(book2UserEntity);
+      boolean isAdmin = userDetails.getRoles().contains("ADMIN");
+      model.addAttribute("admin", isAdmin);
       model.addAttribute("searchWordDto", searchWordDto);
       model.addAttribute("slugBook", book);
       model.addAttribute("reviewList", bookService.bookReviewEntityList(book));

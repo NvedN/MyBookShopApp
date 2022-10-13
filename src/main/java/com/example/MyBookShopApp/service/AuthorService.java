@@ -2,7 +2,7 @@ package com.example.MyBookShopApp.service;
 
 import com.example.MyBookShopApp.data.Author;
 import com.example.MyBookShopApp.data.Book;
-import com.example.MyBookShopApp.data.models.AuthorRepository;
+import com.example.MyBookShopApp.data.repository.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -50,7 +50,6 @@ public class AuthorService {
 
 		public Author getAuthorInfo(String authorLastName)
 		{
-        System.out.println("----getAuthorInfo = ");
         return authorRepository.getAuthorByLastNameContaining(authorLastName);
 		}
 }

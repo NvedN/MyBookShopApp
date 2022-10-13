@@ -1,6 +1,7 @@
 package com.example.MyBookShopApp.util;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.StringTokenizer;
 
 public class Util {
@@ -35,6 +36,16 @@ public class Util {
 
       return var3;
     }
+  }
+
+
+  public static ArrayList<String> getStringList(Object obj) {
+    if (obj instanceof String) {
+      return new ArrayList<> (Collections.singleton((String) obj));
+    } else if (obj instanceof ArrayList) {
+      return (ArrayList<String>) obj;
+    }
+    return new ArrayList<>();
   }
 
 }

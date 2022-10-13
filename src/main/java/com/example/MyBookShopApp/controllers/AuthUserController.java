@@ -215,7 +215,6 @@ public class AuthUserController {
       System.out.println("------javaMailSender = " + javaMailSender);
     }
 
-    System.out.println("-----value = " + value);
     if (value != null) {
       BalanceTransactionEntity balance = new BalanceTransactionEntity();
       balance.setBookstoreUser(userDetails);

@@ -2,8 +2,8 @@ package com.example.MyBookShopApp.service;
 
 import com.example.MyBookShopApp.data.Book;
 import com.example.MyBookShopApp.data.entity.user.BookstoreUser;
-import com.example.MyBookShopApp.data.models.Book2UserRepository;
-import com.example.MyBookShopApp.data.models.BookRepository;
+import com.example.MyBookShopApp.data.repository.Book2UserRepository;
+import com.example.MyBookShopApp.data.repository.BookRepository;
 import com.example.MyBookShopApp.exceptions.UserAttributesException;
 import com.example.MyBookShopApp.security.BookstoreUserRegister;
 import java.util.ArrayList;

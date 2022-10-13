@@ -33,7 +33,6 @@ public class AuthorsController {
 
     @GetMapping("")
     public String authorsPage(Model model, SearchWordDto searchWordDto){
-        System.out.println("---------------authors = !!!!");
         model.addAttribute("searchWordDto", searchWordDto);
         return "/authors/index";
     }
@@ -55,7 +54,6 @@ public class AuthorsController {
     public String genresSlugPage(SearchWordDto searchWordDto, Model model,@RequestParam(value = "authorLastName", required = false) String authorLastName,
         AuthorPageDto authorPageDto)
     {//Model model){
-        System.out.println("--------start slug ");
         model.addAttribute("authorPageObject",authorService.getAuthorInfo(authorLastName));
         model.addAttribute("authorLastName",authorLastName);
         model.addAttribute("searchWordDto", searchWordDto);

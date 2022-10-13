@@ -1,7 +1,7 @@
 package com.example.MyBookShopApp.controllers;
 
 import com.example.MyBookShopApp.data.Book;
-import com.example.MyBookShopApp.data.models.BookRepository;
+import com.example.MyBookShopApp.data.repository.BookRepository;
 import com.example.MyBookShopApp.data.SearchWordDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -55,7 +55,6 @@ public class CartController
 				Model model, SearchWordDto searchWordDto)
 		{
 				model.addAttribute("searchWordDto", searchWordDto);
-				System.out.println("-------------NVN-----------cartContents = " + contents);
 				if (contents == null || contents.equals(""))
 				{
 						model.addAttribute("isCartEmpty", true);
@@ -95,8 +94,6 @@ public class CartController
 		public String handleRemoveBookFromPostponedRequest(@PathVariable("slug") String slug, @CookieValue(name =
 				"postponedContents", required = false) String postponedContents, HttpServletResponse response, Model model)
 		{
-				System.out.println("---------delete postponed  content = " + postponedContents);
-
 				if (postponedContents != null && !postponedContents.equals(""))
 				{
 						ArrayList<String> cookieBooks = new ArrayList<>(Arrays.asList(postponedContents.split("/")));
@@ -139,13 +136,10 @@ public class CartController
 				@CookieValue(name = "postponedContents",
 						required = false) String postponedContents, HttpServletResponse response, Model model)
 		{
-				System.out.println("-------POSTPONED !!!!");
 				if (postponedContents == null || postponedContents.equals(""))
 				{
 						Cookie cookie = new Cookie("postponedContents", slug);
 						cookie.setPath("/shop");
-//						cookie.setHttpOnly(true);
-						System.out.println("-----------cookie = " + cookie);
 						response.addCookie(cookie);
 						model.addAttribute("isCartEmpty", false);
 				}
@@ -155,7 +149,6 @@ public class CartController
 						stringJoiner.add(postponedContents).add(slug);
 						Cookie cookie = new Cookie("postponedContents", stringJoiner.toString());
 						cookie.setPath("/shop");
-//						cookie.setHttpOnly(true);
 						response.addCookie(cookie);
 						model.addAttribute("isCartEmpty", false);
 				}

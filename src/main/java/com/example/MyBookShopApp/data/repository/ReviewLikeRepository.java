@@ -1,4 +1,4 @@
-package com.example.MyBookShopApp.data.models;
+package com.example.MyBookShopApp.data.repository;
 
 import com.example.MyBookShopApp.data.entity.book.review.BookReviewLikeEntity;
 import org.springframework.data.jpa.repository.JpaRepository;

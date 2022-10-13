@@ -5,6 +5,8 @@ import com.example.MyBookShopApp.data.entity.genre.GenreEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name = "book2genre")
@@ -17,13 +19,15 @@ public class Book2GenreEntity {
 //    @Column(columnDefinition = "INT NOT NULL")
 //    private int bookId;
 
-    @ManyToOne
+    @ManyToOne( fetch = FetchType.LAZY, optional = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "book_id", referencedColumnName = "id")
     @JsonIgnore
     private Book book;
 
 
-    @ManyToOne
+    @ManyToOne( fetch = FetchType.LAZY, optional = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "genre_id", referencedColumnName = "id")
     @JsonIgnore
     private GenreEntity genre;

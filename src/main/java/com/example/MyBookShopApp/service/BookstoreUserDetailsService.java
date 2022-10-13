@@ -3,6 +3,7 @@ package com.example.MyBookShopApp.service;
 import com.example.MyBookShopApp.data.entity.user.BookstoreUser;
 import com.example.MyBookShopApp.security.BookstoreUserDetails;
 import com.example.MyBookShopApp.security.BookstoreUserRepository;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 public class BookstoreUserDetailsService implements UserDetailsService {
 
     private final BookstoreUserRepository bookstoreUserRepository;
+
 
     @Autowired
     public BookstoreUserDetailsService(BookstoreUserRepository bookstoreUserRepository) {

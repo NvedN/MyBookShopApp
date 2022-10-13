@@ -5,7 +5,7 @@ import com.example.MyBookShopApp.data.Book;
 import com.example.MyBookShopApp.data.entity.book.review.BookReviewEntity;
 import com.example.MyBookShopApp.data.google.api.books.Item;
 import com.example.MyBookShopApp.data.google.api.books.Root;
-import com.example.MyBookShopApp.data.models.BookRepository;
+import com.example.MyBookShopApp.data.repository.BookRepository;
 import com.example.MyBookShopApp.exceptions.BookstoreApiWrongParameterException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

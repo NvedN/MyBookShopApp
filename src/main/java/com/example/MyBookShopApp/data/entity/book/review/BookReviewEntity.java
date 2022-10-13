@@ -16,7 +16,7 @@ public class BookReviewEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "book_id", referencedColumnName = "id")
     private Book book;
 
@@ -43,7 +43,7 @@ public class BookReviewEntity {
         this.id = id;
     }
 
-    @OneToMany(mappedBy = "bookReviewEntity")
+    @OneToMany(mappedBy = "bookReviewEntity", cascade = CascadeType.ALL)
     private List<BookReviewLikeEntity> bookReviewLikeEntities = new ArrayList<>();
 
     public List<BookReviewLikeEntity> getBookReviewLikeEntities()

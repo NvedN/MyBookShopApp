@@ -1,7 +1,7 @@
 package com.example.MyBookShopApp.service;
 
 import com.example.MyBookShopApp.data.Book;
-import com.example.MyBookShopApp.data.models.BookRepository;
+import com.example.MyBookShopApp.data.repository.BookRepository;
 import com.example.MyBookShopApp.data.entity.genre.GenreEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
