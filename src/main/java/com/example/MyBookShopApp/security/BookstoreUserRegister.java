@@ -48,6 +48,7 @@ public class BookstoreUserRegister {
       user.setEmail(registrationForm.getEmail());
       user.setPhone(registrationForm.getPhone());
       user.setPassword(passwordEncoder.encode(registrationForm.getPass()));
+      user.setRoles(registrationForm.getRole());
       bookstoreUserRepository.save(user);
       return user;
     }
