@@ -6,6 +6,8 @@ import com.example.MyBookShopApp.data.models.Book2UserRepository;
 import com.example.MyBookShopApp.data.models.BookRepository;
 import com.example.MyBookShopApp.exceptions.UserAttributesException;
 import com.example.MyBookShopApp.security.BookstoreUserRegister;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,7 +36,8 @@ public class BooksRatingAndPopularityService {
 
   public List<Book> findPopularsBooks(Integer offset, Integer limit)
       throws UserAttributesException {
-    List<Book> allBooks = bookRepository.findAll();
+    List<Book> allBooks = bookRepository.findAllByPubDateBetween(LocalDateTime.of(2019, 01, 01, 00, 00, 00, 00),
+        LocalDateTime.of(2020, 12, 31, 00, 00, 00, 00));
     BookstoreUser userDetails = (BookstoreUser) userRegister.getCurrentUser();
     HashMap<Double, ArrayList<Book>> popularList = new HashMap<>();
     for (Book book : allBooks) {
