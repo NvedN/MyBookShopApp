@@ -102,12 +102,11 @@ public class BooksController {
       @RequestParam(value = "limit", required = false) Integer limit,
       Model model,
       SearchWordDto searchWordDto) {
-    System.out.println("--------recent?");
     if (fromDate != null || toDate != null) {
       model.addAttribute(
-          "recentResults", bookService.findBooksByPubDateBetween(fromDate, toDate, offset, limit));
+          "newsResults", bookService.findBooksByPubDateBetween(fromDate, toDate, offset, limit));
     } else {
-      model.addAttribute("recentResults", bookService.findTopByPubDate(0, 20));
+      model.addAttribute("newsResults", bookService.findTopByPubDate(0, 20));
     }
     model.addAttribute("searchWordDto", searchWordDto);
     return "books/news";
