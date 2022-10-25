@@ -17,6 +17,7 @@ public interface BookRepository extends JpaRepository<Book,Integer> {
 
     List<Book> findBooksByAuthor_FirstName(String name);
 
+    Page<Book> findAll(Pageable nextPage);
     @Query("from Book")
     List<Book> customFindAllBooks();
 

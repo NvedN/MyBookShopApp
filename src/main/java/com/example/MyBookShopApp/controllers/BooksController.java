@@ -89,7 +89,7 @@ public class BooksController {
   @GetMapping("/popular")
   public String booksPagePopular(Model model, SearchWordDto searchWordDto)
       throws UserAttributesException {
-    model.addAttribute("popularBooks", booksRatingAndPopularityService.findPopularsBooks(0, 5));
+    model.addAttribute("popularBooks", booksRatingAndPopularityService.findPopularsBooks(0, 20));
     model.addAttribute("searchWordDto", searchWordDto);
     return "/books/popular";
   }

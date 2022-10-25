@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -34,8 +36,9 @@ public class BooksRatingAndPopularityService {
 
   public List<Book> findPopularsBooks(Integer offset, Integer limit)
       throws UserAttributesException {
-    List<Book> allBooks = bookRepository.findAll();
-    BookstoreUser userDetails = (BookstoreUser) userRegister.getCurrentUser();
+    Pageable nextPage = PageRequest.of(offset, limit);
+
+    List<Book> allBooks = bookRepository.findAll(nextPage).getContent();
     HashMap<Double, ArrayList<Book>> popularList = new HashMap<>();
     for (Book book : allBooks) {
       Integer bought = book.getNumberOfBought(); // b
