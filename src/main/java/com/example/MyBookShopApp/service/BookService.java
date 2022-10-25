@@ -27,14 +27,15 @@ public class BookService
 {
 
 		private BookRepository bookRepository;
+
 		private RestTemplate restTemplate;
 
 		@Autowired
-		public BookService(BookRepository bookRepository, RestTemplate restTemplate) {
+		public BookService(BookRepository bookRepository, RestTemplate restTemplate)
+		{
 				this.bookRepository = bookRepository;
 				this.restTemplate = restTemplate;
 		}
-
 
 		public List<Book> getBooksData()
 		{
@@ -125,8 +126,9 @@ public class BookService
 
 		public List<Book> findTopByPubDate(Integer offset, Integer limit)
 		{
-				Pageable nextPage = PageRequest.of(offset, limit);
-				return bookRepository.findAllByOrderByPubDateDesc(nextPage).getContent();
+				//				Pageable nextPage = PageRequest.of(offset, limit);
+				return bookRepository.findAllByPubDateBetween(LocalDateTime.of(2019, 01, 01, 00, 00, 00, 00),
+						LocalDateTime.of(2020, 12, 31, 00, 00, 00, 00));
 		}
 
 		public HashSet<String> getBooksByTag()
@@ -154,25 +156,29 @@ public class BookService
 		@Value("${google.books.api.key}")
 		private String apiKey;
 
-		public List<Book> getPageOfGoogleBooksApiSearchResult(String searchWord, Integer offset, Integer limit) {
+		public List<Book> getPageOfGoogleBooksApiSearchResult(String searchWord, Integer offset, Integer limit)
+		{
 				String REQUEST_URL = "https://www.googleapis.com/books/v1/volumes" +
 						"?q=" + searchWord +
 						"&key=" + apiKey +
 						"&filter=paid-ebooks" +
 						"&startIndex=" + offset +
 						"&maxResult=" + limit;
-
-				Root root =restTemplate.getForEntity(REQUEST_URL,Root.class).getBody();
+				Root root = restTemplate.getForEntity(REQUEST_URL, Root.class).getBody();
 				ArrayList<Book> list = new ArrayList<>();
-				if(root != null){
-						for (Item item:root.getItems()){
+				if (root != null)
+				{
+						for (Item item : root.getItems())
+						{
 								Book book = new Book();
-								if(item.getVolumeInfo()!=null){
+								if (item.getVolumeInfo() != null)
+								{
 										book.setAuthor(new Author(item.getVolumeInfo().getAuthors()));
 										book.setTitle(item.getVolumeInfo().getTitle());
 										book.setImage(item.getVolumeInfo().getImageLinks().getThumbnail());
 								}
-								if(item.getSaleInfo()!=null){
+								if (item.getSaleInfo() != null)
+								{
 										book.setPrice(item.getSaleInfo().getRetailPrice().getAmount());
 										Double oldPrice = item.getSaleInfo().getListPrice().getAmount();
 										book.setPriceOld(oldPrice.intValue());
