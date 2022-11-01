@@ -89,7 +89,7 @@ public class BooksController {
   @GetMapping("/popular")
   public String booksPagePopular(Model model, SearchWordDto searchWordDto)
       throws UserAttributesException {
-    model.addAttribute("popularBooks", booksRatingAndPopularityService.findPopularsBooks(0, 20));
+    model.addAttribute("popularBooks", booksRatingAndPopularityService.findPopularsBooks(0, 5));
     model.addAttribute("searchWordDto", searchWordDto);
     return "/books/popular";
   }
@@ -105,30 +105,26 @@ public class BooksController {
     if (fromDate != null || toDate != null) {
       model.addAttribute(
           "newsResults", bookService.findBooksByPubDateBetween(fromDate, toDate, offset, limit));
+      System.out.println(
+          "------bookService.findBooksByPubDateBetween(fromDate, toDate, offset, limit)= "
+              + bookService.findBooksByPubDateBetween(fromDate, toDate, offset, limit));
     } else {
-      model.addAttribute("newsResults", bookService.findTopByPubDate(0, 20));
+      model.addAttribute("newsResults", bookService.findTopByPubDate(0, 5));
     }
     model.addAttribute("searchWordDto", searchWordDto);
     return "books/news";
   }
 
   @GetMapping("/recent")
-  public String booksPageRecent(
-      Model model,
-      SearchWordDto searchWordDto) throws UserAttributesException{
+  public String booksPageRecent(Model model, SearchWordDto searchWordDto)
+      throws UserAttributesException {
     BookstoreUser userDetails = (BookstoreUser) userRegister.getCurrentUser();
-    List<Book2UserEntity> book2UserEntities = book2UserRepository.getAllByBookstoreUserAndTime(userDetails,LocalDate.now());
-    model.addAttribute(
-          "recentResults", book2UserEntities);
+    List<Book2UserEntity> book2UserEntities =
+        book2UserRepository.getAllByBookstoreUserAndTime(userDetails, LocalDate.now());
+    model.addAttribute("recentResults", book2UserEntities);
     model.addAttribute("searchWordDto", searchWordDto);
     return "books/recent";
   }
-
-  //		@GetMapping("/slug")
-  //		public String booksPageSlug()
-  //		{//Model model){
-  //			return "/books/slug";
-  //		}
 
   @ModelAttribute("booksList")
   public List<Book> bookList() {
@@ -145,6 +141,7 @@ public class BooksController {
 
   @ModelAttribute("bookPageDto")
   public BooksPageDto getNextNewsPage() {
+
     return new BooksPageDto();
   }
 

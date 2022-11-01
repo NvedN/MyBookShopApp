@@ -126,9 +126,9 @@ public class BookService
 
 		public List<Book> findTopByPubDate(Integer offset, Integer limit)
 		{
-				//				Pageable nextPage = PageRequest.of(offset, limit);
-				return bookRepository.findAllByPubDateBetween(LocalDateTime.of(2019, 01, 01, 00, 00, 00, 00),
-						LocalDateTime.of(2020, 12, 31, 00, 00, 00, 00));
+				Pageable nextPage = PageRequest.of(offset, limit);
+				return bookRepository.findBooksByPubDateBetween(LocalDateTime.of(2019, 01, 01, 00, 00, 00, 00),
+						LocalDateTime.of(2020, 12, 31, 00, 00, 00, 00), nextPage).getContent();
 		}
 
 		public HashSet<String> getBooksByTag()
