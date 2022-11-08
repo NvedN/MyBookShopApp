@@ -1,5 +1,6 @@
 package com.example.MyBookShopApp.data;
 
+import com.example.MyBookShopApp.data.entity.book.BookSorted;
 import com.example.MyBookShopApp.data.entity.book.file.BookFileEntity;
 import com.example.MyBookShopApp.data.entity.book.review.BookReviewEntity;
 import com.example.MyBookShopApp.data.entity.book.review.BookReviewLikeEntity;
@@ -34,6 +35,18 @@ public class Book {
     @JsonIgnore
     private Author author;
 
+    @OneToOne(mappedBy = "book")
+    @JsonIgnore
+    private BookSorted bookSorted;
+
+    public BookSorted getBookSorted() {
+        return bookSorted;
+    }
+
+    public void setBookSorted(BookSorted bookSorted) {
+        this.bookSorted = bookSorted;
+    }
+
     @Column(name = "is_bestseller")
     @ApiModelProperty("if isBestseller = 1 so the book is considered to be bestseller and if 0 the book is not a " +
     "bestseller")
@@ -59,6 +72,7 @@ public class Book {
     @JsonProperty("discount")
     @ApiModelProperty("discount value for book")
     private Double price;
+
 
     private Integer numberOfBought ;
     private Integer numberInCart;

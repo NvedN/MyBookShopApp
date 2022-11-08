@@ -1,7 +1,7 @@
 package com.example.MyBookShopApp.controllers;
 
 import com.example.MyBookShopApp.data.Book;
-import com.example.MyBookShopApp.data.models.BookRepository;
+import com.example.MyBookShopApp.data.repository.BookRepository;
 import com.example.MyBookShopApp.data.SearchWordDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

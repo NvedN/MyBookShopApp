@@ -8,10 +8,10 @@ import com.example.MyBookShopApp.data.entity.book.links.Book2UserEntity;
 import com.example.MyBookShopApp.data.entity.book.review.BookReviewEntity;
 import com.example.MyBookShopApp.data.entity.book.review.BookReviewLikeEntity;
 import com.example.MyBookShopApp.data.entity.user.BookstoreUser;
-import com.example.MyBookShopApp.data.models.Book2UserRepository;
-import com.example.MyBookShopApp.data.models.BookRepository;
-import com.example.MyBookShopApp.data.models.ReviewLikeRepository;
-import com.example.MyBookShopApp.data.models.ReviewRepository;
+import com.example.MyBookShopApp.data.repository.Book2UserRepository;
+import com.example.MyBookShopApp.data.repository.BookRepository;
+import com.example.MyBookShopApp.data.repository.ReviewLikeRepository;
+import com.example.MyBookShopApp.data.repository.ReviewRepository;
 import com.example.MyBookShopApp.exceptions.UserAttributesException;
 import com.example.MyBookShopApp.security.BookstoreUserRegister;
 import com.example.MyBookShopApp.service.BookService;
@@ -86,12 +86,19 @@ public class BooksController {
     return "/books/author";
   }
 
+//  books/popular?offset=20&limit=20
   @GetMapping("/popular")
   public String booksPagePopular(Model model, SearchWordDto searchWordDto)
       throws UserAttributesException {
     model.addAttribute("popularBooks", booksRatingAndPopularityService.findPopularsBooks(0, 5));
     model.addAttribute("searchWordDto", searchWordDto);
     return "/books/popular";
+  }
+  @GetMapping("/popularNextPage")
+  public BooksPageDto booksPagePopular(@RequestParam(value = "offset" ) Integer offset , @RequestParam(value = "limit") Integer limit)
+          throws UserAttributesException {
+      return new BooksPageDto(
+              bookService.getPageOfRecommendedBooks(offset, limit).getContent());
   }
 
   @GetMapping("/news")
@@ -105,9 +112,6 @@ public class BooksController {
     if (fromDate != null || toDate != null) {
       model.addAttribute(
           "newsResults", bookService.findBooksByPubDateBetween(fromDate, toDate, offset, limit));
-      System.out.println(
-          "------bookService.findBooksByPubDateBetween(fromDate, toDate, offset, limit)= "
-              + bookService.findBooksByPubDateBetween(fromDate, toDate, offset, limit));
     } else {
       model.addAttribute("newsResults", bookService.findTopByPubDate(0, 5));
     }
