@@ -46,20 +46,14 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/books")
 public class BooksController {
 
-  private BookService bookService;
-
-  private BooksRatingAndPopularityService booksRatingAndPopularityService;
-
-  private BookRepository bookRepository;
-
   private final ResourceStorage storage;
-
-  private ReviewRepository reviewRepository;
-
-  private ReviewLikeRepository reviewLikeRepository;
-
   private final BookstoreUserRegister userRegister;
-  private Book2UserRepository book2UserRepository;
+  private final BookService bookService;
+  private final BooksRatingAndPopularityService booksRatingAndPopularityService;
+  private final BookRepository bookRepository;
+  private final ReviewRepository reviewRepository;
+  private final ReviewLikeRepository reviewLikeRepository;
+  private final Book2UserRepository book2UserRepository;
 
   @Autowired
   public BooksController(
@@ -86,7 +80,7 @@ public class BooksController {
     return "/books/author";
   }
 
-//  books/popular?offset=20&limit=20
+  //  books/popular?offset=20&limit=20
   @GetMapping("/popular")
   public String booksPagePopular(Model model, SearchWordDto searchWordDto)
       throws UserAttributesException {
@@ -94,11 +88,14 @@ public class BooksController {
     model.addAttribute("searchWordDto", searchWordDto);
     return "/books/popular";
   }
-  @GetMapping("/popularNextPage")
-  public BooksPageDto booksPagePopular(@RequestParam(value = "offset" ) Integer offset , @RequestParam(value = "limit") Integer limit)
-          throws UserAttributesException {
-      return new BooksPageDto(
-              bookService.getPageOfRecommendedBooks(offset, limit).getContent());
+
+  @GetMapping("/popular/NextPage")
+  @ResponseBody
+  public BooksPageDto booksPagePopular(@RequestParam(value = "offset") Integer offset,
+      @RequestParam(value = "limit") Integer limit)
+      throws UserAttributesException {
+    return new BooksPageDto(
+        bookService.getPageOfRecommendedBooks(offset, limit).getContent());
   }
 
   @GetMapping("/news")

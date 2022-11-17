@@ -45,7 +45,6 @@ public class BooksRatingAndPopularityService {
         List<BookSorted> bookSortedList = bookSortedRepository.findAll(nextPage).getContent();
 
         ArrayList<Book> allBooks = new ArrayList<>();
-
         for (BookSorted bookSorted : bookSortedList) {
             allBooks.add(bookSorted.getBook());
             System.out.println(bookSorted.getBook());
