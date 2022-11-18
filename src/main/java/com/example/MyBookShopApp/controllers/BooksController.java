@@ -2,7 +2,6 @@ package com.example.MyBookShopApp.controllers;
 
 import com.example.MyBookShopApp.data.Book;
 import com.example.MyBookShopApp.data.BooksPageDto;
-import com.example.MyBookShopApp.data.RecommendedBooksPageDto;
 import com.example.MyBookShopApp.data.SearchWordDto;
 import com.example.MyBookShopApp.data.entity.book.links.Book2UserEntity;
 import com.example.MyBookShopApp.data.entity.book.review.BookReviewEntity;
@@ -99,22 +98,24 @@ public class BooksController {
   }
 
   @GetMapping("/news")
-  public String booksPageNews(
-      @RequestParam(value = "from", required = false) String fromDate,
-      @RequestParam(value = "to", required = false) String toDate,
-      @RequestParam(value = "offset", required = false) Integer offset,
-      @RequestParam(value = "limit", required = false) Integer limit,
-      Model model,
+  public String booksPageNews(Model model,
       SearchWordDto searchWordDto) {
-    if (fromDate != null || toDate != null) {
-      model.addAttribute(
-          "newsResults", bookService.findBooksByPubDateBetween(fromDate, toDate, offset, limit));
-    } else {
-      model.addAttribute("newsResults", bookService.findTopByPubDate(0, 5));
-    }
+
+    model.addAttribute("newsResults", bookService.findTopByPubDate(0, 5));
     model.addAttribute("searchWordDto", searchWordDto);
     return "books/news";
   }
+
+  @GetMapping("/news/page")
+  @ResponseBody
+  public BooksPageDto getNewsBooks(@RequestParam(value = "from", required = false) String fromDate,
+      @RequestParam(value = "to", required = false) String toDate,
+      @RequestParam(value = "offset", required = false) Integer offset,
+      @RequestParam(value = "limit", required = false) Integer limit) {
+    return new BooksPageDto(
+        (bookService.findBooksByPubDateBetween(fromDate, toDate, offset, limit)));
+  }
+
 
   @GetMapping("/recent")
   public String booksPageRecent(Model model, SearchWordDto searchWordDto)
@@ -132,13 +133,6 @@ public class BooksController {
     return bookService.getBooksData();
   }
 
-  @GetMapping("/books/news")
-  @ResponseBody
-  public RecommendedBooksPageDto getNewsBooks(
-      @RequestParam("offset") Integer offset, @RequestParam("limit") Integer limit, Model model) {
-    return new RecommendedBooksPageDto(
-        bookService.getPageOfRecommendedBooks(offset, limit).getContent());
-  }
 
   @ModelAttribute("bookPageDto")
   public BooksPageDto getNextNewsPage() {
