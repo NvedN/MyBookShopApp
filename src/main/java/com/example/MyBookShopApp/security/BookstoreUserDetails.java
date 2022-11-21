@@ -29,7 +29,12 @@ public class BookstoreUserDetails implements UserDetails {
     }
 
     public Collection<? extends GrantedAuthority> getAuthoritiesAdmin() {
-        return Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"),new SimpleGrantedAuthority("ROLE_ADMIN"));
+        ArrayList<String> roles = new ArrayList<>(Arrays.asList(bookstoreUser.getRoles().split(",")));
+        if(roles.contains("ADMIN")) {
+            return Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        }else{
+            return null;
+        }
     }
 
     @Override
@@ -63,7 +68,7 @@ public class BookstoreUserDetails implements UserDetails {
     }
 
     public ArrayList<String> getRoles(){
-       return Util.getStringList(bookstoreUser.getRoles());
+        return new ArrayList<>(Arrays.asList(bookstoreUser.getRoles().split(",")));
     }
 
 

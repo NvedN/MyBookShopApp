@@ -67,7 +67,6 @@ public class ApplicationStartup
           }
             outputMap.addAll(popularList.get(rating));
         }
-        return;
     }
 
 

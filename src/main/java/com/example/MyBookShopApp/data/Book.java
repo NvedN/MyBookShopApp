@@ -15,6 +15,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name = "book")
@@ -30,12 +32,12 @@ public class Book {
     @ApiModelProperty("date of book publication")
     private LocalDateTime pubDate;
 
-    @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id", referencedColumnName = "id")
     @JsonIgnore
     private Author author;
 
-    @OneToOne(mappedBy = "book")
+    @OneToOne(mappedBy = "book",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JsonIgnore
     private BookSorted bookSorted;
 
@@ -91,7 +93,7 @@ public class Book {
     }
 
 
-    @OneToMany(mappedBy = "book",cascade = {CascadeType.ALL})
+    @OneToMany(mappedBy = "book",cascade = {CascadeType.ALL},fetch = FetchType.LAZY)
     private List<BookReviewEntity> bookReviewEntityList = new ArrayList<>();
 
     public List<BookReviewEntity> getBookReviewEntityList()

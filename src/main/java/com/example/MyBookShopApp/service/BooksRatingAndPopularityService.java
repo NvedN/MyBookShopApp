@@ -48,7 +48,6 @@ public class BooksRatingAndPopularityService {
         ArrayList<Book> allBooks = new ArrayList<>();
         for (BookSorted bookSorted : bookSortedList) {
             allBooks.add(bookSorted.getBook());
-            System.out.println(bookSorted.getBook());
         }
         return allBooks;
     }
@@ -62,7 +61,6 @@ public class BooksRatingAndPopularityService {
 
         for (BookSorted bookSorted : bookSortedList) {
             books.add(bookSorted.getBook());
-            System.out.println(bookSorted.getBook());
         }
         Page<Book> allBooks = new PageImpl<>(books);
 

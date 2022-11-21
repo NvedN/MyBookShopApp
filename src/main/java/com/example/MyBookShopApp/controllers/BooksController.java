@@ -12,6 +12,7 @@ import com.example.MyBookShopApp.data.repository.BookRepository;
 import com.example.MyBookShopApp.data.repository.ReviewLikeRepository;
 import com.example.MyBookShopApp.data.repository.ReviewRepository;
 import com.example.MyBookShopApp.exceptions.UserAttributesException;
+import com.example.MyBookShopApp.security.BookstoreUserDetails;
 import com.example.MyBookShopApp.security.BookstoreUserRegister;
 import com.example.MyBookShopApp.service.BookService;
 import com.example.MyBookShopApp.service.BooksRatingAndPopularityService;
@@ -20,6 +21,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.servlet.http.Cookie;
@@ -29,6 +31,7 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -146,15 +149,16 @@ public class BooksController {
       SearchWordDto searchWordDto,
       @CookieValue(value = "cartContents", required = false) String cartContents)
       throws UserAttributesException {
-    BookstoreUser userDetails = (BookstoreUser) userRegister.getCurrentUser();
+    BookstoreUserDetails userDetails = new BookstoreUserDetails((BookstoreUser) userRegister.getCurrentUser());
     Book book = bookRepository.findBookBySlug(slug);
     if (book != null) {
       Book2UserEntity book2UserEntity = new Book2UserEntity();
-      book2UserEntity.setBookstoreUser(userDetails);
+      book2UserEntity.setBookstoreUser(userDetails.getBookstoreUser());
       book2UserEntity.setBook(book);
       book2UserEntity.setTime(LocalDate.now());
       book2UserRepository.save(book2UserEntity);
-      boolean isAdmin = userDetails.getRoles().contains("ADMIN");
+      Collection<? extends GrantedAuthority> getAuthoritiesAdmin = userDetails.getAuthoritiesAdmin();
+      boolean isAdmin = getAuthoritiesAdmin != null;
       model.addAttribute("admin", isAdmin);
       model.addAttribute("searchWordDto", searchWordDto);
       model.addAttribute("slugBook", book);

@@ -31,4 +31,5 @@ public class BookstoreUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("user not found doh!");
         }
     }
+
 }

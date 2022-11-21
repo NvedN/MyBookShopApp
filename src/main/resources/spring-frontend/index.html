@@ -59,7 +59,7 @@ p.error-browser
                                         th:src="${book.image}" alt="card.jpg"/></a>
                                     <div class="Card-content">
                                         <strong class="Card-title"><a href="#"
-                                                                      th:href="@{'/books/' + ${book.slug}}"
+                                                                      th:href="@{/books/{slug}(slug=${book.slug})}"
                                                                       th:text="${book.title}">Техника</a>
                                         </strong>
                                         <div class="Card-description" th:text="${book.author}">Кондратенко Валерий

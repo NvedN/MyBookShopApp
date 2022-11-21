@@ -27,7 +27,7 @@ public class BookSorted {
 
     private Double rating;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "bookSorted_id", referencedColumnName = "id")
     @JsonIgnore
     private Book book;
