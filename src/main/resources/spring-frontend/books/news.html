@@ -77,7 +77,7 @@ p.error-browser
                     </form>
                 </div>
                 <div class="Cards Cards_refresh">
-                    <div class="Card" th:each="book : ${recentResults}">
+                    <div class="Card" th:each="book : ${newsResults}">
                         <div class="Card-picture"><a href="#"><img th:src="${book.image}"
                                                                    src="/assets/img/content/main/card.jpg"
                                                                    alt="card.jpg"/></a>
@@ -93,9 +93,8 @@ p.error-browser
                         </div>
                     </div>
                     <div class="Cards-footer Cards-footer_center"><a class="btn btn_primary" href="#"
-                                                                     data-refreshshow="recent" data-refreshoffset="20"
-                                                                     data-refreshlimit="20"
-
+                                                                     data-refreshshow="news" data-refreshoffset="5"
+                                                                     data-refreshlimit="5"
                                                                      th:attr="data-refreshquery=${bookPageDto.getBooks()}"
                                                                      >Показать еще</a>
                     </div>

@@ -2,7 +2,6 @@ package com.example.MyBookShopApp.controllers;
 
 import com.example.MyBookShopApp.data.Book;
 import com.example.MyBookShopApp.data.BooksPageDto;
-import com.example.MyBookShopApp.data.RecommendedBooksPageDto;
 import com.example.MyBookShopApp.data.SearchWordDto;
 import com.example.MyBookShopApp.data.entity.book.links.Book2UserEntity;
 import com.example.MyBookShopApp.data.entity.book.review.BookReviewEntity;
@@ -46,20 +45,14 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/books")
 public class BooksController {
 
-  private BookService bookService;
-
-  private BooksRatingAndPopularityService booksRatingAndPopularityService;
-
-  private BookRepository bookRepository;
-
   private final ResourceStorage storage;
-
-  private ReviewRepository reviewRepository;
-
-  private ReviewLikeRepository reviewLikeRepository;
-
   private final BookstoreUserRegister userRegister;
-  private Book2UserRepository book2UserRepository;
+  private final BookService bookService;
+  private final BooksRatingAndPopularityService booksRatingAndPopularityService;
+  private final BookRepository bookRepository;
+  private final ReviewRepository reviewRepository;
+  private final ReviewLikeRepository reviewLikeRepository;
+  private final Book2UserRepository book2UserRepository;
 
   @Autowired
   public BooksController(
@@ -86,6 +79,7 @@ public class BooksController {
     return "/books/author";
   }
 
+  //  books/popular?offset=20&limit=20
   @GetMapping("/popular")
   public String booksPagePopular(Model model, SearchWordDto searchWordDto)
       throws UserAttributesException {
@@ -94,57 +88,54 @@ public class BooksController {
     return "/books/popular";
   }
 
+  @GetMapping("/popular/NextPage")
+  @ResponseBody
+  public BooksPageDto booksPagePopular(@RequestParam(value = "offset") Integer offset,
+      @RequestParam(value = "limit") Integer limit)
+      throws UserAttributesException {
+    return new BooksPageDto(
+        bookService.getPageOfRecommendedBooks(offset, limit).getContent());
+  }
+
   @GetMapping("/news")
-  public String booksPageNews(
-      @RequestParam(value = "from", required = false) String fromDate,
-      @RequestParam(value = "to", required = false) String toDate,
-      @RequestParam(value = "offset", required = false) Integer offset,
-      @RequestParam(value = "limit", required = false) Integer limit,
-      Model model,
+  public String booksPageNews(Model model,
       SearchWordDto searchWordDto) {
-    if (fromDate != null || toDate != null) {
-      model.addAttribute(
-          "recentResults", bookService.findBooksByPubDateBetween(fromDate, toDate, offset, limit));
-    } else {
-      model.addAttribute("recentResults", bookService.findTopByPubDate(0, 20));
-    }
+    model.addAttribute("newsResults", bookService.findTopByPubDate(0, 5));
     model.addAttribute("searchWordDto", searchWordDto);
     return "books/news";
   }
 
+  @GetMapping("/news/page")
+  @ResponseBody
+  public BooksPageDto getNewsBooks(@RequestParam(value = "from", required = false) String fromDate,
+      @RequestParam(value = "to", required = false) String toDate,
+      @RequestParam(value = "offset", required = false) Integer offset,
+      @RequestParam(value = "limit", required = false) Integer limit) {
+    return new BooksPageDto(
+        (bookService.findBooksByPubDateBetween(fromDate, toDate, offset, limit)));
+  }
+
+
   @GetMapping("/recent")
-  public String booksPageRecent(
-      Model model,
-      SearchWordDto searchWordDto) throws UserAttributesException{
+  public String booksPageRecent(Model model, SearchWordDto searchWordDto)
+      throws UserAttributesException {
     BookstoreUser userDetails = (BookstoreUser) userRegister.getCurrentUser();
-    List<Book2UserEntity> book2UserEntities = book2UserRepository.getAllByBookstoreUserAndTime(userDetails,LocalDate.now());
-    model.addAttribute(
-          "recentResults", book2UserEntities);
+    List<Book2UserEntity> book2UserEntities =
+        book2UserRepository.getAllByBookstoreUserAndTime(userDetails, LocalDate.now());
+    model.addAttribute("recentResults", book2UserEntities);
     model.addAttribute("searchWordDto", searchWordDto);
     return "books/recent";
   }
-
-  //		@GetMapping("/slug")
-  //		public String booksPageSlug()
-  //		{//Model model){
-  //			return "/books/slug";
-  //		}
 
   @ModelAttribute("booksList")
   public List<Book> bookList() {
     return bookService.getBooksData();
   }
 
-  @GetMapping("/books/news")
-  @ResponseBody
-  public RecommendedBooksPageDto getNewsBooks(
-      @RequestParam("offset") Integer offset, @RequestParam("limit") Integer limit, Model model) {
-    return new RecommendedBooksPageDto(
-        bookService.getPageOfRecommendedBooks(offset, limit).getContent());
-  }
 
   @ModelAttribute("bookPageDto")
   public BooksPageDto getNextNewsPage() {
+
     return new BooksPageDto();
   }
 

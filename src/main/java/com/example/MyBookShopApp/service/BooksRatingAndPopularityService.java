@@ -1,71 +1,71 @@
 package com.example.MyBookShopApp.service;
 
 import com.example.MyBookShopApp.data.Book;
-import com.example.MyBookShopApp.data.entity.user.BookstoreUser;
+import com.example.MyBookShopApp.data.entity.book.BookSorted;
 import com.example.MyBookShopApp.data.repository.Book2UserRepository;
 import com.example.MyBookShopApp.data.repository.BookRepository;
+import com.example.MyBookShopApp.data.repository.BookSortedRepository;
+import com.example.MyBookShopApp.data.entity.user.BookstoreUser;
 import com.example.MyBookShopApp.exceptions.UserAttributesException;
 import com.example.MyBookShopApp.security.BookstoreUserRegister;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
+import java.util.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
 public class BooksRatingAndPopularityService {
 
-  private BookRepository bookRepository;
+    private BookRepository bookRepository;
 
-  private Book2UserRepository book2UserRepository;
+    private BookSortedRepository bookSortedRepository;
 
-  private final BookstoreUserRegister userRegister;
+    private Book2UserRepository book2UserRepository;
 
-  @Autowired
-  public BooksRatingAndPopularityService(
-      BookRepository bookRepository,
-      Book2UserRepository book2UserRepository,
-      BookstoreUserRegister userRegister) {
-    this.bookRepository = bookRepository;
-    this.book2UserRepository = book2UserRepository;
-    this.userRegister = userRegister;
-  }
+    private final BookstoreUserRegister userRegister;
 
-  public List<Book> findPopularsBooks(Integer offset, Integer limit)
-      throws UserAttributesException {
-    List<Book> allBooks = bookRepository.findAll();
-    BookstoreUser userDetails = (BookstoreUser) userRegister.getCurrentUser();
-    HashMap<Double, ArrayList<Book>> popularList = new HashMap<>();
-    for (Book book : allBooks) {
-      Integer bought = book.getNumberOfBought(); // b
-      Integer cart = book.getNumberInCart(); // c
-      Integer delayed = book.getNumberDelayed(); // k
-      Double P = bought + 0.7 * cart + 0.4 * delayed;
-      ArrayList<Book> alreadyMarked = new ArrayList<>();
-      if (popularList.containsKey(P)) {
-        alreadyMarked = popularList.get(P);
-      }
-      if (alreadyMarked.size() <= limit) {
-        alreadyMarked.add(book);
-        popularList.put(P, alreadyMarked);
-      }
+    @Autowired
+    public BooksRatingAndPopularityService(
+            BookRepository bookRepository,
+            Book2UserRepository book2UserRepository,
+            BookstoreUserRegister userRegister, BookSortedRepository bookSortedRepository) {
+        this.bookRepository = bookRepository;
+        this.book2UserRepository = book2UserRepository;
+        this.userRegister = userRegister;
+        this.bookSortedRepository = bookSortedRepository;
     }
-    //				P = B + 0,7*C + 0,4*K,
-    //						где B — количество пользователей, купивших книгу, C — количество пользователей, у
-    // которых книга находится в корзине, а K — количество пользователей, у которых книга отложена.
-    HashMap<Double, List<Book>> myNewMap =
-        popularList.entrySet().stream()
-            .limit(limit)
-            .collect(HashMap::new, (m, e) -> m.put(e.getKey(), e.getValue()), Map::putAll);
-    HashMap<Double, List<Book>> sortedOutput = new HashMap<>();
-    myNewMap.entrySet().stream()
-        .sorted(Map.Entry.comparingByKey())
-        .forEachOrdered(x -> sortedOutput.put(x.getKey(), x.getValue()));
-    ArrayList<Book> outputMap = new ArrayList<>();
-    for (Double rating : sortedOutput.keySet()) {
-      outputMap.addAll(sortedOutput.get(rating));
+
+    public List<Book> findPopularsBooks(Integer offset, Integer limit)
+            throws UserAttributesException {
+        Pageable nextPage = PageRequest.of(offset, limit);
+        List<BookSorted> bookSortedList = bookSortedRepository.findAll(nextPage).getContent();
+
+        ArrayList<Book> allBooks = new ArrayList<>();
+        for (BookSorted bookSorted : bookSortedList) {
+            allBooks.add(bookSorted.getBook());
+            System.out.println(bookSorted.getBook());
+        }
+        return allBooks;
     }
-    return outputMap;
-  }
+
+    public Page<Book> findPopularsBooksNextPage(Integer offset, Integer limit)
+            throws UserAttributesException {
+        Pageable nextPage = PageRequest.of(offset, limit);
+        Page<BookSorted> bookSortedList = bookSortedRepository.findAll(nextPage);
+
+        ArrayList<Book> books = new ArrayList<>();
+
+        for (BookSorted bookSorted : bookSortedList) {
+            books.add(bookSorted.getBook());
+            System.out.println(bookSorted.getBook());
+        }
+        Page<Book> allBooks = new PageImpl<>(books);
+
+        return allBooks ;
+    }
 }
