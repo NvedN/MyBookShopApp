@@ -50,7 +50,6 @@ public class AuthorService {
 
 		public Author getAuthorInfo(String authorLastName)
 		{
-        System.out.println("----getAuthorInfo = ");
         return authorRepository.getAuthorByLastNameContaining(authorLastName);
 		}
 }

@@ -52,6 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .authorizeRequests()
             .antMatchers("/my","/profile","/books/*").authenticated()//.hasRole("USER")
             .antMatchers("/**").permitAll()
+            .antMatchers("/adminDeleteBook").hasRole("ADMIN")
             .and().formLogin()
             .loginPage("/signin").failureUrl("/signin")
             .and().logout().logoutUrl("/logout").logoutSuccessUrl("/signin").deleteCookies("token")

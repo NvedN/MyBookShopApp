@@ -7,6 +7,8 @@ public class RegistrationForm {
     private String phone;
     private String pass;
 
+    private String role;
+
     public String getName() {
         return name;
     }
@@ -37,5 +39,13 @@ public class RegistrationForm {
 
     public void setPass(String pass) {
         this.pass = pass;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

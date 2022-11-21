@@ -2,9 +2,11 @@ package com.example.MyBookShopApp.controllers;
 
 import com.example.MyBookShopApp.data.SearchWordDto;
 import com.example.MyBookShopApp.data.SmsCode;
+import com.example.MyBookShopApp.data.entity.book.links.Book2UserEntity;
 import com.example.MyBookShopApp.data.entity.payments.BalanceTransactionEntity;
 import com.example.MyBookShopApp.data.entity.payments.BalanceTransactionRepository;
 import com.example.MyBookShopApp.data.entity.user.BookstoreUser;
+import com.example.MyBookShopApp.data.repository.Book2UserRepository;
 import com.example.MyBookShopApp.exceptions.UserAttributesException;
 import com.example.MyBookShopApp.security.BookstoreUserRegister;
 import com.example.MyBookShopApp.security.BookstoreUserRepository;
@@ -55,6 +57,8 @@ public class AuthUserController {
 
   private MessageSource messages;
 
+  private Book2UserRepository book2UserRepository;
+
   @Autowired
   public AuthUserController(
       BookstoreUserRegister userRegister,
@@ -65,7 +69,7 @@ public class AuthUserController {
       BalanceTransactionRepository balanceTransactionRepository,
       JWTUtil jwtUtil,
       BookstoreUserDetailsService bookstoreUserDetailsService,
-      MessageSource messages) {
+      MessageSource messages, Book2UserRepository book2UserRepository) {
     this.userRegister = userRegister;
     this.smsService = smsService;
     this.javaMailSender = javaMailSender;
@@ -75,6 +79,8 @@ public class AuthUserController {
     this.jwtUtil = jwtUtil;
     this.bookstoreUserDetailsService = bookstoreUserDetailsService;
     this.messages = messages;
+    this.book2UserRepository = book2UserRepository;
+
   }
 
   @GetMapping("/signin")
@@ -149,7 +155,11 @@ public class AuthUserController {
   }
 
   @GetMapping("/my")
-  public String handleMy(SearchWordDto searchWordDto, Model model) {
+  public String handleMy(SearchWordDto searchWordDto, Model model) throws UserAttributesException {
+    BookstoreUser userDetails = (BookstoreUser) userRegister.getCurrentUser();
+    List<Book2UserEntity> book2UserEntities = book2UserRepository.getAllByBookstoreUserAndTime(userDetails,LocalDate.now());
+    model.addAttribute(
+        "recentResults", book2UserEntities);
     model.addAttribute("searchWordDto", searchWordDto);
     return "my";
   }
@@ -215,7 +225,6 @@ public class AuthUserController {
       System.out.println("------javaMailSender = " + javaMailSender);
     }
 
-    System.out.println("-----value = " + value);
     if (value != null) {
       BalanceTransactionEntity balance = new BalanceTransactionEntity();
       balance.setBookstoreUser(userDetails);

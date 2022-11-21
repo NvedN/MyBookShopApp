@@ -30,7 +30,7 @@ public class Book {
     @ApiModelProperty("date of book publication")
     private LocalDateTime pubDate;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinColumn(name = "author_id", referencedColumnName = "id")
     @JsonIgnore
     private Author author;
@@ -91,7 +91,7 @@ public class Book {
     }
 
 
-    @OneToMany(mappedBy = "book")
+    @OneToMany(mappedBy = "book",cascade = {CascadeType.ALL})
     private List<BookReviewEntity> bookReviewEntityList = new ArrayList<>();
 
     public List<BookReviewEntity> getBookReviewEntityList()
@@ -105,7 +105,7 @@ public class Book {
         this.bookReviewEntityList = bookReviewEntityList;
     }
 
-    @OneToMany(mappedBy = "book")
+    @OneToMany(mappedBy = "book",cascade = {CascadeType.ALL})
     private List<BookFileEntity> bookFileEntityList = new ArrayList<>();
 
 

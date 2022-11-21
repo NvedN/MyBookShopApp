@@ -100,7 +100,6 @@ public class BooksController {
   @GetMapping("/news")
   public String booksPageNews(Model model,
       SearchWordDto searchWordDto) {
-
     model.addAttribute("newsResults", bookService.findTopByPubDate(0, 5));
     model.addAttribute("searchWordDto", searchWordDto);
     return "books/news";
@@ -155,6 +154,8 @@ public class BooksController {
       book2UserEntity.setBook(book);
       book2UserEntity.setTime(LocalDate.now());
       book2UserRepository.save(book2UserEntity);
+      boolean isAdmin = userDetails.getRoles().contains("ADMIN");
+      model.addAttribute("admin", isAdmin);
       model.addAttribute("searchWordDto", searchWordDto);
       model.addAttribute("slugBook", book);
       model.addAttribute("reviewList", bookService.bookReviewEntityList(book));
@@ -214,7 +215,7 @@ public class BooksController {
     //								nextId++;
     nextUserId++;
     Integer rating = 0;
-    if (slugCookie != null || !slugCookie.equals("")) {
+    if (slugCookie != null && !slugCookie.equals("")) {
       rating = Integer.valueOf(slugCookie);
     }
     BookReviewEntity bookReviewEntity = new BookReviewEntity();

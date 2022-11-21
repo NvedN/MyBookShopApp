@@ -5,6 +5,7 @@ import com.example.MyBookShopApp.data.entity.book.BookSorted;
 import com.example.MyBookShopApp.data.repository.Book2UserRepository;
 import com.example.MyBookShopApp.data.repository.BookRepository;
 import com.example.MyBookShopApp.data.repository.BookSortedRepository;
+import com.example.MyBookShopApp.data.entity.user.BookstoreUser;
 import com.example.MyBookShopApp.exceptions.UserAttributesException;
 import com.example.MyBookShopApp.security.BookstoreUserRegister;
 

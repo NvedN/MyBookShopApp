@@ -24,6 +24,8 @@ public class BookstoreUser
 
     private String password;
 
+    private String roles;
+
 
     @OneToMany(fetch = FetchType. EAGER,mappedBy = "bookstoreUser")
     @JsonIgnore
@@ -90,6 +92,14 @@ public class BookstoreUser
         this.password = password;
     }
 
+    public String getRoles() {
+        return roles;
+    }
+
+    public void setRoles(String roles) {
+        this.roles = roles;
+    }
+
     @Override
     public String toString() {
         return "BookstoreUser{" +
@@ -98,6 +108,7 @@ public class BookstoreUser
             ", email='" + email + '\'' +
             ", phone='" + phone + '\'' +
             ", password='" + password + '\'' +
+            ", roles=" + roles +
             ", balanceTransactionEntitiesList=" + balanceTransactionEntitiesList +
             '}';
     }

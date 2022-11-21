@@ -97,6 +97,11 @@ p.error-browser
                                    placeholder="Введите password" data-validate="password require"/>
                         </div>
 
+                        <select class="form-control"  th:field="*{role}">
+                            <option th:value="'USER'" th:text="USER"></option>
+                            <option th:value="'USER,ADMIN'" th:text="ADMIN"></option>
+                        </select>
+
                         <div class="form-group form-group_center">
                             <button class="btn btn_primary form-btn" type="submit" name="registration" id="registration"
                                     disabled="disabled">Зарегистрироваться

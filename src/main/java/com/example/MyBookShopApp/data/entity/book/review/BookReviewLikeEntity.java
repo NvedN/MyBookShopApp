@@ -13,7 +13,7 @@ public class BookReviewLikeEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "book_review_id", referencedColumnName = "id")
     private BookReviewEntity bookReviewEntity;
 

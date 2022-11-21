@@ -14,4 +14,7 @@ public interface Book2UserRepository extends JpaRepository<Book2UserEntity, Inte
   List<Book2UserEntity> getAllByBookstoreUserAndBook(BookstoreUser bookstoreUser, Book book);
 
   List<Book2UserEntity> getAllByBookstoreUserAndTime(BookstoreUser bookstoreUser, LocalDate time);
+
+  List<Book2UserEntity> getAllByBook_Slug(String book_slug);
+
 }
