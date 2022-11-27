@@ -80,7 +80,7 @@ public class BooksRestApiController
 				@RequestParam("to") String toDate, @RequestParam("offset") Integer offset,
 				@RequestParam("limit") Integer limit)
 		{
-				return ResponseEntity.ok(bookService.findBooksByPubDateBetween(fromDate, toDate, offset, limit));
+				return ResponseEntity.ok(bookService.findBooksByPubDateBetween(fromDate, toDate, offset, limit).getContent());
 		}
 
 

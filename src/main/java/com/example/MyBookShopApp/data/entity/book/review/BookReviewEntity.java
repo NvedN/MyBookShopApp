@@ -3,6 +3,7 @@ package com.example.MyBookShopApp.data.entity.book.review;
 import com.example.MyBookShopApp.data.Book;
 import com.example.MyBookShopApp.data.entity.book.file.BookFileEntity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -16,7 +17,8 @@ public class BookReviewEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @ManyToOne(optional = false)
+    @JsonIgnore
     @JoinColumn(name = "book_id", referencedColumnName = "id")
     private Book book;
 

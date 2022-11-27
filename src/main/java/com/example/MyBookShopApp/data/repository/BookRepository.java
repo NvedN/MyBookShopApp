@@ -37,6 +37,10 @@ public interface BookRepository extends JpaRepository<Book,Integer> {
 
 
     Page<Book> findBooksByPubDateBetween(LocalDateTime startDate,LocalDateTime endDate, Pageable nextPage);
+
+    Page<Book> findAllByPubDateBetween(LocalDateTime startDate,LocalDateTime endDate, Pageable nextPage);
+
+
     List<Book> findAllByPubDateBetween(LocalDateTime startDate,LocalDateTime endDate);
     List<Book> findByPubDateBetween(LocalDateTime fromDate, LocalDateTime toDate,
 				Pageable nextPage);

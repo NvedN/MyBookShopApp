@@ -106,11 +106,11 @@ public class BookService
 				return bookRepository.findAll(nextPage);
 		}
 
-		public List<Book> findBooksByPubDateBetween(String fromDate, String toDate, Integer offset, Integer limit)
+		public Page<Book> findBooksByPubDateBetween(String fromDate, String toDate, Integer offset, Integer limit)
 		{
 				LocalDateTime fromDateTime = null;
 				LocalDateTime toDateTime = null;
-				Pageable nextPage = PageRequest.of(0, 20);
+				Pageable nextPage = PageRequest.of(0, 5);
 				if (!"".equals(fromDate))
 				{
 						fromDateTime = LocalDate.parse(fromDate, DateTimeFormatter.ofPattern("dd.MM.yyyy"))
@@ -119,9 +119,9 @@ public class BookService
 				if (!"".equals(toDate))
 				{
 						toDateTime = LocalDate.parse(toDate, DateTimeFormatter.ofPattern("dd.MM.yyyy"))
-								.atTime(0, 0, 0, 0);
+								.atTime(0, 0, 0, 0).plusDays(1);
 				}
-				return bookRepository.findBooksByPubDateBetween(fromDateTime, toDateTime, nextPage).getContent();
+				return bookRepository.findAllByPubDateBetween(fromDateTime, toDateTime, nextPage);
 		}
 
 		public Page<Book> getPageOfSearchResultBooks(String searchWork, Integer offset, Integer limit)

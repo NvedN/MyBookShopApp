@@ -23,8 +23,8 @@ import org.hibernate.annotations.OnDeleteAction;
 @ApiModel(description = "entity representing a book")
 public class Book {
 
-    private final Integer DEFAULT_VALUE_ZERO = 0;
-    private final String DEFAULT_IMAGE = "http://dummyimage.com/551x697.png/ff4444/ffffff";
+    private static final Integer DEFAULT_VALUE_ZERO = 0;
+    private static final String DEFAULT_IMAGE = "http://dummyimage.com/551x697.png/ff4444/ffffff";
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -96,7 +96,8 @@ public class Book {
     }
 
 
-    @OneToMany(mappedBy = "book",cascade = {CascadeType.ALL},fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "book",cascade = {CascadeType.ALL})
+    @JsonIgnore
     private List<BookReviewEntity> bookReviewEntityList = new ArrayList<>();
 
     public List<BookReviewEntity> getBookReviewEntityList()
@@ -247,6 +248,8 @@ public class Book {
     public void setPrice(Double price) {
         this.price = price;
     }
+
+
 
     @Override
     public String toString() {

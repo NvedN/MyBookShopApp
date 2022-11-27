@@ -103,22 +103,23 @@ public class BooksController {
         bookService.getPageOfRecommendedBooks(offset, limit).getContent());
   }
 
+
+  @GetMapping("/news/page")
+  @ResponseBody
+  public BooksPageDto getNewsBooks(@RequestParam(value = "from") String fromDate,
+      @RequestParam(value = "to") String toDate,
+      @RequestParam(value = "offset") Integer offset,
+      @RequestParam(value = "limit") Integer limit) {
+    return new BooksPageDto(
+        bookService.findBooksByPubDateBetween(fromDate, toDate, offset, limit).getContent());
+  }
+
   @GetMapping("/news")
   public String booksPageNews(Model model,
       SearchWordDto searchWordDto) {
     model.addAttribute("newsResults", bookService.findTopByPubDate(0, 5));
     model.addAttribute("searchWordDto", searchWordDto);
     return "books/news";
-  }
-
-  @GetMapping("/news/page")
-  @ResponseBody
-  public BooksPageDto getNewsBooks(@RequestParam(value = "from", required = false) String fromDate,
-      @RequestParam(value = "to", required = false) String toDate,
-      @RequestParam(value = "offset", required = false) Integer offset,
-      @RequestParam(value = "limit", required = false) Integer limit) {
-    return new BooksPageDto(
-        (bookService.findBooksByPubDateBetween(fromDate, toDate, offset, limit)));
   }
 
 
@@ -152,7 +153,8 @@ public class BooksController {
       SearchWordDto searchWordDto,
       @CookieValue(value = "cartContents", required = false) String cartContents)
       throws UserAttributesException {
-    BookstoreUserDetails userDetails = new BookstoreUserDetails((BookstoreUser) userRegister.getCurrentUser());
+    BookstoreUserDetails userDetails = new BookstoreUserDetails(
+        (BookstoreUser) userRegister.getCurrentUser());
     Book book = bookRepository.findBookBySlug(slug);
     if (book != null) {
       Book2UserEntity book2UserEntity = new Book2UserEntity();
@@ -244,21 +246,22 @@ public class BooksController {
 
 
   @GetMapping("/newBook")
-  public String addNewBookPage(SearchWordDto searchWordDto, Model model){
-    model.addAttribute("authorsList",authorRepository.findAll());
+  public String addNewBookPage(SearchWordDto searchWordDto, Model model) {
+    model.addAttribute("authorsList", authorRepository.findAll());
     model.addAttribute("searchWordDto", searchWordDto);
     return "books/newBook";
   }
+
   @PostMapping("/newBook")
   public String createNewBook(SearchWordDto searchWordDto, Model model,
       @RequestParam(value = "name", required = false) String name,
-      @RequestParam(value = "description", required = false) String description ,
+      @RequestParam(value = "description", required = false) String description,
       @RequestParam(value = "author", required = false) String authorId,
       @RequestParam(value = "price", required = false) String price
 
-  ){
-    bookService.createNewBook(name,description,authorId,price);
-    model.addAttribute("authorsList",authorRepository.findAll());
+  ) {
+    bookService.createNewBook(name, description, authorId, price);
+    model.addAttribute("authorsList", authorRepository.findAll());
     model.addAttribute("searchWordDto", searchWordDto);
     return "books/newBook";
   }
