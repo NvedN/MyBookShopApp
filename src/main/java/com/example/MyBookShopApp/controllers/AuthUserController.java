@@ -8,6 +8,7 @@ import com.example.MyBookShopApp.data.entity.payments.BalanceTransactionReposito
 import com.example.MyBookShopApp.data.entity.user.BookstoreUser;
 import com.example.MyBookShopApp.data.repository.Book2UserRepository;
 import com.example.MyBookShopApp.exceptions.UserAttributesException;
+import com.example.MyBookShopApp.security.BookstoreUserDetails;
 import com.example.MyBookShopApp.security.BookstoreUserRegister;
 import com.example.MyBookShopApp.security.BookstoreUserRepository;
 import com.example.MyBookShopApp.security.ContactConfirmationPayload;
@@ -19,6 +20,7 @@ import com.example.MyBookShopApp.service.SmsService;
 import com.example.MyBookShopApp.util.Util;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -26,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -167,10 +170,17 @@ public class AuthUserController {
   @GetMapping("/profile")
   public String handleProfile(Model model, SearchWordDto searchWordDto)
       throws UserAttributesException {
-    BookstoreUser userDetails = (BookstoreUser) userRegister.getCurrentUser();
+//    BookstoreUser userDetails = (BookstoreUser) userRegister.getCurrentUser();
+    BookstoreUserDetails userDetails = new BookstoreUserDetails((BookstoreUser) userRegister.getCurrentUser());
+
     List<BalanceTransactionEntity> balanceTransactionEntities =
-        userDetails.getBalanceTransactionEntitiesList();
-    model.addAttribute("curUsr", userDetails);
+        userDetails.getBookstoreUser().getBalanceTransactionEntitiesList();
+
+    Collection<? extends GrantedAuthority> getAuthoritiesAdmin = userDetails.getAuthoritiesAdmin();
+    boolean isAdmin = getAuthoritiesAdmin != null;
+
+    model.addAttribute("admin",isAdmin);
+    model.addAttribute("curUsr", userDetails.getBookstoreUser());
     model.addAttribute("editForm", new RegistrationForm());
     model.addAttribute("balanceForm", new BalanceTransactionEntity());
     model.addAttribute("balanceTransaction", balanceTransactionEntities);

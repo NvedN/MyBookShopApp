@@ -7,6 +7,7 @@ import com.example.MyBookShopApp.data.entity.book.links.Book2UserEntity;
 import com.example.MyBookShopApp.data.entity.book.review.BookReviewEntity;
 import com.example.MyBookShopApp.data.entity.book.review.BookReviewLikeEntity;
 import com.example.MyBookShopApp.data.entity.user.BookstoreUser;
+import com.example.MyBookShopApp.data.repository.AuthorRepository;
 import com.example.MyBookShopApp.data.repository.Book2UserRepository;
 import com.example.MyBookShopApp.data.repository.BookRepository;
 import com.example.MyBookShopApp.data.repository.ReviewLikeRepository;
@@ -56,6 +57,7 @@ public class BooksController {
   private final ReviewRepository reviewRepository;
   private final ReviewLikeRepository reviewLikeRepository;
   private final Book2UserRepository book2UserRepository;
+  private final AuthorRepository authorRepository;
 
   @Autowired
   public BooksController(
@@ -66,7 +68,7 @@ public class BooksController {
       ReviewRepository reviewRepository,
       ReviewLikeRepository reviewLikeRepository,
       BookstoreUserRegister userRegister,
-      Book2UserRepository book2UserRepository) {
+      Book2UserRepository book2UserRepository, AuthorRepository authorRepository) {
     this.bookService = bookService;
     this.booksRatingAndPopularityService = booksRatingAndPopularityService;
     this.bookRepository = bookRepository;
@@ -75,6 +77,7 @@ public class BooksController {
     this.reviewLikeRepository = reviewLikeRepository;
     this.userRegister = userRegister;
     this.book2UserRepository = book2UserRepository;
+    this.authorRepository = authorRepository;
   }
 
   @GetMapping("/author")
@@ -238,4 +241,26 @@ public class BooksController {
     reviewLikeRepository.save(bookReviewLikeEntity);
     return ("redirect:/books/" + slug);
   }
+
+
+  @GetMapping("/newBook")
+  public String addNewBookPage(SearchWordDto searchWordDto, Model model){
+    model.addAttribute("authorsList",authorRepository.findAll());
+    model.addAttribute("searchWordDto", searchWordDto);
+    return "books/newBook";
+  }
+  @PostMapping("/newBook")
+  public String createNewBook(SearchWordDto searchWordDto, Model model,
+      @RequestParam(value = "name", required = false) String name,
+      @RequestParam(value = "description", required = false) String description ,
+      @RequestParam(value = "author", required = false) String authorId,
+      @RequestParam(value = "price", required = false) String price
+
+  ){
+    bookService.createNewBook(name,description,authorId,price);
+    model.addAttribute("authorsList",authorRepository.findAll());
+    model.addAttribute("searchWordDto", searchWordDto);
+    return "books/newBook";
+  }
+
 }
