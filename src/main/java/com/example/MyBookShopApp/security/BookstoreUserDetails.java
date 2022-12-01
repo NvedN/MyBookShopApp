@@ -3,6 +3,7 @@ package com.example.MyBookShopApp.security;
 import com.example.MyBookShopApp.data.entity.user.BookstoreUser;
 import com.example.MyBookShopApp.util.Util;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -25,13 +26,13 @@ public class BookstoreUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
+        return Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
     }
 
     public Collection<? extends GrantedAuthority> getAuthoritiesAdmin() {
         ArrayList<String> roles = new ArrayList<>(Arrays.asList(bookstoreUser.getRoles().split(",")));
         if(roles.contains("ADMIN")) {
-            return Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"));
+            return Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMIN"));
         }else{
             return null;
         }
