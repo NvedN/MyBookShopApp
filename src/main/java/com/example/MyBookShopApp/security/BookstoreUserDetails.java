@@ -30,12 +30,9 @@ public class BookstoreUserDetails implements UserDetails {
     }
 
     public Collection<? extends GrantedAuthority> getAuthoritiesAdmin() {
-        ArrayList<String> roles = new ArrayList<>(Arrays.asList(bookstoreUser.getRoles().split(",")));
-        if(roles.contains("ADMIN")) {
-            return Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMIN"));
-        }else{
-            return null;
-        }
+        return Arrays.asList(
+            new SimpleGrantedAuthority("ROLE_USER"),
+            new SimpleGrantedAuthority("ROLE_ADMIN"));
     }
 
     @Override
