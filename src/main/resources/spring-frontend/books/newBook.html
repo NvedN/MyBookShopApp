@@ -36,15 +36,6 @@
   <script src="/assets/js/scripts.min.js?v=45744385"></script>
 </head>
 <body class="Site">
-<!--if lt IE 8
-p.error-browser
-    | Ваш браузер&nbsp;
-    em устарел!&nbsp;
-    a(href="http://browsehappy.com/") Выберите новую версию
-        +s
-        | браузера здесь&nbsp;
-    | для правильного отображения сайта.
--->
 <header class="Header">
   <div class="Header-rowMain">
     <div class="wrap">
@@ -160,9 +151,6 @@ p.error-browser
           <li class="menu-item"><a class="menu-link" href="authors.html"
                                    th:href="@{/authors}" th:text="#{topbar.authors}">Авторы</a>
           </li>
-          <li class="menu-item"  th:if="${admin}"><a class="menu-link" href="authors.html"
-                                   th:href="@{/books/newBook}" th:text="#{topbar.addBook}">Добавить книгу</a>
-          </li>
         </ul>
       </nav>
     </div>
@@ -171,139 +159,54 @@ p.error-browser
 <div class="Middle">
   <div class="Middle-top">
     <div class="wrap">
-      <h1 class="Middle-title">Личный кабинет
+      <h1 class="Middle-title">Кабинет администартора
       </h1>
     </div>
   </div>
   <div class="wrap">
     <main class="Middle-main">
-      <h2 class="Middle-title">Мой профиль
+      <h2 class="Middle-title">Редактор книг
       </h2>
       <div class="Tabs Tabs_default">
-        <!--+Tabs-links([-->
-        <!--    ['#basic', 'Основные сведения'],-->
-        <!--    ['#transactions','История транзакций'],-->
-        <!--    ['#topup','Пополнить счет']-->
-        <!--], 'text', 0)-->
-        <div class="Tabs-links"><a class="Tabs-link Tabs-link_ACTIVE" href="#basic">Основные
-          сведения</a><a
-            class="Tabs-link" href="#transactions">История транзакций</a><a class="Tabs-link"
-                                                                            href="#topup">Пополнить
-          счет</a>
-        </div>
-        <div class="Tabs-wrap">
-          <div class="Tabs-block" id="basic">
-            <div class="Profile">
-              <form class="form Profile-form" action="#" method="post" th:object="${curUsr}">
-                <div class="row">
-                  <div class="row-block">
-                    <div class="form-group">
-                      <label class="form-label" for="name">Имя
-                      </label>
-                      <input class="form-input" id="name" name="name" type="text"
-                             th:value="${curUsr?.name}" th:field="*{name}" value="Михаил"/>
-                    </div>
-                    <div class="form-group">
-                      <label class="form-label" for="mail">E-mail
-                      </label>
-                      <input class="form-input" id="mail" name="mail" type="text"
-                             th:value="${curUsr?.email}" th:field="*{email}" value="addr@sait.com"
-                             data-validate="require mail"/>
-                      <div class="Profile-btn Profile-btn_confirm">
-                        <button class="btn btn_primary" type="button">Подтвердить
-                        </button>
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label class="form-label" for="phone">Телефон
-                      </label>
-                      <input class="form-input" id="phone" name="phone" th:field="*{phone}"
-                             type="text"
-                             value="+70000000000" data-mask="+7 (999) 999-99-99"
-                             data-validate="require"/>
-                      <div class="Profile-btn Profile-btn_confirm">
-                        <button class="btn btn_primary" type="button" data-check="">Подтвердить
-                        </button>
-                      </div>
-                    </div>
+      </div>
+      <div class="Tabs-wrap">
+        <div class="Tabs-block" id="basic">
+          <div class="Profile">
+            <form class="form Profile-form" action="#" method="post">
+              <div class="row">
+                <div class="row-block">
+                  <div class="form-group">
+                    <label class="form-label" for="name">Название книги
+                    </label>
+                    <input class="form-input" id="name" name="name" type="text" value="Азбука" required/>
                   </div>
-                  <div class="row-block">
-                    <div class="form-group">
-                      <label class="form-label" for="password">Пароль
-                      </label>
-                      <input class="form-input" id="password" name="password" type="password"
-                             placeholder="Тут можно изменить пароль"/>
-                    </div>
-                    <div class="form-group">
-                      <label class="form-label" for="passwordReply">Подтверждение пароля
-                      </label>
-                      <input class="form-input" id="passwordReply" th:field="*{password}"
-                             name="passwordReply" type="password"
-                             placeholder="Введите пароль повторно"/>
-                    </div>
-                    <div class="form-group">
-                      <div class="Profile-btn">
-                        <button class="btn btn_danger" type="button">Отменить
-                        </button>
-                        <button class="btn btn_primary" type="submit">Сохранить
-                        </button>
-                      </div>
-                      <div class="Profile-success">Вам на почту отправлено сообщение с
-                        подтверждением об изменения профиля
-                      </div>
-                    </div>
+                  <div class="form-group">
+                    <label class="form-label" for="description">Описание
+                    </label>
+                    <input class="form-input" id="description" name="description"
+                           type="text"
+                           required>
+                  </div>
+                  <div>
+                    <label class="form-label" for="price">Цена
+                    </label>
+                    <input class="form-input" id="price" name="price" type="text" value="0.0" required/>
                   </div>
                 </div>
-              </form>
-            </div>
-          </div>
-          <div class="Tabs-block" id="transactions" >
-            <div class="Transactions" >
-              <div class="tableWrap" >
-                <table class="table table_noMargin" th:each="info : ${balanceTransaction}" >
-                  <thead>
-                  <tr >
-                    <th>Дата и время
-                    </th>
-                    <th>Сумма
-                    </th>
-                    <th>Описание
-                    </th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  <tr>
-                    <td th:text="${info?.time}">15 мая 2017 10:03
-                    </td>
-                    <td><span class="Transactions_textSuccess">
-                            <strong th:text="${info?.value}">+500 р.
-                            </strong></span>
-                    </td>
-                    <td th:text="${info?.description}">Пополнение счета
-                    </td>
-                  </tr>
-                  </tbody>
-                </table>
-              </div>
-              <div class="Transactions-footer Transactions-footer_center"><a
-                  class="btn btn_primary Transactions-get" href="#" data-transactionoffset="4"
-                  data-transactionlimit="10" data-transactionsort="asc">Показать еще</a>
-              </div>
-            </div>
-          </div>
-          <div class="Tabs-block" id="topup" th:object="${balanceForm}">
-            <form class="form Topup" action="#" method="post" data-sendHash="34534535">
-              <div class="Topup-wrap">
-                <strong class="Topup-title">Введите сумму, на которую хотите пополнить свой счет:
-                </strong>
-                <div class="form-group form-group_row Topup-group">
-                  <input class="form-input" id="sum" name="sum" th:field="*{value}"
-                         type="text"/><span>рублей</span>
-                </div>
-                <div class="form-group">
-                  <div class="Topup-btn">
-                    <button class="btn btn_primary">Пополнить
-                    </button>
+                <div class="row-block">
+                  <div class="form-group">
+                    <label for="author">Choose  author:</label>
+                    <select class="form-control" id="author" name="author">
+                      <option th:each="author : ${authorsList}"
+                              th:value="${author.getId()}"
+                              th:text="${author.lastName + ' ' + author.firstName}"></option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <div class="Profile-btn">
+                      <button class="btn btn_primary" type="submit">Сохранить
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>

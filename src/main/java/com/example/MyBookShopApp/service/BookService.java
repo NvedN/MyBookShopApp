@@ -5,8 +5,10 @@ import com.example.MyBookShopApp.data.Book;
 import com.example.MyBookShopApp.data.entity.book.review.BookReviewEntity;
 import com.example.MyBookShopApp.data.google.api.books.Item;
 import com.example.MyBookShopApp.data.google.api.books.Root;
+import com.example.MyBookShopApp.data.repository.AuthorRepository;
 import com.example.MyBookShopApp.data.repository.BookRepository;
 import com.example.MyBookShopApp.exceptions.BookstoreApiWrongParameterException;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -26,15 +28,19 @@ import java.util.List;
 public class BookService
 {
 
-		private BookRepository bookRepository;
+		private final BookRepository bookRepository;
 
 		private RestTemplate restTemplate;
 
+		private final AuthorRepository  authorRepository;
+
 		@Autowired
-		public BookService(BookRepository bookRepository, RestTemplate restTemplate)
+		public BookService(BookRepository bookRepository, RestTemplate restTemplate,
+				AuthorRepository authorRepository)
 		{
 				this.bookRepository = bookRepository;
 				this.restTemplate = restTemplate;
+			this.authorRepository = authorRepository;
 		}
 
 		public List<Book> getBooksData()
@@ -100,11 +106,11 @@ public class BookService
 				return bookRepository.findAll(nextPage);
 		}
 
-		public List<Book> findBooksByPubDateBetween(String fromDate, String toDate, Integer offset, Integer limit)
+		public Page<Book> findBooksByPubDateBetween(String fromDate, String toDate, Integer offset, Integer limit)
 		{
 				LocalDateTime fromDateTime = null;
 				LocalDateTime toDateTime = null;
-				Pageable nextPage = PageRequest.of(0, 20);
+				Pageable nextPage = PageRequest.of(0, 5);
 				if (!"".equals(fromDate))
 				{
 						fromDateTime = LocalDate.parse(fromDate, DateTimeFormatter.ofPattern("dd.MM.yyyy"))
@@ -113,9 +119,9 @@ public class BookService
 				if (!"".equals(toDate))
 				{
 						toDateTime = LocalDate.parse(toDate, DateTimeFormatter.ofPattern("dd.MM.yyyy"))
-								.atTime(0, 0, 0, 0);
+								.atTime(0, 0, 0, 0).plusDays(1);
 				}
-				return bookRepository.findBooksByPubDateBetween(fromDateTime, toDateTime, nextPage).getContent();
+				return bookRepository.findAllByPubDateBetween(fromDateTime, toDateTime, nextPage);
 		}
 
 		public Page<Book> getPageOfSearchResultBooks(String searchWork, Integer offset, Integer limit)
@@ -188,4 +194,16 @@ public class BookService
 				}
 				return list;
 		}
+
+  public void createNewBook(String name, String description, String authorId, String price) {
+			Author author = authorRepository.getById(Integer.valueOf(authorId));
+			Book newBook = new Book();
+			newBook.setAuthor(author);
+			newBook.setTitle(name);
+			newBook.setDescription(description);
+			newBook.setSlug(String.valueOf(UUID.randomUUID()));
+			newBook.setTag("en");
+			newBook.setPrice(Double.valueOf(price));
+			bookRepository.save(newBook);
+  }
 }

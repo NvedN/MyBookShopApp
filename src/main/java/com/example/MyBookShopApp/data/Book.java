@@ -15,11 +15,16 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name = "book")
 @ApiModel(description = "entity representing a book")
 public class Book {
+
+    private static final Integer DEFAULT_VALUE_ZERO = 0;
+    private static final String DEFAULT_IMAGE = "http://dummyimage.com/551x697.png/ff4444/ffffff";
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -28,14 +33,14 @@ public class Book {
 
     @Column(name = "pub_date")
     @ApiModelProperty("date of book publication")
-    private LocalDateTime pubDate;
+    private LocalDateTime pubDate = LocalDateTime.now();
 
-    @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "author_id", referencedColumnName = "id")
     @JsonIgnore
     private Author author;
 
-    @OneToOne(mappedBy = "book")
+    @OneToOne(mappedBy = "book",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JsonIgnore
     private BookSorted bookSorted;
 
@@ -50,14 +55,14 @@ public class Book {
     @Column(name = "is_bestseller")
     @ApiModelProperty("if isBestseller = 1 so the book is considered to be bestseller and if 0 the book is not a " +
     "bestseller")
-    private Integer isBestseller;
+    private Integer isBestseller = DEFAULT_VALUE_ZERO;
 
     @ApiModelProperty("mnemonical identity sequence of characters")
     private String slug;
     @ApiModelProperty("book title")
     private String title;
     @ApiModelProperty("book url")
-    private String image;
+    private String image = DEFAULT_IMAGE;
 
     @Column(columnDefinition = "TEXT")
     @ApiModelProperty("book description text")
@@ -66,7 +71,7 @@ public class Book {
     @Column(name = "price")
     @JsonProperty("price")
     @ApiModelProperty("book price without discount")
-    private Integer priceOld;
+    private Integer priceOld = DEFAULT_VALUE_ZERO;
 
     @Column(name = "discount")
     @JsonProperty("discount")
@@ -74,9 +79,9 @@ public class Book {
     private Double price;
 
 
-    private Integer numberOfBought ;
-    private Integer numberInCart;
-    private Integer numberDelayed ;
+    private Integer numberOfBought  = DEFAULT_VALUE_ZERO;
+    private Integer numberInCart = DEFAULT_VALUE_ZERO;
+    private Integer numberDelayed  = DEFAULT_VALUE_ZERO;
 
     private String tag;
 
@@ -92,6 +97,7 @@ public class Book {
 
 
     @OneToMany(mappedBy = "book",cascade = {CascadeType.ALL})
+    @JsonIgnore
     private List<BookReviewEntity> bookReviewEntityList = new ArrayList<>();
 
     public List<BookReviewEntity> getBookReviewEntityList()
@@ -242,6 +248,8 @@ public class Book {
     public void setPrice(Double price) {
         this.price = price;
     }
+
+
 
     @Override
     public String toString() {

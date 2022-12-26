@@ -7,11 +7,13 @@ import com.example.MyBookShopApp.data.entity.book.links.Book2UserEntity;
 import com.example.MyBookShopApp.data.entity.book.review.BookReviewEntity;
 import com.example.MyBookShopApp.data.entity.book.review.BookReviewLikeEntity;
 import com.example.MyBookShopApp.data.entity.user.BookstoreUser;
+import com.example.MyBookShopApp.data.repository.AuthorRepository;
 import com.example.MyBookShopApp.data.repository.Book2UserRepository;
 import com.example.MyBookShopApp.data.repository.BookRepository;
 import com.example.MyBookShopApp.data.repository.ReviewLikeRepository;
 import com.example.MyBookShopApp.data.repository.ReviewRepository;
 import com.example.MyBookShopApp.exceptions.UserAttributesException;
+import com.example.MyBookShopApp.security.BookstoreUserDetails;
 import com.example.MyBookShopApp.security.BookstoreUserRegister;
 import com.example.MyBookShopApp.service.BookService;
 import com.example.MyBookShopApp.service.BooksRatingAndPopularityService;
@@ -20,6 +22,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.servlet.http.Cookie;
@@ -29,6 +32,7 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -53,6 +57,7 @@ public class BooksController {
   private final ReviewRepository reviewRepository;
   private final ReviewLikeRepository reviewLikeRepository;
   private final Book2UserRepository book2UserRepository;
+  private final AuthorRepository authorRepository;
 
   @Autowired
   public BooksController(
@@ -63,7 +68,7 @@ public class BooksController {
       ReviewRepository reviewRepository,
       ReviewLikeRepository reviewLikeRepository,
       BookstoreUserRegister userRegister,
-      Book2UserRepository book2UserRepository) {
+      Book2UserRepository book2UserRepository, AuthorRepository authorRepository) {
     this.bookService = bookService;
     this.booksRatingAndPopularityService = booksRatingAndPopularityService;
     this.bookRepository = bookRepository;
@@ -72,6 +77,7 @@ public class BooksController {
     this.reviewLikeRepository = reviewLikeRepository;
     this.userRegister = userRegister;
     this.book2UserRepository = book2UserRepository;
+    this.authorRepository = authorRepository;
   }
 
   @GetMapping("/author")
@@ -97,22 +103,23 @@ public class BooksController {
         bookService.getPageOfRecommendedBooks(offset, limit).getContent());
   }
 
+
+  @GetMapping("/news/page")
+  @ResponseBody
+  public BooksPageDto getNewsBooks(@RequestParam(value = "from") String fromDate,
+      @RequestParam(value = "to") String toDate,
+      @RequestParam(value = "offset") Integer offset,
+      @RequestParam(value = "limit") Integer limit) {
+    return new BooksPageDto(
+        bookService.findBooksByPubDateBetween(fromDate, toDate, offset, limit).getContent());
+  }
+
   @GetMapping("/news")
   public String booksPageNews(Model model,
       SearchWordDto searchWordDto) {
     model.addAttribute("newsResults", bookService.findTopByPubDate(0, 5));
     model.addAttribute("searchWordDto", searchWordDto);
     return "books/news";
-  }
-
-  @GetMapping("/news/page")
-  @ResponseBody
-  public BooksPageDto getNewsBooks(@RequestParam(value = "from", required = false) String fromDate,
-      @RequestParam(value = "to", required = false) String toDate,
-      @RequestParam(value = "offset", required = false) Integer offset,
-      @RequestParam(value = "limit", required = false) Integer limit) {
-    return new BooksPageDto(
-        (bookService.findBooksByPubDateBetween(fromDate, toDate, offset, limit)));
   }
 
 
@@ -146,15 +153,17 @@ public class BooksController {
       SearchWordDto searchWordDto,
       @CookieValue(value = "cartContents", required = false) String cartContents)
       throws UserAttributesException {
-    BookstoreUser userDetails = (BookstoreUser) userRegister.getCurrentUser();
+    BookstoreUserDetails userDetails = new BookstoreUserDetails(
+        (BookstoreUser) userRegister.getCurrentUser());
     Book book = bookRepository.findBookBySlug(slug);
     if (book != null) {
       Book2UserEntity book2UserEntity = new Book2UserEntity();
-      book2UserEntity.setBookstoreUser(userDetails);
+      book2UserEntity.setBookstoreUser(userDetails.getBookstoreUser());
       book2UserEntity.setBook(book);
       book2UserEntity.setTime(LocalDate.now());
       book2UserRepository.save(book2UserEntity);
-      boolean isAdmin = userDetails.getRoles().contains("ADMIN");
+      Collection<? extends GrantedAuthority> getAuthoritiesAdmin = userDetails.getAuthoritiesAdmin();
+      boolean isAdmin = getAuthoritiesAdmin != null;
       model.addAttribute("admin", isAdmin);
       model.addAttribute("searchWordDto", searchWordDto);
       model.addAttribute("slugBook", book);
@@ -234,4 +243,27 @@ public class BooksController {
     reviewLikeRepository.save(bookReviewLikeEntity);
     return ("redirect:/books/" + slug);
   }
+
+
+  @GetMapping("/newBook")
+  public String addNewBookPage(SearchWordDto searchWordDto, Model model) {
+    model.addAttribute("authorsList", authorRepository.findAll());
+    model.addAttribute("searchWordDto", searchWordDto);
+    return "books/newBook";
+  }
+
+  @PostMapping("/newBook")
+  public String createNewBook(SearchWordDto searchWordDto, Model model,
+      @RequestParam(value = "name", required = false) String name,
+      @RequestParam(value = "description", required = false) String description,
+      @RequestParam(value = "author", required = false) String authorId,
+      @RequestParam(value = "price", required = false) String price
+
+  ) {
+    bookService.createNewBook(name, description, authorId, price);
+    model.addAttribute("authorsList", authorRepository.findAll());
+    model.addAttribute("searchWordDto", searchWordDto);
+    return "books/newBook";
+  }
+
 }
